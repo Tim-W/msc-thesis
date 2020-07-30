@@ -25,6 +25,7 @@
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
+\RequirePackage[natbibapa]{apacite}
 %% English is the default language, but this can be changed to Dutch by
 %% specifying the 'dutch' option to the document class.
 \if@dutch
@@ -647,7 +648,7 @@
 \renewcommand*\labelitemiv{\color{title}\textperiodcentered}
 
 %% Use a custom bibliography style based on apsrev4-1.
-\bibliographystyle{tudelft-report}
+\bibliographystyle{apacite}
 
 %% Hyperlinks are cyan, except in print mode, when they are all black.
 \hypersetup{
