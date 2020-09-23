@@ -1,1 +1,19 @@
 \chapter{Design}
+This section describes the of different functions of the software, how they are separated into components, and how the components interact.
+
+\section{A network without central control}
+With the goal of distributing power in the music industry, every peer in the network will have the same rights and access to the same functions.
+
+\section{Phone-to-phone connectivity}
+Mobile phones have the largest share of any type of device using music streaming services. If the software that we design and implement runs well on a network consisting of only mobile devices, we can conclude that it will run well on better hardware (such as PCs) as well. For these reasons, we design our system to work on mobile phones only.
+
+\section{Release model}
+\label{sec:release-model}
+A Release is an object describing a list of tracks that are published by a clearly identifiable artist or group of artists. For example, a Release can represent a single, and EP or an album. It is modeled as shown in fig. X. Release objects are shared between peers in the network. By discovering many of those objects, a user can see and browse through them to select a track to play. A Release object merely contains metadata of the tracks. We design the network to have a separate channel for downloading the track files. This is to enable fast discovery and
+searching of Releases, as Release objects have a small byte size. 
+
+\section{Distributed storage}
+Central to our system is sharing downloading and storage of audio files and Release objects (see \ref{sec:release-model}). To design a system which has no middlemen or regulators for publishing Releases, and has no central control, a distributed storage system is required. This storage system should have the following properties: immutability (data cannot be tampered with), resiliency (data should be available as long as users want it) and rigorous duplication (all objects should live on multiple devices so they do not disappear when requested). Distributed ledger technology (DLT) allows for these properties, so we design our system with a DLT as a major component.
+
+\section{Distributed downloading and uploading}
+To be able to have low latency for discovering and playing music tracks, while using no central nor high-throughput servers, the network demands participants to upload content continuously. We design the app to, by default, use the network capabilities of the mobile device to upload content as much as possible. This is constrained by networking hardware, data subscription plans and other software running on the phone.
