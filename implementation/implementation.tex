@@ -6,27 +6,14 @@ We implement the public key infrastructure as described in \ref{sec:pki-design}.
 
 \section{Metadata storage and discovery}
 \subsection{Release blocks}
-Releases are objects that represent an audio release produced by one or more artists. This can be an album, an EP, a single, or a podcast. Release objects are stored on the TrustChain, and are exchanged between peers that are part of the MusicCommunity (see \ref{sec:searching-musiccommunity-impl}). These objects are structured as shown in \ref{fig:release-implementation}. The \textit{magnet} property contains a magnet link which holds all additional information about the contents of the Release, such as the torrent file list, size and tracker URLs. The \textit{publisher} property contains the public key of a Bitcoin wallet which is owned by the creator of the Release. This public key is an identity of the owner of the record (either the artist, band or label). This allows only the owner to receive funds sent by listeners, and no other middlemen (apart from miners).
+Releases are objects that represent an audio release produced by one or more artists. This can be an album, an EP, a single, or a podcast. Release objects are stored on the TrustChain, and are exchanged between peers that are part of the MusicCommunity (see \ref{sec:searching-musiccommunity-impl}). These objects are structured as shown in \ref{fig:release-model}. The \textit{magnet} property contains a magnet link which holds all additional information about the contents of the Release, such as the torrent file list, size and tracker URLs. The \textit{publisher} property contains the public key of a Bitcoin wallet which is owned by the creator of the Release. This public key is an identity of the owner of the record (either the artist, band or label). This allows only the owner to receive funds sent by listeners, and no other middlemen (apart from miners).
 % When a torrent is created from a local file list, the TorrentInfoName value is established. 
-\begin{figure}
-    \minipage{0.2\textwidth}
-        \includegraphics[width=\linewidth]{implementation/release-implementation.png}
-        \caption{Release blocks structure as seen on TrustChain}
-        \label{fig:release-implementation}
-    \endminipage\hfill
-    \minipage{0.3\textwidth}
-        \includegraphics[width=\linewidth]{implementation/keyword-search-message.png}
-        \caption{KeywordSearchMessage object sent over IPv8 in MusicCommunity}
-        \label{fig:keyword-search-message}
-    \endminipage\hfill
-    \minipage{0.5\textwidth}
-    \endminipage
-\end{figure}
+
 \subsection{MusicCommunity and keyword search}
 \label{sec:searching-musiccommunity-impl}
 The MusicCommunity extends the TrustChainCommunity with additional methods \textit{performRemoteKeywordSearch} and \textit{onKeywordSearch}. These methods enable searching for content using a keyword, both locally and remotely. These methods test each \textit{title}, \textit{artists} and \textit{date} field of each Release block against a \verb|contain(keyword)| filter. This means: if the keyword is contained in one of those values, it is added to the results.
 
-When the user performs a search, the local database is filtered first to find matches. If there are less than \(x\) results, the device sends a KeywordSearchMessage (see X) to a maximum of \(P\) known peers in the MusicCommunity. This asks neighbours to inspect their local database to find matches for the same query. Upon receival, the peer subtracts 1 from the time to live (TTL) field. If the peer finds a match, it sends the corresponding TrustChain block directly back to the original asker, appointed by the \textit{origin} field. This contains the IPv8 \textit{peer ID}~\citep{mattskala2020} of the peer that initiated the search. Otherwise, if the time to live (TTL) is more than 1, the peer forwards this KeywordSearchMessage (see \ref{fig:keyword-search-message)}) to other peers. Our keyword search is implemented with default values of \(T=1, P=20, x=5\) (where \(T\) is the TTL).
+When the user performs a search, the local database is filtered first to find matches. If there are less than \(x\) results, the device sends a KeywordSearchMessage (see X) to a maximum of \(P\) known peers in the MusicCommunity. This asks neighbours to inspect their local database to find matches for the same query. Upon receival, the peer subtracts 1 from the time to live (TTL) field. If the peer finds a match, it sends the corresponding TrustChain block directly back to the original asker, appointed by the \textit{origin} field. This contains the IPv8 \textit{peer ID}~\citep{mattskala2020} of the peer that initiated the search. Otherwise, if the time to live (TTL) is more than 1, the peer forwards this KeywordSearchMessage (see \ref{fig:keyword-search-message-model}) to other peers. Our keyword search is implemented with default values of \(T=1, P=20, x=5\) (where \(T\) is the TTL).
 
 \section{Networking}
 We implement audio track uploading, downloading and streaming using BitTorrent. This technology has shown to run well on mobile devices (cite), allows for extensive configuration and flexible uploading (seeding) strategies. Moreover it supports transfer over local area network and discovering peers in a distributed hash table. It is a well-established technology, as it was released in 2001.
