@@ -1,5 +1,17 @@
 \chapter{Implementation}
-The application is implemented as a `mini-app' of the \textit{TrustChain Superapp}~\citep{mattskala2020}. This follows the concept of super apps~\citep{kpmg2019superapps}. The app is published on the Android Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}} and its code is publicly available\footnote{\url{https://github.com/Tim-W/trustchain-superapp}}. As programming language Kotlin is selected, as it is the preferred language for Android development~\citep{googleio2019}. Moreover the underlying technology stack is also written in Kotlin, so this allows for neat integration. This section describes the implementation choices, usage of external libraries and presents the user interface of MusicDAO.
+The application is implemented as a `mini-app' of the \textit{TrustChain Superapp}~\citep{mattskala2020}. This follows the concept of super apps~\citep{kpmg2019superapps}. The app is published on the Android Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}} and its code is publicly available\footnote{\url{https://github.com/Tim-W/trustchain-superapp}}. As programming language Kotlin is selected, as it is the preferred language for Android development~\citep{googleio2019}. Moreover the underlying technology stack is also written in Kotlin, so this allows for neat integration. This section describes the implementation choices, usage of external libraries and presents the user interface of MusicDAO. An overview of the implementation can be seen in the package diagram in fig. \ref{fig:package-diagram}.
+\begin{figure}
+    \minipage{0.3\textwidth}
+        \includegraphics[width=1\linewidth]{implementation/screenshot-superapp.png}
+        \caption{The app is integrated as a mini-app in the IPv8 Superapp catalog}
+        \label{fig:screenshot-superapp}
+    \endminipage\hfill
+    \minipage{0.6\textwidth}
+        \includegraphics[width=1\linewidth]{implementation/package-diagram.png}
+        \caption{Package diagram showing the interaction with external libraries and TrustChain Superapp packages}
+        \label{fig:package-diagram}
+    \endminipage
+\end{figure}
 
 \section{Identity and authenticity}
 We implement the public key infrastructure as described in \ref{sec:pki-design}. We use the identity system proposed by \cite{mattskala2020}. All Release blocks (as with all blocks) created on the TrustChain are assigned an identity of the creator. This is a public key using \textit{Curve25519} elliptic-curve cryptography. Every device running the MusicDAO will receive a public/private key-pair upon first launch. While the public key ultimately shows the identification of the device, it can also be used as identification of the artist owning the device. Currently there is no multi-signature support implemented. This means that in the case of a group publishing a Release, there is only one public key representing the whole group. Every artist, and every unique collaboration between artists should generate their own key-pair to describe ownership of the Release.
@@ -65,11 +77,6 @@ We created a public Bitcoin RegTest environment\footnote{\url{https://developer.
 \subsection{Playlist overview}
 The playlist overview screen, as shown in \ref{fig:screenshot-home} is the screen that is first shown upon starting the MusicDAO. Here the user is presented a list of playlists, loaded from their local TrustChain database. Currently, each Playlist fragment corresponds to exactly one Release block (see ref). In the background runs an iterative process which checks whether new playlist content is found, and re-renders the view if necessary. The playlists are sorted on their torrent swarm health in ascending order. 
 \begin{figure}
-    \minipage{0.3\textwidth}
-        \includegraphics[width=1\linewidth]{implementation/screenshot-superapp.png}
-        \caption{The app is integrated as a mini-app in the IPv8 Superapp catalog}
-        \label{fig:screenshot-superapp}
-    \endminipage\hfill
     \minipage{0.3\textwidth}
         \includegraphics[width=1\linewidth]{implementation/screenshot-home.png}
         \caption{The playlist overview screen, which is the entrance screen}
