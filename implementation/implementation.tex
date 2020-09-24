@@ -58,9 +58,21 @@ Seeding of content is implemented using a simple continuous mechanism. On startu
 \section{Caching}
 The app implements both caching of tracks and metadata, to enable fast browsing and playback of tracks. As described in \ref{sec:torrent-creation}, only magnet links are shared on the TrustChain blocks. When the user opens a playlist for the first time, torrent metadata is fetched from peers for the corresponding magnet link. Once this metadata is received, it is written to a new .torrent file in the \textit{cache directory}\footnote{\url{https://developer.android.com/training/data-storage}} of the app. This can then be picked up by the ContentSeeder (see \ref{sec:content-seeding}). The tracks are also stored in the cache directory, in subdirectories identified by the \textit{name}~\citep{bittorrentbep3} property of the torrent metadata. The process of browsing playlists, loading metadata and selecting tracks using caching is shown in fig. \ref{fig:playing-tracks}.
 \begin{figure}
-    \includegraphics[width=0.3\textwidth]{implementation/playing_track.png}
-    \caption{Browsing and playing tracks}
-    \label{fig:playing-tracks}
+    \minipage{0.3\textwidth}
+        \includegraphics[width=1\linewidth]{implementation/playing_track.png}
+        \caption{Browsing and playing tracks}
+        \label{fig:playing-tracks}
+    \endminipage\hfill
+    \minipage{0.3\textwidth}
+        \includegraphics[width=1\linewidth]{implementation/screenshot-home.png}
+        \caption{The playlist overview screen, which is the entrance screen}
+        \label{fig:screenshot-home}
+    \endminipage\hfill
+    \minipage{0.3\textwidth}
+        \includegraphics[width=1\linewidth]{implementation/screenshot-playlist.png}
+        \caption{Playlist fragment, showing all tracks of one Release}
+        \label{fig:screenshot-playlist}
+    \endminipage\hfill
 \end{figure}
 
 \section{Music Player and Streaming}
@@ -76,18 +88,6 @@ We created a public Bitcoin RegTest environment\footnote{\url{https://developer.
 \section{Interface}
 \subsection{Playlist overview}
 The playlist overview screen, as shown in \ref{fig:screenshot-home} is the screen that is first shown upon starting the MusicDAO. Here the user is presented a list of playlists, loaded from their local TrustChain database. Currently, each Playlist fragment corresponds to exactly one Release block (see ref). In the background runs an iterative process which checks whether new playlist content is found, and re-renders the view if necessary. The playlists are sorted on their torrent swarm health in ascending order. 
-\begin{figure}
-    \minipage{0.3\textwidth}
-        \includegraphics[width=1\linewidth]{implementation/screenshot-home.png}
-        \caption{The playlist overview screen, which is the entrance screen}
-        \label{fig:screenshot-home}
-    \endminipage\hfill
-    \minipage{0.3\textwidth}
-        \includegraphics[width=1\linewidth]{implementation/screenshot-playlist.png}
-        \caption{Playlist fragment, showing all tracks of one Release}
-        \label{fig:screenshot-playlist}
-    \endminipage\hfill
-\end{figure}
 \subsection{Playlist fragment}
 A Playlist fragment displays one Release object. The playlist fragment shows its list of tracks and other metadata, such as the title and artists of the Release (see \ref{fig:screenshot-playlist}). For each track the file size is displayed, and a loading indicator on the right side. This shows, in real time, how much of the track is downloaded. In the example of \ref{fig:screenshot-playlist}, the first track is fully loaded.
 \subsection{Wallet}
