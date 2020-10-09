@@ -4,9 +4,13 @@ In this section we present the design of our software application MusicDAO. Musi
 \section{Phone-to-phone connectivity}
 Mobile phones have the largest share of any type of device using music streaming services. If the software that we design and implement runs well on a network consisting of only mobile devices, we can conclude that it will run well on better hardware (such as PCs) as well. For these reasons, we design our system to work on mobile phones only.
 
+We choose to use the Android framework for decentralized apps as proposed by~\cite{mattskala2020}. This gives us a toolbox for building phone-to-phone serverless apps and make use of its distributed ledger technology to build a public database. It also gives us a public-key infrastructure to identify and authenticate artists. 
+
 \section{Release model}
 \label{sec:release-model}
-A Release is an object describing a list of tracks that are published by a clearly identifiable artist or group of artists. For example, a Release can represent a single, and EP or an album. It is modeled as shown in fig. \ref{fig:release-model}. Release objects are shared between peers in the network. By discovering many of those objects, a user can see and browse through them to select a track to play. A Release object merely contains metadata of the tracks. We design the network to have a separate channel for downloading the track files. This is to enable fast discovery and
+Central to our system will be the storage of metadata and audio files for playlists. We design an abstract model for the structure of this metadata, so that the artist is free in the way to release music content. The artist may publish tracks as part of a single, an EP, an album or any other structured list of tracks.
+
+A Release is an object describing a list of tracks that are published by a clearly identifiable artist or group of artists. It is modeled as shown in fig. \ref{fig:release-model}. Release objects are shared between peers in the network. By discovering many of those objects, a user can see and browse through them to select a track to play. A Release object merely contains metadata of the tracks. We design the network to have a separate channel for downloading the track files. This is to enable fast discovery and
 searching of Releases, as Release objects have a small byte size. 
 \begin{figure}
     \minipage{0.2\textwidth}
@@ -29,8 +33,11 @@ As we design a system that is fully decentralized, we cannot use a central datab
 
 In the context of MusicDAO we use this PKI to proof ownership of Release objects. All Release objects are signed using the owner's private key and the signature is added to the object. Any user receiving this object can verify its authenticity.
 
+We choose to use the public key infrastructure as implemented in the TrustChain-Superapp~\citep{mattskala2020}. This gives us a unique identity per Android phone, by abstracting the network identities such as (changing) IP addresses and Bluetooth addresses.  
 \section{Distributed storage}
 Central to our system is sharing downloading and storage of audio files and Release objects (see \ref{sec:release-model}). To design a system which has no middlemen or regulators for publishing Releases, and has no central control, a distributed storage system is required. This storage system should have the following properties: immutability (data cannot be tampered with), resiliency (data should be available as long as users want it) and rigorous duplication (all objects should live on multiple devices so they do not disappear when requested). Distributed ledger technology (DLT) allows for these properties, so we design our system with a DLT as a major component.
+
+One implementation of this technology is TrustChain~\citep{otte2020trustchain} which allows for recording transactions between peers in a linearly scaling public ledger. Every peer has its own immutable and public blockchain which shows its history of transactions with others. This way we can establish trust in a certain party. In our context, we can use this mechanism to estimate trust in artists by inspecting their history of uploads. We choose TrustChain because of its scalability and trust mechanism, and because it has a native implementation for Android, as described in \ref{sec:sote-trustchain}. In addition, it allows for offline communication, so users can download and explore new content using Bluetooth or LAN.
 
 \section{Distributed downloading and uploading}
 To be able to have low latency for discovering and playing music tracks, while using no central nor high-throughput servers, the network demands participants to upload content continuously. We design the app to, by default, use the network capabilities of the mobile device to upload content as much as possible. This is constrained by networking hardware, data subscription plans and other software running on the phone.
@@ -40,6 +47,8 @@ For searching content we use a simple distributed algorithm called XYZ (cite). P
 
 \section{Direct payments without intermediaries}
 As we are designing a system with no intermediaries, it should be possible to give money directly to artists. Cryptocurrency allows for peer-to-peer payments which achieve this goal, so we use this in the MusicDAO. Cryptocurrency payments will be used for two different functionalities: a user can send a donation to an artist, or a user can pay artists using a monthly subscription system. This subscription system pays artists that the user listened to, using the Artist Income Division Algorithm (see \ref{sec:aida-design}).
+
+We choose to use Bitcoin as a cryptocurrency as it has shown to be a secure and popular payment system, and it does not rely on any third parties to run. It also allows for making a experimentation environment without any high-throughput external servers. 
 
 \subsection{Wallet}
 Cryptocurrency implementations allow for private/public key-pairs which can be interpreted as a kind of wallet; the funds can only be unlocked by a holder of the private key. In the case of MusicDAO we design the app to include a wallet for every user. To receive money, every artist should share their public key to all of their listeners. To achieve this, the public key of their cryptocurrency wallet is included as a property of the Release objects (see \ref{sec:release-model}). As there are no institutions or banks involved in storing money, users will be required to keep their private key safe.
