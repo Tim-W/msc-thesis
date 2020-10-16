@@ -1,6 +1,22 @@
 \chapter{Implementation}
 The application is implemented as a `mini-app' of the \textit{TrustChain Superapp}~\citep{mattskala2020}. This follows the concept of super apps~\citep{kpmg2019superapps}. The app is published on the Android Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}} and runs on Android 5.1 and above. Its code is publicly available\footnote{\url{https://github.com/Tim-W/trustchain-superapp}}. As programming language Kotlin is selected, as it is the preferred language for Android development~\citep{googleio2019}. Moreover the underlying technology stack is also written in Kotlin, so this allows for neat integration. This section describes the implementation choices, usage of external libraries and presents the user interface of MusicDAO. The main interfaces of the app can be seen below (figs. \ref{fig:screenshot-home}, \ref{fig:screenshot-playlist} and \ref{fig:tip-artist}). An overview of the structure of the code can be seen in the package diagram in fig. \ref{fig:package-diagram}.
-\begin{figure}[H]
+
+\section{Features overview}
+We implemented a peer-to-peer system to share, discover and listen to music, and to give payments to artists. The system requires no servers, middlemen or third parties to run. Our Android app contains the following features:
+\begin{itemize}
+    \item Defining album/single/EP releases using metadata, and sharing those with peers; Sharing of your audio tracks with peers; Immutable storage of music metadata and cryptographic identification of artists.
+    \item Streaming music over BitTorrent; Prioritization algorithm to minimize streaming latency; Caching audio files and metadata.
+    \item Browsing playlists; Local and remote keyword search for music.
+    \item Mobile bitcoin wallet implementation; Peer-to-peer donations to artists using Bitcoin.
+\end{itemize}
+The following planned features were not implemented:
+\begin{itemize}
+    \item Artist Income Division Algorithm.
+    \item Content sorting algorithm based on swarm health.
+\end{itemize}
+Apart from the Android SDK and the TrustChain Superapp, the main libraries that are used are shown in \ref{tab:library-usage}. In the following sections we explain the details of implementing the aforementioned features in a top-down overview, starting with the interfaces.
+
+\begin{figure}[]
     \minipage{0.3\textwidth}
         \includegraphics[width=1\linewidth]{implementation/screenshot-home.png}
         \caption{The playlist overview screen, which is the entrance screen}
@@ -22,34 +38,6 @@ The application is implemented as a `mini-app' of the \textit{TrustChain Superap
     %     \label{fig:screenshot-superapp}
     % \endminipage\hfill
 \end{figure}
-
-\section{Features overview}
-We implemented a peer-to-peer system to share, discover and listen to music, and to give payments to artists. The system requires no servers, middlemen or third parties to run. Our Android app contains the following features:
-\begin{itemize}
-    \item Defining album/single/EP releases using metadata, and sharing those with peers; Sharing of your audio tracks with peers; Immutable storage of music metadata and cryptographic identification of artists.
-    \item Streaming music over BitTorrent; Prioritization algorithm to minimize streaming latency; Caching audio files and metadata.
-    \item Browsing playlists; Local and remote keyword search for music.
-    \item Mobile bitcoin wallet implementation; Peer-to-peer donations to artists using Bitcoin.
-\end{itemize}
-The following planned features were not implemented:
-\begin{itemize}
-    \item Artist Income Division Algorithm.
-    \item Content sorting algorithm based on swarm health.
-\end{itemize}
-Apart from the Android SDK and the TrustChain Superapp, the main libraries that are used are shown in \ref{tab:library-usage}. In the following sections we explain the details of implementing the aforementioned features in a top-down overview, starting with the interfaces.
-\begin{table}[]
-\begin{tabular}{|l|l|l|}
-\hline
-Name                  & Version & Usage                          \\ \hline
-JLibtorrent           & 1.2.10  & Peer-to-peer file distribution \\ \hline
-TorrentStream-Android & 2.7.0   & Video streaming library        \\ \hline
-ExoPlayer             & 2.10.5  & Android multimedia player      \\ \hline
-BitcoinJ              & 0.15.7  & Java bitcoin interface         \\ \hline
-XChange               & 5.0.1   & Crypto/USD price conversion    \\ \hline
-\end{tabular}
-\caption{Notable libraries used}
-\label{tab:library-usage}
-\end{table}
 
 \section{Playlist overview interface}
 The playlist overview screen, as shown in \ref{fig:screenshot-home} is the screen that is first shown upon starting the MusicDAO. Here the user is presented a list of playlists, loaded from their local TrustChain database. Currently, each Playlist fragment corresponds to exactly one Release block (see \ref{fig:release-model}). The playlists are rendered in real-time based on TrustChain data. The playlists are sorted on their torrent swarm health in ascending order. 
@@ -84,30 +72,16 @@ We implement audio track uploading, downloading and streaming using JLibtorrent\
 To create and share music content, a user can create a Release object using the dialog shown in fig. \ref{fig:submit-release-dialog}.  There are two options for creation: the user either selects local audio tracks or pastes a magnet link. Afterwards, the user adds metadata describing the contents and submits the Release. In the background this creates a torrent file, which is stored on the mobile device. Finally, by using the computed infohash and file list, the magnet link of the torrent file is created and added to the \textit{magnet} field of the Release block.
 
 To keep the system independent on centralized trackers, torrent peers are found using a distributed hash table~\citep{dht2019}. In addition, the app uses the local peer discovery (LPD)~\citep{bittorrentbep142015} functionality of BitTorrent. This allows for finding peers and transmitting torrent pieces over a LAN, resulting in fast transmission and low latency.
+\subsection{Content seeding}
+\label{sec:content-seeding}
+Seeding of content is implemented using a simple continuous mechanism. The ContentSeeder class (see X) runs a background thread which seeds all local torrents, with an upper threshold \(T\). This is set to \(T=10\). The ContentSeeder uses a last-in-first-out heuristic: Only the top \(T\) most recently created/received torrent files are seeded.
+\section{Caching}
+Caching is used for fast browsing and music playback. All torrent metadata and all track files received from peers are cached on the Android phone. Audio files are stored in the app cache directory\footnote{\url{https://developer.android.com/training/data-storage}}, indexed by the torrent \textit{name}~\citep{bittorrentbep3} property. 
 \begin{figure}
     \minipage{0.3\textwidth}
         \includegraphics[width=\linewidth]{implementation/screenshot-select-tracks.png}
         \caption{Dialog for creating and publishing a new Release}
         \label{fig:submit-release-dialog}
-    \endminipage\hfill
-    \minipage{0.3\textwidth}
-        \includegraphics[width=\linewidth]{implementation/screenshot-submit-release.png}
-        \caption{Selecting local tracks for creating a new Release}
-        \label{fig:select-tracks}
-    \endminipage\hfill
-    \minipage{0.3\textwidth}
-    \endminipage
-\end{figure}
-\subsection{Content seeding}
-\label{sec:content-seeding}
-Seeding of content is implemented using a simple continuous mechanism. The ContentSeeder class (see X) runs a background thread which seeds all local torrents, with an upper threshold \(T\). This is set to \(T=10\). The ContentSeeder uses a last-in-first-out heuristic: Only the top \(T\) most recently created/received torrent files are seeded.
-\section{Caching}
-Caching is used for fast browsing and music playback. The process of browsing playlists, loading metadata and selecting tracks using caching is shown in fig. \ref{fig:playing-tracks}. All torrent metadata and all track files received from peers are cached on the Android phone. Audio files are stored in the app cache directory\footnote{\url{https://developer.android.com/training/data-storage}}, indexed by the torrent \textit{name}~\citep{bittorrentbep3} property. 
-\begin{figure}
-    \minipage{0.3\textwidth}
-        \includegraphics[width=1\linewidth]{implementation/playing_track.png}
-        \caption{Browsing and playing tracks}
-        \label{fig:playing-tracks}
     \endminipage\hfill
     \minipage{0.6\textwidth}
     \includegraphics[width=1\linewidth]{implementation/package-diagram.png}
@@ -117,7 +91,7 @@ Caching is used for fast browsing and music playback. The process of browsing pl
 \end{figure}
 
 \section{Music Player and Streaming} 
-Playing music is implemented using ExoPlayer (\ref{fig:libraries}). This music player library is suitable as it allows for playing tracks that are partially loaded, which enables streaming.
+Playing music is implemented using ExoPlayer (\ref{tab:library-usage}). This music player library is suitable as it allows for playing tracks that are partially loaded, which enables streaming.
 \subsection{Priority handling}
 To achieve fast buffering, we implemented a priority system for tracks and torrent chunks. This uses the piece priorities system in libtorrent, which range from 1 (normal) to 7 (highest) (see libtorrent Manual\footnote{\url{https://www.libtorrent.org/manual-ref.html\#file-format}}). By default, files have a priority of 1. When a user selects a track, this track is given a \textit{file\_priority} of 5. In addition, the first 5  pieces of the selected track are given a \textit{piece\_priority} of 7, so that the first seconds of the track are buffered quickly and the user can start streaming early.
 
@@ -143,7 +117,21 @@ When the user performs a search, the local database is filtered first to find ma
 We created a public Bitcoin RegTest environment\footnote{\url{https://developer.bitcoin.org/examples/testing.html\#regtest-mode}} to test peer-to-peer Bitcoin donations and payments. This creates a new `clean slate' Bitcoin blockchain and allows for full control over the chain and miners. This enables a test environment that is useful for experiments, as we can tweak the block generation speed and keep track of all transactions registered on the closed-off blockchain.
 
 \section{Quality assurance}
-In order to preserve quality of code we make use of continuous integration, automated tests and an online crash reporter. Unit tests are written using JUnit 4\footnote{\url{https://junit.org/junit4/}} and the mocking library Mockk\footnote{\url{https://mockk.io/}}. The code coverage of these unit tests can be seen in \ref{tab:code-cov}. The majority of uncovered code contain user interface interaction and networking callback logic. 
+In order to preserve quality of code we make use of continuous integration, automated tests and an online crash reporter. Unit tests are written using JUnit 4\footnote{\url{https://junit.org/junit4/}} and the mocking library Mockk\footnote{\url{https://mockk.io/}}. The code coverage of these unit tests can be seen in \ref{tab:code-cov}. This is measured by Android Studio 4\footnote{\url{https://developer.android.com/studio}}. The majority of uncovered code contain user interface interaction and networking callback logic. 
+
+\begin{table}[]
+\begin{tabular}{|l|l|l|}
+\hline
+Name                  & Version & Usage                          \\ \hline
+JLibtorrent           & 1.2.10  & Peer-to-peer file distribution \\ \hline
+TorrentStream-Android & 2.7.0   & Video streaming library        \\ \hline
+ExoPlayer             & 2.10.5  & Android multimedia player      \\ \hline
+BitcoinJ              & 0.15.7  & Java bitcoin interface         \\ \hline
+XChange               & 5.0.1   & Crypto/USD price conversion    \\ \hline
+\end{tabular}
+\caption{Notable libraries used}
+\label{tab:library-usage}
+\end{table}
 
 \begin{table}[]
 \begin{tabular}{|l|l|}
@@ -164,10 +152,10 @@ wallet                 & 0\% (0/100)            \\ \hline
 \label{tab:code-cov}
 \end{table}
 
-These tests are run in an automated testing environment using Github Actions\footnote{\url{https://github.com/features/actions}}. This continuous integration system is executed on every pull request for changes to the code. Aside from this, during the experimentation phase, app installs and crashes are recorded using Firebase Crashlytics, which is a crash reporter showing details of each application crash of all users (see fig. \ref{fig:firebase-crashlytics}). Using this, a full stack trace can be inspected remotely for each crash.
+These tests are run in an automated testing environment using Github Actions\footnote{\url{https://github.com/features/actions}}. This continuous integration system is executed on every pull request for changes to the code. Aside from this, during the experimentation phase, app installs and crashes are recorded using Firebase Crashlytics, which is an end-to-end crash reporting tool. It shows details of each application crash of all users (see fig. \ref{fig:firebase-crashlytics}). Using this, a full stack trace can be inspected remotely for each crash. In addition it helps with gaining insight in performance for certain types of Android devices, Android versions and helps us evaluate user interaction with the app. 
 
 \begin{figure}
-    \includegraphics[width=0.55\linewidth]{implementation/firebase-crashlytics.png}
-    \caption{Firebase Crashlytics crash reporter. This figure shows the crashes over time peer week}
+    \includegraphics[width=0.8\linewidth]{implementation/firebase-crashlytics.png}
+    \caption{Firebase Crashlytics crash reporter; this figure shows the crashes over time}
     \label{fig:firebase-crashlytics}
 \end{figure}
