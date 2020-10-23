@@ -20,7 +20,7 @@
     \State $ttl \gets ttl-1$
     \State $results\gets localSearch(query)$
     \If {$|results|\le 1$}
-       \For{$i\gets 1, maxPeers$}
+      \For{$i\gets 1, maxPeers$}
             \State $peer \gets peers[i]$
             \State $sendQuery(origin, peer, query, ttl)$
         \EndFor
