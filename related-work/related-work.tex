@@ -61,23 +61,25 @@ There are no differences between hosters and downloaders. Meaing, all participan
 \subsection{IPFS}
 The Inter-Planetary FileSystem, introduced by \cite{benet2014ipfs}, is a distributed peer-to-peer file sharing system in which any person can start a node and start uploading and downloading files. It uses a Distributed Hash Table to address content using a combination of SHA-256 hashes and hyperlinks. This means there is a global key-value store for all files (and file parts), in contrast to BitTorrent, which works with torrent swarms and trackers. IPFS uses an efficient graph implementation (a Merkle DAG) for addressing content and nodes. In addition, it removes duplications of files across the network. As IPFS uses a global key-value store for all files, every file hosting node needs to synchronize with the latest acyclic graph before it can start serving files.
 
-End-users of content stored on IPFS can access content without supporting the network, so there is the possibility of free-riding. For example, users of the aforementioned Audius music streaming system are not required, to run an IPFS node to improve the health of the network. In addition, there are no direct (financial) incentives to run an IPFS node, other than to help the network and to host content. 
+End-users of content stored on IPFS can access content without supporting the network, so there is the possibility of free-riding. For example, users of the aforementioned Audius music streaming system are not required to run an IPFS node to improve the health of the network. In addition, there are no direct (financial) incentives to run an IPFS node, other than to help the network and to host content. 
 
-\subsection{Comparison}
-A notable difference between IPFS and BitTorrent is that IPFS makes a difference in file-hosting nodes (running on desktops only) and end-users (which only download files). BitTorrent does not make a distinction between these actors. In BitTorrent, every participant of the network has the capabilities to both upload and download content. In addition, IPFS nodes only run on servers or desktop software whereas BitTorrent can also run on phones. Therefore a BitTorrent network using DHT is a distributed networks while IPFS is a decentralized network (as visualized in \ref{fig:decentralized} and \ref{fig:distributed}).
+\subsection{Comparison: IPFS and BitTorrent}
+A notable difference between IPFS and BitTorrent is that IPFS makes a difference in file-hosting nodes and end-users (which only download files). BitTorrent does not make a distinction between these actors. In BitTorrent, every participant of the network has the capabilities to both upload and download content. Therefore a BitTorrent network using DHT is typically more decentralized than IPFS. 
 
-\begin{figure}
-    \minipage{0.45\textwidth}
-        \includegraphics[width=1\linewidth]{related-work/decentralized-ipfs.png}
-        \caption{Decentralized file sharing structure: each node hosts nodes for some end-users}
-        \label{fig:decentralized}
-    \endminipage\hfill
-    \minipage{0.45\textwidth}
-        \includegraphics[width=1\linewidth]{related-work/distributed-bittorrent.png}
-        \caption{Distributed file sharing structure: each participant can exchange with each other participant}
-        \label{fig:distributed}
-    \endminipage
-\end{figure}
+IPFS uses a global file index using a hash tree, which means that every two file that produce the same hash are stored on the same index. This leads to de-duplication, which may result in better use of disk space, in comparison to BitTorrent.
+
+% \begin{figure}
+%     \minipage{0.45\textwidth}
+%         \includegraphics[width=1\linewidth]{related-work/decentralized-ipfs.png}
+%         \caption{Decentralized file sharing structure: each node hosts nodes for some end-users}
+%         \label{fig:decentralized}
+%     \endminipage\hfill
+%     \minipage{0.45\textwidth}
+%         \includegraphics[width=1\linewidth]{related-work/distributed-bittorrent.png}
+%         \caption{Distributed file sharing structure: each participant can exchange with each other participant}
+%         \label{fig:distributed}
+%     \endminipage
+% \end{figure}
 
 \section{Incentives for file hosting}
 \label{sec:file-spreading-incentives}
