@@ -18,7 +18,7 @@ None of the state-of-the-art decentralized audio streaming technologies show a r
 \label{sec:smart-contracts}
 The payment to royalties to artists can be described in a transparent and immutable record on a blockchain. In addition, smart contracts can be used to automate payments~\citep{buterin2014next}. Smart contracts are self-executing (no ambiguity) and self-verifying (guaranteeing its statements). In the music industry context, a smart contract can be used for transparent, immutable and automatic payment distribution of royalties. This technique was shown in practice in 2017, when Imogen Heap released the song `Tiny Human'~\citep{heap2017blockchain}. Its distribution of payments to the makers and recorders was written in a smart contract, in the form of a record on the Ethereum blockchain. When a user downloads the corresponding track and makes the payment using cryptocurrency, the forwarding details of the payment are located within the blockchain, and executed as declared on the smart contract.
 
-\section{TrustChain-Superapp}
+\section{Decentralized application frameworks}
 \label{sec:sote-trustchain}
 The TrustChain superapp~\citep{mattskala2020} is a framework for implementing mobile Android decentralized applications. It allows for storing append-only immutable data on TrustChain~\citep{otte2017trustchain} and spreading this data in a phone-to-phone serverless network. It follows the concept of super apps~\citep{kpmg2019superapps}, meaning that it contains many mini-apps which use the same networking interface. The Superapp is an Android app as seen in fig. \ref{fig:trustchain-superapp}. Its mini-apps implement decentralized democratic voting and has bitcoin payment integration, among other features.
 
@@ -35,10 +35,14 @@ The TrustChain superapp~\citep{mattskala2020} is a framework for implementing mo
     \endminipage
 \end{figure}
 
-\section{Decentralized Autonomous Organization technologies}
+\section{DAO theory and technologies}
+Important groundwork around the theory and implementation of a DAO has been done by \cite{jentzsch2016decentralized}. He notes that corporations originally work through people only, and this has two flaws: ``People do not always follow the rules, and they do not always agree what the rules require''. His paper illustrates a method that allows creating and maintaining organizations in which ``(1) participants maintain direct real-time control of contributed funds and (2) governance rules are formalized, automated and enforced using software''.
+
 For an application to evolve without a company or a responsible group of people, decisions need to be made on protocol or feature additions and changes. We inspect the state-of-the-art of peer-to-peer technologies which enable autonomous communities to solve these problems by organizing themselves. In computer science, one approach to this is democratic voting based on voluntary proposals to change and improve the decentralized system. 
 
-One mobile implementation of this is a mini-app of the aforementioned TrustChain-Superapp (see fig. \ref{fig:trustchain-superapp-voter}). In this voting app, any participant of the organization can create a proposal for the community to vote on. Once a preset voting threshold is reached, the proposal is automatically accepted or denied. Bookkeeping of these proposals is done using the TrustChain distributed ledger technology~\citep{otte2017trustchain}. This voting app is an important basis for democratic decision making, but does not include code changes directly after proposals are accepted, so lacks app evolution. 
+\cite{jentzsch2016decentralized} proposes a system based on the Ethereum blockchain, using smart contracts~\citep{buterin2014next}. In essence, any person that would like to join a DAO must be invited or pay a fee. All participants use tokens, to create proposals and to vote on proposals, so it uses a proof-of-stake mechanism. The paper also contains a solution for the majority owns minority attack: (an attacker with more than half of all tokens can make and accept a proposal to send all its tokens to itself) by allowing participants to split a DAO. 
+
+One mobile implementation of this is a mini-app of the aforementioned TrustChain-Superapp (see fig. \ref{fig:trustchain-superapp-voter}). In this voting app, any participant of the organization can create a proposal for the community to vote on. Once a preset voting threshold is reached, the proposal is automatically accepted or denied. Bookkeeping of these proposals is done using the TrustChain distributed ledger technology~\citep{otte2017trustchain}. This voting app is an important basis for democratic decision making, but does not include code changes directly after proposals are accepted, so lacks app evolution. This protocol is based on proof-of-identity instead of proof-of-stake, as no tokens are involved.
 
 \begin{figure}
     \centering
