@@ -50,7 +50,7 @@ searching of Releases, as Release objects have a small byte size.
     \endminipage
 \end{figure}
 
-\section{Permissionless infrastructure and identities}
+\section{Identification of participants}
 \label{sec:pki-design}
 The MusicDAO allows any person to participate, and start publishing or listening to music. It requires a permissionless infrastructure, in which artists can be identified. As we design a system that is fully decentralized, we cannot use a central database to record user identities. Therefore every user generates a unique identity to be used in the network, and must be able to give proof of this identity. We use a public key infrastructure (PKI) which achieve these goals. Every user stores their private and public key on their device, and only share their public key. The keypair has a mathematical property that allows verification of messages that are signed with a private key. By comparing the public key of a peer with their signed message, anyone can verify the authenticity of the message.
 
@@ -58,13 +58,18 @@ In the context of MusicDAO we use this PKI to proof ownership of Release objects
 
 We choose to use the public key infrastructure as implemented in the TrustChain-Superapp~\citep{mattskala2020}. This gives us a unique identity per Android phone, by abstracting the network identities such as (changing) IP addresses and Bluetooth addresses. 
 
+\section{Trust system and sybil-resilience}
+In any permissionless infrastructure, legitimacy of parties is not defined by a centralized authority. To still establish trust in the legitimacy of artists, we use the TrustChain DLT~\citep{otte2017trustchain}. Using this technology, we record the history of uploaded tracks in an immutable and transparent way. In essence, every artist adds Release blocks to its personal chain, and due to the interlinking mechanism of TrustChain, it is not possible to hide parts of this history. Every participant can view this timestamped history, as it is public by design. 
+
+This way, an application can inspect the legitimacy of an artist. For example, if an application finds a song X, published by both participant A and B, but the song published by participant A was published later, it can be concluded that A is more trustworthy than B, as B may have copied the song. This system can also be extended trivially to user ratings, or other interactions between parties, to achieve better measurements of trust. This distributed datastore of immutable and transparent histories then becomes a measure against Sybil attacks~\citep{douceur2002sybil} and artist impersonation.
+
 \section{Distributed storage}
 \label{sec:distributed-storage}
 Central to our system is sharing downloading and storage of audio files and Release objects (see \ref{sec:release-model}). To design a system which has no middlemen or regulators for publishing Releases, and has no central control, a distributed storage system is required. This storage system should have the following properties: immutability (data cannot be tampered with), resiliency (data should be available as long as users want it) and rigorous duplication (all objects should be saved on multiple machines). Distributed ledger technology (DLT) allows for these properties, so we design our system with a DLT as a major component.
 
 One implementation of this technology is TrustChain~\citep{otte2017trustchain} which allows for recording transactions between peers in a linearly scaling public ledger. Every peer has its own immutable and public blockchain which shows its history of transactions with others. This way we can establish trust in a certain party. In our context, we can use this mechanism to estimate trust in artists by inspecting their public history of uploads. We choose TrustChain because of its scalability, its trust mechanism, and because it has a native implementation for Android, as described in \ref{sec:sote-trustchain}. In addition, this implementation allows for offline communication, so users can download and explore new content using Bluetooth or LAN.
 
-\section{Distributed music sharing}
+\section{Peer-to-peer music file sharing}
 To be able to have low latency for discovering and playing music tracks, while using no central nor high-throughput servers, the network demands participants to upload content continuously. We design the app to, by default, use the network capabilities of the mobile device to upload content as much as possible. This is constrained by networking hardware, data subscription plans and other software running on the phone.
 
 The peer-to-peer file sharing protocol BitTorrent is suitable to share audio files in MusicDAO. We make BitTorrent a design choice as it does not require synchronizing with a global data store, in contrary to IPFS. This means we can build a metadata store independently from BitTorrent (for example, using TrustChain as explained in \ref{sec:distributed-storage}). BitTorrent also has stable implementations for Android.
@@ -98,8 +103,6 @@ Cryptocurrency implementations allow for private/public key-pairs which can be i
 
 \subsection{Artist Income Division Algorithm}
 \label{sec:aida-design}
-To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how periodic subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. Interaction can be measured in e.g. time listened, plays or feedback in the form of likes. The details of this division is explained in the implementation section of AIDA (see X).
+To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. Interaction can be measured in e.g. time listened, plays or feedback in the form of likes. The details of this division is explained in the implementation section of AIDA (see TODO).
 
 \input{design/distributed-search-pseudocode}
-
-% \section{Splitting the application and data layers} Mention the protocol vs platform model by Masnick
