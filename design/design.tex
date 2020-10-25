@@ -69,12 +69,12 @@ Central to our system is sharing downloading and storage of audio files and Rele
 
 One implementation of this technology is TrustChain~\citep{otte2017trustchain} which allows for recording transactions between peers in a linearly scaling public ledger. Every peer has its own immutable and public blockchain which shows its history of transactions with others. This way we can establish trust in a certain party. In our context, we can use this mechanism to estimate trust in artists by inspecting their public history of uploads. We choose TrustChain because of its scalability, its trust mechanism, and because it has a native implementation for Android, as described in \ref{sec:sote-trustchain}. In addition, this implementation allows for offline communication, so users can download and explore new content using Bluetooth or LAN.
 
-\section{Peer-to-peer music file sharing}
+\section{Peer-to-peer music sharing}
 To be able to have low latency for discovering and playing music tracks, while using no central nor high-throughput servers, the network demands participants to upload content continuously. We design the app to, by default, use the network capabilities of the mobile device to upload content as much as possible. This is constrained by networking hardware, data subscription plans and other software running on the phone.
 
 The peer-to-peer file sharing protocol BitTorrent is suitable to share audio files in MusicDAO. We make BitTorrent a design choice as it does not require synchronizing with a global data store, in contrary to IPFS. This means we can build a metadata store independently from BitTorrent (for example, using TrustChain as explained in \ref{sec:distributed-storage}). BitTorrent also has stable implementations for Android.
 
-\section{Distributed search algorithm}
+\section{Distributed search}
 For searching content we use introduce our simple distributed algorithm. Pseudocode of this algorithm is shown in algorithm 1. It asks peers around for content tagged with some keyword. When a peer finds a match on their local database, it sends this Release object to the original asking peer. Otherwise it forwards the query to their neighbours, after reducing the time-to-live property by 1. The messages stop being forwarded once their time-to-live property hits below 1. The structure of search messages are shown in fig. \ref{fig:keyword-search-message-model}.
 
 \section{Transparent money flow}
