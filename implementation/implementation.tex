@@ -54,7 +54,7 @@ XChange               & 5.0.1   & Crypto/USD price conversion    \\ \hline
 \end{figure}
 
 \section{Playlist overview interface}
-Overall, the app is set in a dark-styled color scheme. The `home' of the app is the playlist overview screen (see \ref{fig:screenshot-home}). It is the screen that is first shown upon starting the MusicDAO. Here the user is presented a list of playlists, with title and author, loaded from local disk and from peers. In our current implementation, each Playlist fragment corresponds to exactly one Release block (see \ref{fig:release-model}). MusicDAO does not support user-made playlists as of the time of writing. The playlists are rendered in real-time based on TrustChain data. This means: during browsing, newly clickable playlists show up instantly once they are discovered from peers. The playlists are sorted on their torrent swarm health in ascending order. Caching is used for fast browsing and music playback. All torrent metadata and all track files received from peers are cached on the Android phone. 
+The entry point of the app is the playlist overview screen (see \ref{fig:screenshot-home}). It is the screen that is first shown upon starting the MusicDAO. Here the user is presented a list of playlists, with title and author, loaded from local disk and from peers. In our current implementation, each Playlist fragment corresponds to exactly one Release block (see \ref{fig:release-model}). MusicDAO does not support user-made playlists as of the time of writing. The playlists are rendered in real-time based on TrustChain data. This means: during browsing, newly clickable playlists show up instantly once they are discovered from peers. The playlists are sorted on their torrent swarm health in ascending order. Caching is used for fast browsing and music playback. All torrent metadata and all track files received from peers are cached on the Android phone. 
 \section{Playlist fragment interface}
 When the user selects a playlist to browse and play, this fragment is shown (see \ref{fig:screenshot-playlist}). Here, the user can select a track to play. It presents its list of tracks and other metadata, such as the title and artist(s). For each track the file size is displayed, and a loading indicator on the right side. This shows, in real time, how much of the track is downloaded. In the example of \ref{fig:screenshot-playlist}, the first track is fully loaded. The track player, shown on the bottom, interacts directly with the tracklist and the selected track. It shows which track is selected and whether it is currently playing or buffering.
 \section{Wallet interface}
@@ -141,9 +141,30 @@ Each device must be synchronized with the network in order to make payments. A b
 In the current system, when a user makes a donation, this donation can only go to one artist. An automatic splitting system between different artists of one group or band has not been implemented yet.
 
 \section{Quality assurance}
-In order to preserve quality of code we make use of continuous integration, automated tests and an online crash reporter. Unit tests are written using JUnit 4\footnote{\url{https://junit.org/junit4/}} and the mocking library Mockk\footnote{\url{https://mockk.io/}}. The code coverage of these unit tests can be seen in \ref{tab:code-cov}.
+In order to preserve quality of code we make use of continuous integration, automated tests and an online crash reporter. Unit tests are written using JUnit 4\footnote{\url{https://junit.org/junit4/}} and the mocking library Mockk\footnote{\url{https://mockk.io/}}. The code coverage of these unit tests can be seen in \ref{tab:code-cov}. 
 
-These tests are run in an automated testing environment using Github Actions\footnote{\url{https://github.com/features/actions}}. This continuous integration system is executed on every pull request for changes to the code. Aside from this, during the experimentation phase, app installs and crashes are recorded using Firebase Crashlytics, which is an end-to-end crash reporting tool. It shows details of each application crash of all users (see fig. \ref{fig:firebase-crashlytics}). Using this, a full stack trace can be inspected remotely for each crash. In addition it helps with gaining insight in performance for certain types of Android devices, Android versions and helps us evaluate user interaction with the app. 
+Code coverage is measured by Android Studio 4\footnote{\url{https://developer.android.com/studio}}. The majority of uncovered code contain user interface interaction and networking callback logic. Code coverage could have been improved by introducing Android instrumented tests. These are tests that run on an Android device or emulator so that user interaction flows can be tested. However, we chose to not implement this as these type of tests can not be run in our continuous integration environment, and tweaking the CI for support of this would be a non-trivial task.
+
+All tests are run in an automated testing environment using Github Actions\footnote{\url{https://github.com/features/actions}}. This continuous integration system is executed on every pull request for changes to the code. Aside from this, during the experimentation phase, app installs and crashes are recorded using Firebase Crashlytics, which is an end-to-end crash reporting tool. It shows details of each application crash of all users (see fig. \ref{fig:firebase-crashlytics}). Using this, a full stack trace can be inspected remotely for each crash. In addition it helps with gaining insight in performance for certain types of Android devices, Android versions and helps us evaluate user interaction with the app.
+
+\begin{table}[]
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Package/class} & \textbf{Line coverage} \\ \hline
+MusicService.kt        & 15\% (15/95)           \\ \hline
+MusicBaseFragment.kt   & 50\% (1/2)             \\ \hline
+catalog                & 24\% (35/142)          \\ \hline
+dialog                 & 20\% (24/130)          \\ \hline
+ipv8                   & 81\% (57/70)           \\ \hline
+net                    & 90\% (27/30)           \\ \hline
+player                 & 0\% (0/50)             \\ \hline
+playlist               & 9\% (19/203)           \\ \hline
+util                   & 60\% (42/70)           \\ \hline
+wallet                 & 0\% (0/100)            \\ \hline
+\end{tabular}
+\caption{Code coverage overview}
+\label{tab:code-cov}
+\end{table}
 
 \begin{figure}
     \includegraphics[width=0.8\linewidth]{implementation/firebase-crashlytics.png}

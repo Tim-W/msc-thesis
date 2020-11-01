@@ -1,7 +1,23 @@
 \chapter{Design}
-In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery app, with peer-to-peer payment to artists in the form of donations and subscriptions. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. All users of the app form a community to share audio tracks and transfer money. Any user can join this community, publish their musical works and receive money from its listeners. With the goal of distributing power in the music industry, every peer in the network will have the same rights and access to the same functions. All participants cooperate in the network, which makes it self-scaling by design.
+
+
+In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery app, with peer-to-peer payment to artists in the form of donations and subscriptions. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. All users of the app form a community to share audio tracks and transfer money. Any user can join this community, publish their musical works and receive money from its listeners. Every peer in the network will have the same rights and access to the same functions. All participants cooperate in the network, which makes it self-scaling by design.
 
 The overall design of the system can be seen in fig. \ref{fig:architecture}. This describes the interaction between the different components, libraries and frameworks. The following sections explain the designed features, components and design choices.
+\\
+
+\tikzstyle{background rectangle}=[thin,draw=black]
+\begin{tikzpicture}[show background rectangle]
+
+\node[align=left, text width=0.87\textwidth, inner sep=1em]{
+The main goal of MusicDAO is: Distributing the power in the music industry, from centralized platforms to listeners and artists. Meaning: liberating artists from their dependence on money-grabbing platforms, so that they receive 100\% of the subscription/donation money from their listeners.
+};
+
+\node[xshift=1.0ex, yshift=-0.7ex, overlay, fill=white, draw=white, above 
+right] at (current bounding box.north west) {
+\textit{Main goal of our system}
+};
+\end{tikzpicture}
 
 \begin{figure}
     \includegraphics[width=0.6\textwidth]{design/architecture-v1.png}
@@ -9,13 +25,13 @@ The overall design of the system can be seen in fig. \ref{fig:architecture}. Thi
     \label{fig:architecture}
 \end{figure}
 
-\section{Serverless architecture}
-The network we are designing cannot use central servers or servers from third parties. This network should allow listeners and artists to exchange music and money, without the help from external services. We choose to build a phone-to-phone serverless network, for the following reasons. Firstly, Mobile phones have the largest share of any type of device using music streaming services. Secondly, if the software that we design and implement runs well on a network consisting of only mobile devices, we can conclude that it will run well on better hardware (such as PCs) as well. 
+\section{Zero-server architecture}
+The network we are designing cannot use central servers or servers from third parties. This network should allow listeners and artists to exchange music and money, without the help from external services. We choose to build a phone-to-phone zero-server network, for the following reasons. Firstly, Mobile phones have the largest share of any type of device using music streaming services. Secondly, if the software that we design and implement runs well on a network consisting of only mobile devices, we can conclude that it will run well on better hardware (such as PCs) as well. 
 
-We choose to use the Android framework for decentralized apps as proposed by~\cite{mattskala2020}. This gives us a toolbox for building phone-to-phone serverless apps and make use of its distributed ledger technology to build a public database. It also gives us a public-key infrastructure to identify and authenticate artists. 
+We choose to use the Android framework for decentralized apps as proposed by~\cite{mattskala2020}. This gives us a toolbox for building phone-to-phone zero-server apps and make use of its distributed ledger technology to build a public database. It also gives us a public-key infrastructure to identify and authenticate artists. 
 
 \section{Open protocol and artist freedom}
-The design of our system contains both an open protocol and an application for the end-user. This is inspired by the ideas from \cite{masnick2019protocols}, who describes that the Internet should go back to open protocols instead of platforms, and that there should be a clear distinction between applications and protocols, so that users have the choice between different applications. Then, every application can have its own strategy of content moderation.  This should result in more competition to ``[...] provide better services that minimize the impact of those
+The design of our system contains both an open protocol and an application for the end-user. This is inspired by the ideas from \cite{masnick2019protocols}, who describes that the Internet should go back to open protocols instead of platforms, and that there should be a clear distinction between applications and protocols, so that users have the choice between different applications. Then, every application can have its own strategy of content moderation. This should result in more competition to ``[...] provide better services that minimize the impact of those
 with malicious intent, without cutting off their ability to speak entirely''~\citep{masnick2019protocols}.
 
 In our context, we envision different applications using the same streaming, discovery and payment protocol, but with each application having strategies for content filtering and user interfaces. This way, music can not be censored in a centralized manner. Moderation of content happens on the side of the application, so that the user is in control of the settings of moderation and we do not lose freedom of speech or data resiliency.
