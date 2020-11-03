@@ -4,7 +4,7 @@ Music artists have a hard time making a living. The oligarchical power of music 
 
 At the time of writing, there exists no alternative decentralized and transparent music streaming system with peer-to-peer payments directly to artists. A visualization of the economic muscle of both the label oligarchy and streaming platform oligarchy is shown in \ref{fig:current-music-publishing-situation}.
 
-\textit{How can we design and implement a music streaming service that distributes the power from one authority to its users?}% \subsection{Ownership} ? It may be true that when you purchase a record on iTunes or favourite something on Spotify, you do not legally own a copy of it but only an access to it via their proprietary closed source platform.
+% \subsection{Ownership} ? It may be true that when you purchase a record on iTunes or favourite something on Spotify, you do not legally own a copy of it but only an access to it via their proprietary closed source platform.
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{problem-description/current-music-publishing-situation.png}
@@ -12,12 +12,39 @@ At the time of writing, there exists no alternative decentralized and transparen
     \label{fig:current-music-publishing-situation}
 \end{figure}
 
+% THE REAL PROBLEMS WITH PLATFORM OLIGARCHY
+% Streaming now dominates download and physical sales, accounting for 62% of US music
+% revenue in 2017, a staggering 47% rise since 2012 when it accounted for only 15%
+% Instead, we increasingly see label profits growing and support reserved for only
+% the most successful - read marketable - artists through playlists and featured/preferred
+% placement. In 2017, 93% of streams in the US went to the top 2% of available music. 
+% In return for opening up their catalog of content for unlimited use, Sony, Warner and
+% Universal (the Big 3) have built their contracts with streaming services to be among
+% the most lucrative in the music industry. In 2011 for example, when Sony signed a
+% contract allowing Spotify to use its content on their platform they were guaranteed
+% over $42 million in yearly advances throughout the course of its three year lifespan,
+% as well as over $9 million in ad revenue. https://www.theverge.
+% com/2015/5/19/8621581/sony-music-
+% spotify-contract
+% It suppresses small, independent artists. 
+
 % \todo[inline]{Mention pro-rata vs user-centric models}
 
 % The survey findings are instead consistent with a winner-take-all or superstar model in which copyright motivates musicians through the promise of large rewards in the future in the rare event of wide popularity. This conclusion is not unfamiliar, but this article is the first to support it with empirical evidence on musicians’ revenue. 
 
-\section{Music platform oligarchy}
-As shown in \ref{tab:streaming-service-market-share}, the top 4 streaming services have, as of Q1 2020, a subscriber share of over 80\%. As such they can be regarded as an oligarchy.
+\section{History in the industry: centralization of power}
+The nature of distributing music has changed spectacularly in the last 30 years. There has been a remarkable shift from physical sales, to online track downloads and piracy issues, to digital on-demand streaming. The bargaining power in music sales was once distributed over many different physical stores and labels, but is nowadays in the hand of a few labels and Big Tech corporations. 
+
+In the CD era of music, every city would have one or a few stores selling physical records. There were many music distribution companies competing for their sales.
+
+With the rapid shift towards digital sales around the 2000s, IT companies used their advantage in terms of network infrastructure to sell digital copies to massive audiences. The downfall of the physical record stores began. At the same time, only a dozen digital stores managed to attract large audiences on their platforms, and thus survived. This marked the start of \textit{platform accumulation}~\citep{meier2019rising}: routing all music and money flow over centralized platforms.
+
+Around the 2010s, the attention started to turn again to a new industry: on-demand streaming of music. In 2017, streaming accounted for 62\% of music revenue in the US, compared to only 15\% in 2012\footnote{\url{http://www.riaa.com}}. Nowadays, the number of distributors to choose from is reduced to only 5 Big Tech platforms. Together they form over 80\% share of all subscribers. Clearly, streaming royalties are an increasingly important piece of income for musicians. However, these increased revenues are not felt in the pockets of musicians, but rather in major label and platform profits.
+
+This history shows a trend towards centralization of power in the music industry. The future of artists is in the hand of a few large corporations, as they have monopoly power over them. This comes with several issues, as explained in the next section. 
+
+% Firstly, with only a few platforms monopolizing the market, these platforms can push down artist salaries. This mainly hits small and independent artists, as they have small bargaining power compared to major labels. Big Tech platforms have shown to make lucrative deals with major labels~\citep{meier2019rising}, paying them millions of dollars up front. Finally, they can lock content to one or a few platforms, as they have the largest music volume and audience. 
+
 \begin{table}[]
 \begin{tabular}{|l|l|}
 \hline
@@ -34,14 +61,17 @@ YouTube Music              & 6\%                   \\ \hline
 \end{table}
 
 \section{Intermediaries take a large share}
-Artists publishing their content on a music streaming service such as Google Music, Spotify and Apple Music receive low compensation, because the intermediaries take a large cut in revenue, typically between 25 and 40 percent (see \ref{tab:revenue-cuts}). The top 5 streaming services control 82\% market share \citep{midiamarketshare2020}, which can be regarded as an oligarchy. Together, these streaming services have the power to ask high subscription fees.
+Artists publishing their content on a music streaming service such as Google Music, Spotify and Apple Music receive low compensation, because the intermediaries take a large cut in revenue, typically between 25 and 40 percent (see \ref{tab:revenue-cuts}). The top 5 streaming services, controlling 80\% market share \citep{midiamarketshare2020}, have the power to ask high subscription fees. The Big Tech corporations behind these services are also tightly intertwined with dominant labels. For instance, \cite{aguiar2018platforms} notices that ``major record labels have substantial ownership stakes in Spotify''.
 
-This leads to problems for artists as digital streaming has become their main source of income in recent years. According to \cite{ifpi2020global}, 2019 became the first year in which digital streaming is the single biggest source of revenue for the music industry globally. This trend is has shifted power from decentralized music stores to centralized streaming services.
+According to \cite{ifpi2020global}, 2019 became the first year in which digital streaming is the single biggest source of revenue for the music industry globally. At the same time, streaming services take a large cut in revenue, and artists are having a harder time making money from music. According to investigations by \cite{chris2018dissecting} and \cite{recode2015}, the revenue cut of Apple Music and Spotify is between 25\% and 30\%. An additional problem is opacity: streaming deals on these platforms remain behind closed doors. 
+
+For these reasons, massive audiences are needed to generate sustaining profits. An investigation by Bloomberg\footnote{\url{https://www.bloomberg.com/opinion/articles/2017-09-25/the-music-business-is-more-unfair-than-ever}} shows that a whopping 152,094 Spotify subscriber streams generate \$100 on average for artists. Consequently, only 0.733\% of all acts generate enough revenue for an artist to make a living \citep{ingham2018odds}. The International Federation of the Phonographic Industry states that as of 2018 there exists a "value gap" in digital music streaming, meaning a ``mismatch between the value that some digital platforms [...] extract from music and the revenue returned to the music community–those who are creating and investing in music'' \citep{ifpi2018global}.
+
 
 \begin{table}[]
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
-\textbf{}                      & \textbf{Music release type} & \textbf{Label cut} & \textbf{Platform cut} & \textbf{Artist/band cut} & \textbf{\begin{tabular}[c]{@{}l@{}}Streams per month \\ to earn min. wage \\ (solo musician)\end{tabular}} \\ \hline
+\textbf{}                      & \textbf{Music release} & \textbf{Label cut} & \textbf{Platform cut} & \textbf{Artist/band cut} & \textbf{\begin{tabular}[c]{@{}l@{}}Streams per month \\ to earn min. wage \\ (solo musician)\end{tabular}} \\ \hline
 TIDAL                          & Unsigned                    & 0\%                & 40\%                  & 60\%                     & 117,760                                                                                                    \\ \hline
                                & Signed                      & 55\%               & 50\%                  & 20\%                     & 353,280                                                                                                    \\ \hline
 Spotify                        & Unsigned                    & 0\%                & 40\%                  & 60\%                     & 287,574                                                                                                    \\ \hline
@@ -55,8 +85,6 @@ Google Play                    & Unsigned                    & 0\%              
 \caption{Overview of revenue cuts (estimated) on streaming platforms, with a note on the streams/plays per month that an artist should have in order to make a minimum wage. The challenge of this thesis is to liberate artists from depending on intermediaries that take a large revenue cut. Sources: \cite{thetrichordist2014}, \cite{digitalmusicnews2018}.}
 \label{tab:revenue-cuts}
 \end{table}
-
-At the same time, streaming services take a large cut in revenue, and artists are having a harder time making money from music. According to investigations by \cite{chris2018dissecting} and \cite{recode2015}, the revenue cut of Apple Music and Spotify is between 25\% and 30\%. An additional problem is opacity: streaming deals on these platforms remain behind closed doors. For these reasons, massive audiences are needed to generate sustaining profits. An investigation by Bloomberg\footnote{\url{https://www.bloomberg.com/opinion/articles/2017-09-25/the-music-business-is-more-unfair-than-ever}} shows that a whopping 152,094 Spotify subscriber streams generate \$100 on average for artists. Consequently, only 0.733\% of all acts generate enough revenue for an artist to make a living \citep{ingham2018odds}. The International Federation of the Phonographic Industry states that as of 2018 there exists a "value gap" in digital music streaming, meaning a ``mismatch between the value that some digital platforms [...] extract from music and the revenue returned to the music community–those who are creating and investing in music'' \citep{ifpi2018global}.
 
 \section{Platformization and gatekeeping}
 The infrastructure of current internet applications are increasingly moving towards 'platformization'. In essence, platforms are taking control of ``the surface on which the market exchange take place'' \citep{andersson2016mastering} with digital distribution and network effects enabling an increasing centralization of power. This phenomenon is related to IT gatekeeping: tying access of content to a specific internet service. An example of this is the release of the album \textit{The Life of Pablo} in 2016, which was contracted to only be played on one platform, Tidal.
@@ -97,6 +125,11 @@ Musicians and record labels are increasingly dependent on landing on Spotify-cur
 A notable problem with this situation is that the inner workings of the recommendation algorithms are opaque to the user. These algorithms, fed by user interaction data, are in some extend also a black box to the company, as they are built using machine learning technologies. However, as noted by \citep{gillespie2014relevance}, the impression that algorithms are objective is a ``carefully crafted fiction''. Namely, they are altered based on company strategies. Companies are not obliged to explain their algorithms. In the context of recommendations, this leads to a ``threat of invisibility": the problem of content regularly disappearing \citep{bucher2018if}, a phenomenon which is out of the hands of the artist, because the artist lacks knowledge in the algorithm workings. Frustrating for artists and labels is also the vagueness of getting playlisted: it is unclear why ``[...] a particular track was placed, or replaced, on a playlist'' \citep{prey2020locating}. 
 
 On the other hand, if the `frontpage' playlists, such as ``Today's Top Hits'', are manually created by a person or company, we run into another issue. This is depicted in a recent book by \cite{heuvelings2020}. The author had the job of maintaining several high-demand playlists on Spotify, with millions of monthly listeners. This gave her substantial power but also huge pressure from artists and labels, demanding their work to be visible on her playlists. She was threatened by some of these parties as well, after which she decided to leave Spotify. This autobiography shows the immense pressure on playlist curation, when this is done by one company or person. It can make or break an artist, so there will be large (financial) pressure from labels or artists towards playlist maintainers, making the music industry unfair for smaller artists with less power.
+
+\section{Research question}
+All in all, the main issue is as follows. The music industry is imbalanced: it suffers from centralized power that is in the hand of a few labels and Big Tech corporations. Our research question thus follows:
+
+\textit{How can we design and implement a music streaming service that distributes the power from one authority to its users?}
 % \subsection{Visibility of small artists}
 % Small, independent artists may suffer from major labels that invest large amounts of money to have their content promoted.
 % \todo[inline]{Extend this section or merge it?}
