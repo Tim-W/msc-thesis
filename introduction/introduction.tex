@@ -1,10 +1,9 @@
 \chapter{Introduction}
 \label{introduction}
-Music streaming services have an immense amount of power in the music industry. The biggest streaming services dictate the rules which artists have to play by. The top 5 streaming services form an oligarchy, and the same goes for the top 3 labels. Artists have a hard time to make a living because the streaming companies take large revenue cuts. The centralization of power on Internet platforms cause unfairness in multiple industries, of which the music industry is particularly affected. This thesis aims to distribute the power from centralized streaming platforms to listeners and artists.
+Music streaming services have an immense amount of power in the music industry. The biggest streaming services dictate the rules which artists have to play by. The top 5 streaming services and the top 3 labels dominate the market. Artists have a hard time to make a living because the streaming companies take large revenue cuts. The centralization of power on Internet platforms cause unfairness in multiple industries, of which the music industry is particularly affected. This thesis aims to distribute the power from centralized streaming platforms to listeners and artists.
 
 The music streaming industry is completely digital\; from recording and publishing to listening and digital rights management. We investigate the feasibility of fully replacing this digital value chain by software. 
 
-% TODO begin eerder met centralisatie van macht in het algemeen in de Big Tech wereld, of zelfs in de economie.
 % Een problem begin zoals dit:
 % The robot economy is already here.Instead, we are still suffering big stagnation; income polarisation is rapidly increasing, wages have been falling, and the rate of technological progress is slowing down. In addition, the latest wave of digital innovation has resulted in excessive returns to capital, with a massive amount of cash going to the balance sheets of big tech companies, while very little is invested in welfare, social infrastructures, education, health and clean energy. This situation is exacerbated by the apparent inability of governments to tax profits made by hi-tech and financial giants, as seen, for instance, in the very generous tax settlement between Google and the government. 
 % https://www.opendemocracy.net/en/can-europe-make-it/robot-economy-full-automation-work-future/
@@ -12,9 +11,9 @@ The music streaming industry is completely digital\; from recording and publishi
 \section{Monopolization on the Internet}
 The Internet is moving from a network of people to a sparse selection of platforms over which nearly all commerce is regulated. A few Big Tech corporations are gaining increasing power in the the surface on which market exchange takes place. The consumer choice is diminishing due to the power of oligarchs and monopolies. As explained by \citep{stiglitz2019market}, there is a fundamental problem: the growing ``concentration of market power, which allows dominant firms to exploit their customers and squeeze their employees, whose own bargaining power and legal protections are being weakened'', while ``[...] CEOs and executives are extracting higher pay for themselves''.
 
+\section{Centralization of power in the music industry}
 An industry with great consequences of this trend is the music industry. In the last 20 years there has been a remarkably fast shift from the exchange of CDs in various stores to music streaming on the Internet. Music platforms and labels use their economic muscle to push down artist salaries. They take large cuts of revenue from the user subscription money.
 
-\section{Centralization of power in the music industry}
 Firstly, corporations with power squeeze the music production side by taking large cuts of revenue from the user subscription money. As a result, the artists receive a low compensation. Especially independent artists have a hard time making a living. The distributors Spotify, iTunes and Google Play take on a 25\% to 40\% revenue cut.
 
 Secondly, Big Tech has curatorial power to decide what is shown in the catalog of their application. The music catalog may seem endless, but in reality it is controlled by the Big Tech corporation and dictated by the interests of major labels. The inner workings of recommendation algorithms and playlists are in the hands of a few labels and streaming services.
@@ -24,7 +23,7 @@ Finally, the streaming companies can sensor tracks. The freedom of artist expres
 \section{Proposed solution: MusicDAO}
 This thesis proposes an alternative technology from Big Tech streaming services. We design and implement a decentralized system which attempts to replace the full value chain in music streaming industry, from the subscription money to the artist, by removing all intermediaries and giving power back to the artists and listeners. Listeners can stream music without being dependent on a single provider and can give money directly to artists. Artists receive 100\% of this donation and subscription money.
 
-In essence, the solution is a decentralized autonomous organization (DAO) which is formed by listeners and artists. In this paper we present the design and implementation of our mobile android app MusicDAO. Users of this app form a phone-to-phone serverless network they form a network over which they publish music, download music and transfer money. Peer-to-peer communication and peer-to-peer payments are essential technologies for this. No external servers, third parties or intermediaries are necessary to keep this flow of music and money going. Any person can join the network, publish music and get paid for it. 
+In essence, the solution is a decentralized autonomous organization (DAO) which is formed by listeners and artists. A DAO is defined by \cite{buterin2014dao} as an ``entity that lives on the internet and exists autonomously, but also heavily relies on hiring individuals to perform certain tasks that the automaton itself cannot do'' (see \ref{fig:dao-quadrants}). In this thesis we present the design and implementation of our mobile android app MusicDAO. Users of this app form a phone-to-phone zero-server network over which they publish music, download music and transfer money. This proof-of-principle of a DAO shows a fair and transparent music streaming service in which no external servers, third parties or intermediaries are necessary. Any person can join the network, publish music and get paid for it. 
 
 MusicDAO supports the following functionalities:
 \begin{itemize}
@@ -43,8 +42,14 @@ In a real-world experiment with Android phones, we tested the feasibility of suc
 % Stolen from Resonate.is:
 % The music industry is dysfunctional. Power has become consolidated in the hands of a small number of technology companies and dominant major labels.
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{introduction/problem-image.png}
+	\includegraphics[width=0.4\textwidth]{introduction/problem-image.png}
 	\caption{Artist compensation inconsistency}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{introduction/dao-quadrants.jpg}
+    \caption{Decentralized Autonomous Organization, in comparison to other organizational structures. In a DAO, activity is performed by humans at the edges, automation at the center. It is an interplay in which robots and humans perform tasks. Source: \cite{buterin2014dao}}
+    \label{fig:dao-quadrants}
 \end{figure}
 
 % Section X describes the design of the system, section Y its implementation and Z its testing results.
