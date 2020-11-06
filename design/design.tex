@@ -1,7 +1,5 @@
 \chapter{Design}
-
-
-In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery app, with peer-to-peer payment to artists in the form of donations and subscriptions. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. All users of the app form a community to share audio tracks and transfer money. Any user can join this community, publish their musical works and receive money from its listeners. Every peer in the network will have the same rights and access to the same functions. All participants cooperate in the network, which makes it self-scaling by design.
+In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery app, with peer-to-peer payment to artists in the form of donations and subscriptions. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. It is non-profit by design, as there is no single leader or company controlling it. Instead, its users determine its future. All users of the app form a community to share audio tracks and transfer money. Any user can join this community, publish their musical works and receive money from its listeners. Every participant will have the same rights and access to the same functions. All participants cooperate in the network, which makes it self-scaling by design.
 
 The overall design of the system can be seen in fig. \ref{fig:architecture}. This describes the interaction between the different components, libraries and frameworks. The following sections explain the designed features, components and design choices.
 \\
@@ -25,10 +23,41 @@ right] at (current bounding box.north west) {
     \label{fig:architecture}
 \end{figure}
 
-\section{Zero-server architecture}
-The network we are designing cannot use central servers or servers from third parties. This network should allow listeners and artists to exchange music and money, without the help from external services. We choose to build a phone-to-phone zero-server network, for the following reasons. Firstly, Mobile phones have the largest share of any type of device using music streaming services. Secondly, if the software that we design and implement runs well on a network consisting of only mobile devices, we can conclude that it will run well on better hardware (such as PCs) as well. 
+\section{Phone-to-phone censorship-free network}
+We design a network which only consists of mobile phones. Each mobile phone has access to the same functionalities. A key attribute of the network we are designing is  censorship-resiliency. That means that no single authority (company, institution or government) can take all the data down, or prevent any device from participating in the network. Censorship-resiliency is an important requirement for the system because of the issues described in \ref{sec:problem-description-sensoring}. Attempting to build a resilient system while using Internet technologies results in the following key challenges as identified by \cite{pouwelse2012censorship} and \cite{di2014bypassing}.
 
-We choose to use the Android framework for decentralized apps as proposed by~\cite{mattskala2020}. This gives us a toolbox for building phone-to-phone zero-server apps and make use of its distributed ledger technology to build a public database. It also gives us a public-key infrastructure to identify and authenticate artists. 
+To identify the key challenges to overcome in order to build a decentralized censorship-free network, we specify an adversary which has the goal to reduce the freedom of a user of the system. The adversary, which has access to ISP configuration, is known to manage the following attacks:
+\begin{itemize}
+    \item IP Filtering: block or filter content by restricting access of a specific IP address.
+    \item Content filtering: removing or hiding specific content from several hosts.
+    \item Eavesdropping of network interactions over routers and ISP traffic.
+    \item Manually take some devices down (a small proportion of the whole network).
+    \item Direct censorship through installing malware or spyware.
+    \item Lawyer-based attacks.
+\end{itemize}
+The following paragraphs explain how MusicDAO is designed to defend against these attacks.
+
+In a censorship-resistant network, devices talking to each other must trust the network infrastructure to be free of eavesdropping. An alternative approach is to establish \textit{direct communication} between devices, which means that data is transmitted device-to-device, without the use of a central access point such such as a router. In addition to end-to-end encryption, key technologies to establish direct communication between devices are \textit{BlueTooth LTE}, \textit{Wi-Fi Aware} and \textit{Wi-Fi Direct}. We use BlueTooth LTE~\citep{townsend2014getting} as a back-up strategy for when Internet traffic is being eavesdropped or when Wi-Fi is killed. This is a widely supported technology in present-day mobile phones and has existing integration into the framework by \cite{mattskala2020}.
+
+\textit{Direct censorship} is another challenge in designing an application. Direct censorship means that there is a piece of code installed on-device that tracks user activity, without the user knowing this. Our solution is two-fold. Firstly, the ecosystem is by default open source. Secondly, the evolution of the code-base is determined by a governance system and majority voting. This means that proposals to change the code-base will need to be voted on by its community. This idea is inspired by previous work from \cite{jentzsch2016decentralized}.
+
+% \section{Phone-to-phone connectivity}
+% NAT traversal
+% Identification of devices: IPv8 (move identity section)
+
+% \section{Resiliency and longevity}
+% % BlueTooth as backup for Internet kill switches
+% % Rigorous duplication of data: one devices leaves the network, data is not lost
+% % It is impossible to take down TrustChain data, as proven by Otte et al.
+% % In relation to the problems shown with publishing music about for example Tiananmen Square events (see prob desc X), we show the importance of sensor-resiliency at the core of any system that serves the common good.
+% % 
+
+
+% % Our ideas are heavily inspired by previous works by \cite{mattskala2020}
+
+% The network we are designing cannot use central servers or servers from third parties. This network should allow listeners and artists to exchange music and money, without the help from external services. We choose to build a phone-to-phone zero-server network, for the following reasons. Firstly, Mobile phones have the largest share of any type of device using music streaming services. Secondly, if the software that we design and implement runs well on a network consisting of only mobile devices, we can conclude that it will run well on better hardware (such as PCs) as well. 
+
+% We choose to use the Android framework for decentralized apps as proposed by~\cite{mattskala2020}. This gives us a toolbox for building phone-to-phone zero-server apps and make use of its distributed ledger technology to build a public database. It also gives us a public-key infrastructure to identify and authenticate artists. 
 
 \section{Open protocol and artist freedom}
 The design of our system contains both an open protocol and an application for the end-user. This is inspired by the ideas from \cite{masnick2019protocols}, who describes that the Internet should go back to open protocols instead of platforms, and that there should be a clear distinction between applications and protocols, so that users have the choice between different applications. Then, every application can have its own strategy of content moderation. This should result in more competition to ``[...] provide better services that minimize the impact of those
@@ -74,7 +103,7 @@ In the context of MusicDAO we use this PKI to proof ownership of Release objects
 
 We choose to use the public key infrastructure as implemented in the TrustChain-Superapp~\citep{mattskala2020}. This gives us a unique identity per Android phone, by abstracting the network identities such as (changing) IP addresses and Bluetooth addresses. 
 
-\section{Trust system and sybil-resilience}
+\section{Establishing trust and reducing sybil attacks}
 In any permissionless infrastructure, legitimacy of parties is not defined by a centralized authority. To still establish trust in the legitimacy of artists, we use the TrustChain DLT~\citep{otte2017trustchain}. Using this technology, we record the history of uploaded tracks in an immutable and transparent way. In essence, every artist adds Release blocks to its personal chain, and due to the interlinking mechanism of TrustChain, it is not possible to hide parts of this history. Every participant can view this timestamped history, as it is public by design. 
 
 This way, an application can inspect the legitimacy of an artist. For example, if an application finds a song X, published by both participant A and B, but the song published by participant A was published later, it can be concluded that A is more trustworthy than B, as B may have copied the song. This system can also be extended trivially to user ratings, or other interactions between parties, to achieve better measurements of trust. This distributed datastore of immutable and transparent histories then becomes a measure against Sybil attacks~\citep{douceur2002sybil} and artist impersonation.
@@ -122,3 +151,6 @@ Cryptocurrency implementations allow for private/public key-pairs which can be i
 To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. Interaction can be measured in e.g. time listened, plays or feedback in the form of likes. The details of this division is explained in the implementation section of AIDA (see TODO).
 
 \input{design/distributed-search-pseudocode}
+
+\section{Scalability}
+TODO

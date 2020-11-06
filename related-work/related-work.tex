@@ -58,13 +58,14 @@ A fully decentralized audio streaming service requires sharing and streaming aud
 \subsection{BitTorrent}
 BitTorrent~\citep{cohen2002bittorrent} is an open peer-to-peer file sharing protocol. It invented by Bram Cohen, and has generated a massive influence on network traffic on the Internet since its release. Today, it is still the most popular peer-to-peer protocol for sharing data. In 2019, BitTorrent was measured to generate 2.5\% of all download and 24.6\% of all upload bandwidth~\citep{marozzo2020}. It went through many iterations and improvements. It has a large community, with over 3K repositories on GitHub related to the technology. Furthermore there are a few companies maintaining clients (such as \url{https://bittorrent.com} and \url{https://www.utorrent.com}).
 
-In essence, BitTorrent makes use of seeding while downloading: this means that when multiple clients download a file, they simultaneously share pieces of this file with the other downloaders. This results, with well connected and performing peers, in fast downloads. A key challenge is finding and connecting to healthy \textit{swarms}: groups of uploaders and downloaders that are interested in some piece of content.
+In essence, BitTorrent makes use of seeding while downloading: this means that when multiple clients download a file, they simultaneously share pieces of this file with the other downloaders. This results, with well connected and performing peers, in fast downloads. 
+% A key challenge is finding and connecting to healthy \textit{swarms}: groups of uploaders and downloaders that are interested in some piece of content.
 
 % he BitTorrent file distribution system uses tit-for-tat as a method of seeking pareto efficiency
 
 % Any person can join the network and start sharing files, by making a torrent which contains the metadata of the files. Content is specified using SHA1 hashes of the files. Checksums are used to make sure no changes to the original torrent have been made upon receiving files. This way all files are immutably shared. BitTorrent has implementations for various systems, including Android. This means mobile devices can participate in uploading and downloading content, and can even build an autonomous phone-only file sharing system.
 
-Torrent files contain a list of chunks (torrent pieces), which represent the different parts of the related file. Flawless streaming of media files over BitTorrent requires a smart algorithm to predict what file is requested next, and what torrent pieces should be loaded. 
+% Torrent files contain a list of chunks (torrent pieces), which represent the different parts of the related file. Flawless streaming of media files over BitTorrent requires a smart algorithm to predict what file is requested next, and what torrent pieces should be loaded. 
 
 % BitTorrent originally relied on trackers to perform peer discovery, and trackers can become a central point of failure. However, since the introduction of the DHT protocol~\citep{bittorrentbep5dht}, finding peers in the network can be done by querying any known peer, which makes the network more decentralized. 
 
