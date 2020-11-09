@@ -3,30 +3,28 @@
 \begin{algorithmic}
 \Function{DistributedSearch}{$query, ttl, maxPeers, minResults$}\Comment{Device initiates the search}
     \State $results\gets localSearch(query)$\Comment{Filter local database}
-    \If {$|results|\leq minResults$}
-        \State $origin \gets myAddress()$\Comment{Address of the device initiating the search}
-        \For{$i\gets 1, maxPeers$}
-            \State $peer \gets peers[i]$\Comment{Select a random neighbor}
-            \State $sendQuery(origin, peer, query, ttl)$
-        \EndFor
-    \Else
-        \State \textbf{return} $results$
+    \If {$|results|\geq minResults$}
+            \State \textbf{return} $results$
     \EndIf
+    \State $origin \gets myAddress()$\Comment{Address of the device initiating the search}
+    \For{$i\gets 1, maxPeers$}
+        \State $peer \gets peers[i]$\Comment{Select a random neighbor}
+        \State $sendQuery(origin, peer, query, ttl)$
+    \EndFor
 \EndFunction
 \Function{OnQuery}{$origin, peer, query, ttl$}\Comment{This is called when a query is received}
-    \If $ttl\leq 0$
+    \If {$ttl\leq 0$}
         \State \textbf{return}
     \EndIf
     \State $ttl \gets ttl-1$
     \State $results\gets localSearch(query)$
     \If {$|results|\le 1$}
-      \For{$i\gets 1, maxPeers$}
-            \State $peer \gets peers[i]$
-            \State $sendQuery(origin, peer, query, ttl)$
-        \EndFor
-    \Else
-        \State $sendResults(origin, results)$\Comment{Send the results back directly to the origin}
+        \State \textbf{return} $sendResults(origin, results)$\Comment{Send the results back directly to the origin}
     \EndIf
+    \For{$i\gets 1, maxPeers$}
+        \State $peer \gets peers[i]$
+        \State $sendQuery(origin, peer, query, ttl)$
+    \EndFor
 \EndFunction
 \end{algorithmic}
 \end{algorithm}

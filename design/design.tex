@@ -24,24 +24,34 @@ right] at (current bounding box.north west) {
 \end{figure}
 
 \section{Phone-to-phone censorship-free network}
-We design a network which only consists of mobile phones. Each mobile phone has access to the same functionalities. A key attribute of the network we are designing is  censorship-resiliency. That means that no single authority (company, institution or government) can take all the data down, or prevent any device from participating in the network. Censorship-resiliency is an important requirement for the system because of the issues described in \ref{sec:problem-description-sensoring}. Attempting to build a resilient system while using Internet technologies results in the following key challenges as identified by \cite{pouwelse2012censorship} and \cite{di2014bypassing}.
+We design a network which only consists of mobile phones. Every phone cooperates by storing, sharing and validating content. Each mobile phone has access to the same functionalities. The reason for this topology is to have no single, powerful party or centralized server, and that scales naturally. With the latter is meant: the computational power and bandwidth capacity grows with the amount of devices requiring these resources.
 
-To identify the key challenges to overcome in order to build a decentralized censorship-free network, we specify an adversary which has the goal to reduce the freedom of a user of the system. The adversary, which has access to ISP configuration, is known to manage the following attacks:
+A proof-of-concept will show an important step towards mobile infrastructure for the common good: a system in which participants do not lose money and power to greedy intermediaries. Instead, they will benefit from cooperation. This concept aims for absolute fairness, controlled by the community from the ground up instead of dictated top-down. All money going into the system is divided over the participants, following rules written in code that are defined by the community.
+
+\subsection{Censorship-resiliency}
+A key attribute of the network is censorship-resiliency. That means that no single authority (company, institution or government) can remove tracks, or prevent devices from participating in the network. Censorship-resiliency is an important requirement for the system because of the issues described in \ref{sec:problem-description-censoring}. Attempting to build a resilient system while using Internet technologies results in a few key challenges as identified by \cite{pouwelse2012censorship} and \cite{di2014bypassing}. To articulate these challenges, we specify a powerful adversary which has the goal to reduce the freedom of a user of the system. The adversary is known to manage the following attacks:
 \begin{itemize}
+    \item Eavesdropping.
+    \item Killing Internet switches. 
+    \item Direct censorship: installing malware or spyware.
     \item IP Filtering: block or filter content by restricting access of a specific IP address.
     \item Content filtering: removing or hiding specific content from several hosts.
-    \item Eavesdropping of network interactions over routers and ISP traffic.
-    \item Manually take some devices down (a small proportion of the whole network).
-    \item Direct censorship through installing malware or spyware.
-    \item Lawyer-based attacks.
+    \item Confiscating devices: manually take some devices down (a small proportion of the whole network).
 \end{itemize}
 The following paragraphs explain how MusicDAO is designed to defend against these attacks.
 
-In a censorship-resistant network, devices talking to each other must trust the network infrastructure to be free of eavesdropping. An alternative approach is to establish \textit{direct communication} between devices, which means that data is transmitted device-to-device, without the use of a central access point such such as a router. In addition to end-to-end encryption, key technologies to establish direct communication between devices are \textit{BlueTooth LTE}, \textit{Wi-Fi Aware} and \textit{Wi-Fi Direct}. We use BlueTooth LTE~\citep{townsend2014getting} as a back-up strategy for when Internet traffic is being eavesdropped or when Wi-Fi is killed. This is a widely supported technology in present-day mobile phones and has existing integration into the framework by \cite{mattskala2020}.
+\textit{Eavesdropping}: In a censorship-resistant network, devices talking to each other must trust the network infrastructure to be free of eavesdropping. Preventing eavesdropping can be achieved using end-to-end encryption. However, an adversary may take down certain networking infrastructure to prevent communication altogether (Killing Internet switches).
+
+\textit{Killing Internet switches}: An alternative approach is to establish \textit{direct communication} between devices, which means that data is transmitted device-to-device, without the use of a central access point such such as a router. We use BlueTooth LTE~\citep{townsend2014getting} as a back-up strategy for when Internet traffic is being eavesdropped or when Wi-Fi is killed. This is a widely supported technology in present-day mobile phones and has existing integration into the framework by \cite{mattskala2020}.
 
 \textit{Direct censorship} is another challenge in designing an application. Direct censorship means that there is a piece of code installed on-device that tracks user activity, without the user knowing this. Our solution is two-fold. Firstly, the ecosystem is by default open source. Secondly, the evolution of the code-base is determined by a governance system and majority voting. This means that proposals to change the code-base will need to be voted on by its community. This idea is inspired by previous work from \cite{jentzsch2016decentralized}.
 
-% \section{Phone-to-phone connectivity}
+\textit{Content filtering} is not a threat to MusicDAO, because it uses an immutable data structure (see \ref{sec:distributed-storage} for details). This means, in current context, that it is not possible to change or remove any (meta)data of music tracks after they have been published. In addition, multiple copies of track files are available through content duplication. The system uses simple duplication heuristics, such that all objects that a phone receives is stored in cache. This strategy also defends against \textit{confiscating devices} and \textit{IP filtering}. When an adversary takes down, or blocks, a small portion of devices from the network, there will still be back-ups available on the other devices.
+
+\section{Phone-to-phone connectivity}
+As mentioned above, MusicDAO is designed to have a network consisting of only mobile phones. Key challenges to establishing and maintaining such a network are: discovering of other devices, network connectivity and longevity.
+
+As we do not have a central server, each device acts as both a client and server. To achieve this, we use network address (NAT) traversal. This allows communication directly between phones which have no static, public IP address.
 % NAT traversal
 % Identification of devices: IPv8 (move identity section)
 
@@ -101,7 +111,7 @@ The MusicDAO allows any person to participate, and start publishing or listening
 
 In the context of MusicDAO we use this PKI to proof ownership of Release objects. All Release objects are signed using the owner's private key and the signature is added to the object. Any user receiving this object can verify its authenticity.
 
-We choose to use the public key infrastructure as implemented in the TrustChain-Superapp~\citep{mattskala2020}. This gives us a unique identity per Android phone, by abstracting the network identities such as (changing) IP addresses and Bluetooth addresses. 
+We choose to use the public key infrastructure as implemented in the TrustChain-Superapp~\citep{mattskala2020}. This abstracts network identifiers such as IP addresses, which may change over time; so it provides a unique identity per Android phone.
 
 \section{Establishing trust and reducing sybil attacks}
 In any permissionless infrastructure, legitimacy of parties is not defined by a centralized authority. To still establish trust in the legitimacy of artists, we use the TrustChain DLT~\citep{otte2017trustchain}. Using this technology, we record the history of uploaded tracks in an immutable and transparent way. In essence, every artist adds Release blocks to its personal chain, and due to the interlinking mechanism of TrustChain, it is not possible to hide parts of this history. Every participant can view this timestamped history, as it is public by design. 
@@ -115,12 +125,15 @@ Central to our system is sharing downloading and storage of audio files and Rele
 One implementation of this technology is TrustChain~\citep{otte2017trustchain} which allows for recording transactions between peers in a linearly scaling public ledger. Every peer has its own immutable and public blockchain which shows its history of transactions with others. This way we can establish trust in a certain party. In our context, we can use this mechanism to estimate trust in artists by inspecting their public history of uploads. We choose TrustChain because of its scalability, its trust mechanism, and because it has a native implementation for Android, as described in \ref{sec:sote-trustchain}. In addition, this implementation allows for offline communication, so users can download and explore new content using Bluetooth or LAN.
 
 \section{Peer-to-peer music sharing}
+\label{sec:p2p-music-sharing}
 To be able to have low latency for discovering and playing music tracks, while using no central nor high-throughput servers, the network demands participants to upload content continuously. We design the app to, by default, use the network capabilities of the mobile device to upload content as much as possible. This is constrained by networking hardware, data subscription plans and other software running on the phone.
 
 The peer-to-peer file sharing protocol BitTorrent is suitable to share audio files in MusicDAO. We make BitTorrent a design choice as it does not require synchronizing with a global data store, in contrary to IPFS. This means we can build a metadata store independently from BitTorrent (for example, using TrustChain as explained in \ref{sec:distributed-storage}). BitTorrent also has stable implementations for Android.
 
 \section{Distributed search}
 For searching content we use introduce our simple distributed algorithm. Pseudocode of this algorithm is shown in algorithm 1. It asks peers around for content tagged with some keyword. When a peer finds a match on their local database, it sends this Release object to the original asking peer. Otherwise it forwards the query to their neighbours, after reducing the time-to-live property by 1. The messages stop being forwarded once their time-to-live property hits below 1. The structure of search messages are shown in fig. \ref{fig:keyword-search-message-model}.
+
+\input{design/distributed-search-pseudocode}
 
 \section{Transparent money flow}
 Figures \ref{fig:current-money-flow} and \ref{fig:desired-money-flow} visualize, in a simplified fashion, the difference of how money flows in the current situation and in MusicDAO. It shows that, when intermediaries are cut from the flow, artists will have a higher income for the same fees from the listener. Streaming services and record holders introduce many overhead costs. Our system allows artists to publish their songs without the need to contact a label. The biggest difference in income will be seen for independent artists, as streaming services gives particularly low payouts for unsigned artists.
@@ -150,7 +163,9 @@ Cryptocurrency implementations allow for private/public key-pairs which can be i
 \label{sec:aida-design}
 To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. Interaction can be measured in e.g. time listened, plays or feedback in the form of likes. The details of this division is explained in the implementation section of AIDA (see TODO).
 
-\input{design/distributed-search-pseudocode}
-
 \section{Scalability}
-TODO
+MusicDAO is scalable by using a scalable accounting system (see \ref{sec:distributed-storage}) and distributed file system (see \ref{sec:p2p-music-sharing}). Every device records its own history. When a device wants to publish music, it only transacts with one other party, to sign the metadata record. As such, there is no global consensus, nor a global ordering of transactions, so all records are processed in parallel.
+
+In addition, by using BitTorrent as the streaming/content layer, any participant can publish a torrent with music, without needing to interact with any other peer. 
+
+Finally, the transaction system, Bitcoin, may become a bottleneck in scalability. It requires global consensus and a voting process for every transaction. However, as of the time of writing, there is no mature alternative as peer-to-peer payment system technology. We do not consider centralized technologies as that would concentrate power, in contrary to the aim of this thesis.
