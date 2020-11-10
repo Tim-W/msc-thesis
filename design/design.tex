@@ -1,5 +1,5 @@
 \chapter{Design}
-In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery app, with peer-to-peer payment to artists in the form of donations and subscriptions. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. It is non-profit by design, as there is no single leader or company controlling it. Instead, its users determine its future. All users of the app form a community to share audio tracks and transfer money. Any user can join this community, publish their musical works and receive money from its listeners. Every participant will have the same rights and access to the same functions. All participants cooperate in the network, which makes it self-scaling by design.
+In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery application, with peer-to-peer payment to artists in the form of donations and subscriptions. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. It is non-profit by design, as there is no single leader or company controlling it. Instead, its users determine its future. All users of the app form a community to share audio tracks and transfer money. Any user can join this community, publish their musical works and receive money from its listeners. Every participant will have the same rights and access to the same functions. All participants cooperate in the network, which makes it self-scaling by design.
 
 The overall design of the system can be seen in fig. \ref{fig:architecture}. This describes the interaction between the different components, libraries and frameworks. The following sections explain the designed features, components and design choices.
 \\
@@ -49,9 +49,14 @@ The following paragraphs explain how MusicDAO is designed to defend against thes
 \textit{Content filtering} is not a threat to MusicDAO, because it uses an immutable data structure (see \ref{sec:distributed-storage} for details). This means, in current context, that it is not possible to change or remove any (meta)data of music tracks after they have been published. In addition, multiple copies of track files are available through content duplication. The system uses simple duplication heuristics, such that all objects that a phone receives is stored in cache. This strategy also defends against \textit{confiscating devices} and \textit{IP filtering}. When an adversary takes down, or blocks, a small portion of devices from the network, there will still be back-ups available on the other devices.
 
 \section{Phone-to-phone connectivity}
-As mentioned above, MusicDAO is designed to have a network consisting of only mobile phones. Key challenges to establishing and maintaining such a network are: discovering of other devices, network connectivity and longevity.
+As mentioned above, MusicDAO is designed to have a network consisting of only mobile phones. Key challenges to establishing and maintaining such a network are: discovering other devices, network connectivity and longevity.
 
-As we do not have a central server, each device acts as both a client and server. To achieve this, we use network address (NAT) traversal. This allows communication directly between phones which have no static, public IP address.
+Every device that wants to participate, will try to find other devices to join the network. To discover devices, we use a bootstrap server, which keeps track of other devices on the network to connect with. A bootstrap server should not be necessary when there are devices nearby that can introduce a new device to the network. However, the network of MusicDAO will be sparse at the start. After a few devices are discovered, the bootstrap server can be disregarded, as new devices are then trivially found via neighbors.
+
+As we do not have a central server, each device acts as both a client and server. To achieve this, we use network address translation (NAT) traversal. This allows communication directly between phones which have no static, public IP address.
+
+To support a healthy evolution of the network, every device will maintain a list of connected devices. Devices will send periodic \textit{keepalive} messages to its connected peers to track which are alive and reachable. By doing this, devices can decide which peers are healthy connections. This list should grow to a few dozen, so that there are always reachable peers.
+
 % NAT traversal
 % Identification of devices: IPv8 (move identity section)
 
@@ -168,4 +173,4 @@ MusicDAO is scalable by using a scalable accounting system (see \ref{sec:distrib
 
 In addition, by using BitTorrent as the streaming/content layer, any participant can publish a torrent with music, without needing to interact with any other peer. 
 
-Finally, the transaction system, Bitcoin, may become a bottleneck in scalability. It requires global consensus and a voting process for every transaction. However, as of the time of writing, there is no mature alternative as peer-to-peer payment system technology. We do not consider centralized technologies as that would concentrate power, in contrary to the aim of this thesis.
+Finally, the transaction system, Bitcoin, may become a bottleneck in scalability. It requires global consensus and a voting process for every transaction. However, as of the time of writing, there is no mature and more scalable alternative as peer-to-peer payment system technology. We do not consider centralized technologies as that would concentrate power, in contrary to the aim of this thesis.
