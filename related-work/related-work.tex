@@ -1,5 +1,23 @@
 \chapter{\label{chap:state-of-the-art}State of the Art}
 In this chapter we describe existing algorithms, protocols and applications in computer science, which try to solve, or give an alternative for, the centralized power in Big Tech, and more specifically in digital audio streaming. We inspect full solutions in the form of distributed applications, and techniques which solve subproblems, such as decentralized file sharing protocols.
+
+For an application to evolve without a company or a responsible group of people, decisions need to be made on protocol or feature additions and changes. We inspect the state-of-the-art technologies and organizational theories which enable autonomous communities to solve these problems by organizing themselves.
+
+\section{DAO theory and technologies}
+A Decentralized Autonomous Organization (DAO) is ``an entity that lives on the internet and exists autonomously, but also heavily relies on hiring individuals to perform certain tasks that the automaton itself cannot do''~\citep{buterin2014dao}. It is not owned by a single person or legal entity. It should also not require a specifically specified party to operate. As such we say it lives \textit{autonomously}. Important groundwork around the theory and implementation of a DAO has been done by \cite{jentzsch2016decentralized}. He notes that corporations originally work through people only, and this has two flaws: ``People do not always follow the rules, and they do not always agree what the rules require''. His paper illustrates a method that allows creating and maintaining organizations in which ``(1) participants maintain direct real-time control of contributed funds and (2) governance rules are formalized, automated and enforced using software''.
+
+\section{AI DAO}
+Central to this thesis is the exploration of an intelligent decentralized system: a system that is on the boundary of DAO and AI technologies (see \ref{fig:dao-quadrants}). This means humans are still involved with performing some tasks and governing, but an intelligent agent can perform other decision making tasks. This may be the holy grail in automation. In our context, we envision human tasks being: creating music and giving feedback on music (through e.g. donations). 'Robot tasks' could be: processing an automatic subscription payment system, in which all user money is divided fairly over the artists every month.
+
+Much is still unknown in this research area. This thesis aims to create more knowledge on a 'AI DAO' by designing a proof-of-concept of such intelligent system.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{introduction/dao-quadrants.jpg}
+    \caption{Decentralized Autonomous Organization, in comparison to other organizational structures. In a DAO, activity is performed by humans at the edges, automation at the center. It is an interplay in which robots and humans perform tasks. Source: \cite{buterin2014dao}}
+    \label{fig:dao-quadrants}
+\end{figure}
+
 \section{Decentralized music distribution technologies}
 Multiple decentralized audio distribution and streaming applications exist. Examples are Audius~\citep{audius2018}, Musicoin~\footnote{\url{http://musicoin.org/}} and Opus Audio~\citep{jia2016opus}.
 
@@ -35,14 +53,7 @@ The TrustChain superapp~\citep{mattskala2020} is a framework for implementing mo
     \endminipage
 \end{figure}
 
-\section{DAO theory and technologies}
-Important groundwork around the theory and implementation of a DAO has been done by \cite{jentzsch2016decentralized}. He notes that corporations originally work through people only, and this has two flaws: ``People do not always follow the rules, and they do not always agree what the rules require''. His paper illustrates a method that allows creating and maintaining organizations in which ``(1) participants maintain direct real-time control of contributed funds and (2) governance rules are formalized, automated and enforced using software''.
-
-For an application to evolve without a company or a responsible group of people, decisions need to be made on protocol or feature additions and changes. We inspect the state-of-the-art of peer-to-peer technologies which enable autonomous communities to solve these problems by organizing themselves. In computer science, one approach to this is democratic voting based on voluntary proposals to change and improve the decentralized system. 
-
-\cite{jentzsch2016decentralized} proposes a system based on the Ethereum blockchain, using smart contracts~\citep{buterin2014next}. In essence, any person that would like to join a DAO must be invited or pay a fee. All participants use tokens, to create proposals and to vote on proposals, so it uses a proof-of-stake mechanism. The paper also contains a solution for the majority owns minority attack: (an attacker with more than half of all tokens can make and accept a proposal to send all its tokens to itself) by allowing participants to split a DAO. 
-
-One mobile implementation of this is a mini-app of the aforementioned TrustChain-Superapp (see fig. \ref{fig:trustchain-superapp-voter}). In this voting app, any participant of the organization can create a proposal for the community to vote on. Once a preset voting threshold is reached, the proposal is automatically accepted or denied. Bookkeeping of these proposals is done using the TrustChain distributed ledger technology~\citep{otte2017trustchain}. This voting app is an important basis for democratic decision making, but does not include code changes directly after proposals are accepted, so lacks app evolution. This protocol is based on proof-of-identity instead of proof-of-stake, as no tokens are involved.
+In the context of DAO, the TrustChain-Superapp contains a mini-app for decentralized governance using voting (see fig. \ref{fig:trustchain-superapp-voter}). In this voting app, any participant of the organization can create a proposal for the community to vote on. Once a preset voting threshold is reached, the proposal is automatically accepted or denied. Bookkeeping of these proposals is done using the TrustChain distributed ledger technology~\citep{otte2017trustchain}. This voting app is an important basis for democratic decision making, but does not include code changes directly after proposals are accepted, so lacks app evolution. This protocol is based on proof-of-identity instead of proof-of-stake, as no tokens are involved.
 
 \begin{figure}
     \centering
