@@ -1,8 +1,11 @@
 \chapter{Implementation}
+We implemented our system on a network of phones, with no servers. Every mobile phone cooperates by sharing music and establishing trust. This means that the computational capacity grows with the amount of users, as does the demand on such capacity. The system is built along the ideologies of a DAO: there is no single party, server or database that the system requires to operate. As such, it is a non-profit system, where the artists keep all revenues. In MusicDAO, mobile phones are able to transfer money and music. In this trust-less system, trust in other parties is established through proofs of identity using cryptography, and publicly verified append-only history data. It is resilient against censorship-attacks: it cannot be taken down by any government or institution.
+
+\section{Android app}
 The application is implemented as a `mini-app' of the \textit{TrustChain Superapp}~\citep{mattskala2020}. This follows the concept of super apps~\citep{kpmg2019superapps}. The app is published on the Android Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}} and runs on Android 5.1 and above. Its code is publicly available\footnote{\url{https://github.com/Tim-W/trustchain-superapp}}. As programming language Kotlin is selected, as it is the preferred language for Android development\footnote{\url{https://android-developers.googleblog.com/2019/05/google-io-2019-empowering-developers-to-build-experiences-on-Android-Play.html}}. Moreover the underlying technology stack is also written in Kotlin, so this allows for neat integration. This section describes the implementation choices, usage of external libraries and presents the user interface of MusicDAO. The main interfaces of the app can be seen below (figs. \ref{fig:screenshot-home}, \ref{fig:screenshot-playlist} and \ref{fig:tip-artist}). An overview of the structure of the code can be seen in the package diagram in fig. \ref{fig:package-diagram}.
 
 \section{Features overview}
-We implemented a peer-to-peer system to share, discover and listen to music, and to give payments to artists. 100\% of money goes to artists. The system requires no servers, middlemen or third parties to run, and is resilient: it can not be taken down by any government or institution. Our Android app contains the following features:
+Our Android app contains the following features:
 \begin{itemize}
     \item Defining album/single/EP releases using metadata, and sharing those with peers; Sharing of your audio tracks with peers; Immutable storage of music metadata and cryptographic identification of artists.
     \item Streaming music over BitTorrent; Prioritization algorithm to minimize streaming latency; Caching audio files and metadata.
@@ -29,6 +32,9 @@ XChange               & 5.0.1   & Crypto/USD price conversion    \\ \hline
 \caption{Notable libraries used}
 \label{tab:library-usage}
 \end{table}
+
+\section{Zero-server infrastructure}
+We implemented our system on a network of phones, with no servers. Every mobile phone cooperates by sharing music and establishing trust. This means that the computational capacity grows with the amount of users, as does the demand on such capacity. The system is built along the ideologies of a DAO: there is no single party, server or database that the system requires to operate. As such, it is a non-profit system, where the artists keep all revenues. In MusicDAO, mobile phones are able to transfer money and music. In this trust-less system, trust in other parties is established through proofs of identity using cryptography, and publicly verified append-only history data.
 
 \begin{figure}[]
     \minipage{0.3\textwidth}
@@ -114,7 +120,8 @@ To achieve fast buffering, we implemented a priority system for tracks and for p
 This uses the piece priorities system in libtorrent, which range from 1 (normal) to 7 (highest) (see libtorrent Manual\footnote{\url{https://www.libtorrent.org/manual-ref.html\#file-format}}). By default, the first couple of chunks of each track are given a high priority, to reduce the chance of buffer underflow, so that the user can start streaming early.
 
 \section{Identity and authenticity}
-Every device participating in MusicDAO has a unique identity. MusicDAO implements the public-key infrastructure as described in \ref{sec:pki-design} using the identity system proposed by \cite{mattskala2020}. This uses the \textit{Curve25519} cryptography system. Using this system, it is computationally infeasible to obtain the private key from a  public key. For simplicity in implementation, we assume that every device in the network is an abstraction of a unique artist. 
+\label{sec:identity-authenticity}
+Every device participating in MusicDAO has a unique identity. MusicDAO implements the public-key infrastructure as described in \ref{sec:pki-design} using the identity system proposed by \cite{mattskala2020}. This uses the widely used industry standard \textit{Curve25519} cryptography system. Using this system, it is computationally infeasible to obtain the private key from a  public key. For simplicity in implementation, we assume that every device in the network is an abstraction of a unique artist. 
 
 All immutable music release blocks are assigned an identity of the creator using a public key. Every device running the MusicDAO will receive a public/private key-pair upon first launch. 
 
