@@ -54,13 +54,13 @@ The following paragraphs explain how MusicDAO is designed to defend against thes
 \textit{Content filtering} is not a threat to MusicDAO, because it uses an immutable data structure (see \ref{sec:distributed-storage} for details). This means, in current context, that it is not possible to change or remove any (meta)data of music tracks after they have been published. In addition, multiple copies of track files are available through content duplication. The system uses simple duplication heuristics, such that all objects that a phone receives is stored in cache. This strategy also defends against \textit{confiscating devices} and \textit{IP filtering}. When an adversary takes down, or blocks, a small portion of devices from the network, there will still be back-ups available on the other devices.
 
 \section{Phone-to-phone connectivity}
-As mentioned above, MusicDAO is designed to have a network consisting of only mobile phones. Key challenges to establishing and maintaining such a network are: discovering other devices, network connectivity and longevity.
+As mentioned above, MusicDAO is designed to have a network consisting of only mobile phones. Key challenges to establishing and maintaining such a network are: discovering other devices, network connectivity, longevity and scalability.
 
-Every device that wants to participate, will try to find other devices to join the network. To discover devices, we use a bootstrap server, which keeps track of other devices on the network to connect with. A bootstrap server should not be necessary when there are devices nearby that can introduce a new device to the network. However, the network of MusicDAO will be sparse at the start. After a few devices are discovered, the bootstrap server can be disregarded, as new devices are then trivially found via neighbors.
+Every device that wants to participate, will try to find other devices to join the network. Every device also keeps track of a routing table, containing public IP addresses of connected and connectable peers, including latency for each peer. This routing table is inspired by the routing table implemented by BitTorrent DHT~\citep{bittorrentbep5dht}. To discover an \textit{initial} list of devices, we use a bootstrap server, which keeps track of other devices on the network to connect with. A bootstrap server should not be necessary when there are devices on the same Local Area Network that can introduce a new device to the network. However, the network of MusicDAO will be sparse at the start. After a few devices are discovered, the bootstrap server can be disregarded, as new devices are then trivially found via neighbor search.
 
-As we do not have a central server, each device acts as both a client and server. To achieve this, we use network address translation (NAT) traversal. This allows communication directly between phones which have no static, public IP address.
+As there will be no central server, each device acts as both a client and server. As devices may be behind routers or other \textit{Network Address Translators} (NATs), establishing a direct connection between devices is not trivial. To achieve this, we use network address translation (NAT) traversal. NAT traversal is a set of methods used to establish a connection between devices which have no static, public IP address.
 
-To support a healthy evolution of the network, every device will maintain a list of connected devices. Devices will send periodic \textit{keepalive} messages to its connected peers to track which are alive and reachable. By doing this, devices can decide which peers are healthy connections. This list should grow to a few dozen, so that there are always reachable peers.
+To support a healthy evolution of the network, every device will maintain a list of connected devices. Devices will send periodic \textit{keepalive} messages to its connected peers to track which are alive and reachable. By doing this, devices can decide which peers are healthy connections. This list should grow to a few dozen, so that there are always connectable peers.
 
 % NAT traversal
 % Identification of devices: IPv8 (move identity section)
@@ -152,7 +152,7 @@ As we are designing a system with no intermediaries, it should be possible to gi
 
 In the desired money flow, we have a  Fig. \ref{fig:desired-money-flow} shows another component: an automated and transparent payment division system. In practice, this should be an algorithm running locally on the machine of the user which calculates how much money should go to each of the shareholders of a particular song. Currently, record holders have this task, but there exists no transparent system for this, so they can give low payouts to its artists. We design the transparent payment system to be an immutable record on a distributed ledger, on which a specification of the exact shares per artists are written down. This can be implemented using TrustChain blocks~\citep{otte2017trustchain}.
 
-We choose to use Bitcoin as a cryptocurrency as it has shown to be a secure and popular payment system, and it does not rely on any third parties to run. It also allows for making a experimentation environment without any high-throughput external servers. 
+We choose to use Bitcoin as a cryptocurrency as it has shown to be a fully peer-to-peer, secure and popular payment system, and it does not rely on any third parties to run. It also allows for making a experimentation environment without any high-throughput external servers. 
 
 \begin{figure}
     \minipage{0.6\textwidth}
@@ -172,6 +172,8 @@ Cryptocurrency implementations allow for private/public key-pairs which can be i
 \subsection{Artist Income Division Algorithm}
 \label{sec:aida-design}
 To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. Interaction can be measured in e.g. time listened, plays or feedback in the form of likes. The details of this division is explained in the implementation section of AIDA (see TODO).
+
+\section{Content popularity gossip protocol}
 
 \section{Scalability}
 MusicDAO is scalable by using a scalable accounting system (see \ref{sec:distributed-storage}) and distributed file system (see \ref{sec:p2p-music-sharing}). Every device records its own history. When a device wants to publish music, it only transacts with one other party, to sign the metadata record. As such, there is no global consensus, nor a global ordering of transactions, so all records are processed in parallel.
