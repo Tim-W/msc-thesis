@@ -10,7 +10,7 @@ In multiple \textit{supervised} experiments, we use 10 Android devices that are 
 \section{Unsupervised experiment: public release}
 MusicDAO was released publicly on the Google Play store and 11 test subjects were given the task to download music and send donations to artists. Upon installation and first running MusicDAO, it sends a request in the background to our Bitcoin node, asking for 10 coins in starter money. The responsiveness of our Bitcoin node for transferring starter money is analyzed in \ref{starter-money-flow}.
 
-\subsection{Starter money flow}
+\subsection{Automated starter money transactions}
 \label{starter-money-flow}
 We analyze the responsiveness of our bitcoin node by obtaining two datasets, and inspecting their correlation in terms of timing of events.
 
@@ -20,7 +20,7 @@ The two datasets are:
     \item Transactions from our Bitcoin node with a value of 10 coins, scraped from our blockchain.
 \end{enumerate}
 
-When there are $x$ app installations on some day, there should be $y \gte x$ transactions outgoing from our Bitcoin faucet. In the graph shown by \ref{fig:faucet-app-installs}, this is not always the case. On 01/19/2021 there was (at least) one transaction missing. This was due to a server outage where the Bitcoin faucet was running. There are also cases in which there are transactions but no installations. This may be due to multiple app installations from one device on the same day (which is measured as one by the Google Play store console) or app installations outside of the Play store. 
+When there are $x$ app installations on some day, there should be $y \gte x$ transactions outgoing from our Bitcoin faucet. In the graph shown by \ref{fig:faucet-app-installs}, this is not always the case. On 19-01-2021 there was (at least) one transaction missing. This was due to a server outage where the Bitcoin faucet was running. There are also cases in which there are transactions but no installations. This may be due to multiple app installations from one device on the same day (which is measured as one by the Google Play store console) or app installations outside of the Play store. 
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{evaluation/faucet-app-installs.png}
@@ -116,3 +116,17 @@ For two different situations, 10 runs are done and the latency and average laten
 
 \section{Devices behind NATs}
 During experimentation, some of the Bittorrent traffic on Android devices were blocked by Network Address  Translators (NATs). MP3 transfers over Bittorrent were slowed down by this. The NAT Port Mapping Protocol (NAT-PMP) was used to be able to establish connections between different devices. NAT-PMP establishes connections using port scanning and port forwarding. However, this is a lengthy process: we observed that establishing such a connection usually takes more than 2 minutes. Analyzing and improving this process should be investigated in future distributed systems research.
+
+\section{Transaction fees}
+
+\section{Missing features}
+\begin{itemize}
+    \item Artist Income Division Algorithm
+\end{itemize}
+\section{Scalability}
+Scalability beyond 20 nodes
+\section{Music publishing protocol}
+Music publishing currently requires a block signing/agreement from one other peer, before it is added to the TrustChain and sent to other peers.  
+\section{Bitcoin node}
+The experiments made use of a bitcoin node, which ran on a dedicated server 24/7.
+\section{Bootstrap node}
