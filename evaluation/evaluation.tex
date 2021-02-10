@@ -98,7 +98,7 @@ We device \textit{hit chance} as such: every interval $i$, the hit chance $C$ to
 In \ref{fig:content-discovery} we can see a correlation between model and experiment for network sizes $n=2$ and $n=4$. For $n=10$ the experiment and model correlate until 3 minutes into the experiment. The reasons for this are for now not clear. More investigation and more experiments on larger networks are necessary to make conclusions.
 
 \subsection{Random access latency}
-Random access latency is evaluated through measuring search latency. Search latency is the round-trip time between initiating keyword search and receiving metadata for the release.  During this experiment, the content that was searched for was present in all devices except the one under test. The aforementioned distributed search algorithm (alg. \ref{alg:algorithm-distributed-search}) is used with the following parameters.
+Random access latency of metadata is evaluated through measuring search latency. Search latency is the round-trip time between initiating keyword search and receiving metadata for the release. During this experiment, the content that was searched for was present in all devices except the one under test. The distributed search algorithm (alg. \ref{alg:algorithm-distributed-search}) is used with the following parameters.
 \begin{itemize}
     \item $maxPeers=20$
     \item $ttl=1$ 
@@ -113,6 +113,8 @@ For two different situations, 10 runs are done and the latency and average laten
     \caption{Search latency of performing keyword search}
     \label{fig:search-latency}
 \end{figure}
+
+It should be noted that message complexity of the search algorithm grows exponentially with the value of \textit{time-to-live} (ttl). For time-to-live $T$ and the maximum number of neighboring peers to ask $P$, the amount of messages for a single search is $p^T$ for $p\leq P$. This leaves a message complexity of $O(P^T)$. This could be improved by using a different distributed data structure that is optimized for search, such as a balance tree or a distributed hash table. 
 
 \section{Devices behind NATs}
 During experimentation, some of the Bittorrent traffic on Android devices were blocked by Network Address  Translators (NATs). MP3 transfers over Bittorrent were slowed down by this. The NAT Port Mapping Protocol (NAT-PMP) was used to be able to establish connections between different devices. NAT-PMP establishes connections using port scanning and port forwarding. However, this is a lengthy process: we observed that establishing such a connection usually takes more than 2 minutes. Analyzing and improving this process should be investigated in future distributed systems research.
@@ -130,3 +132,5 @@ Music publishing currently requires a block signing/agreement from one other pee
 \section{Bitcoin node}
 The experiments made use of a bitcoin node, which ran on a dedicated server 24/7.
 \section{Bootstrap node}
+\section{Battery usage}
+As \citep{mattskala2020} experimented previously, running an IPv8 instance with a large set of peers impacts the battery usage of Android majorly. The main reason for this is that the Superapp spawns a background process in order to continuously communicate with peers. (add exact numbers/graph)

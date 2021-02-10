@@ -21,6 +21,11 @@ Secondly, Big Tech has curatorial power to decide what is shown in the catalog o
 
 Finally, the streaming companies can sensor tracks. The freedom of artist expression is then decided by undemocratic judgments. Big Tech has the power to decide the future of an artist.
 
+\begin{figure}
+	\includegraphics[width=0.4\textwidth]{introduction/problem-image.png}
+	\caption{Artist compensation inconsistency}
+\end{figure}
+
 \section{Proposed solution: MusicDAO}
 This thesis proposes an alternative technology from Big Tech streaming services. We design and implement a decentralized system which attempts to replace the full value chain in music streaming industry, from the subscription money to the artist, by removing all intermediaries and giving power back to the artists and listeners. Listeners can stream music without being dependent on a single provider and can give money directly to artists. Artists receive 100\% of this donation and subscription money.
 
@@ -37,15 +42,30 @@ MusicDAO supports the following functionalities:
 \end{itemize}
 
 \subsection{Experimentation and evaluation}
-In a real-world experiment with Android phones, we tested the feasibility of such a phone-to-phone serverless system. We ran MusicDAO on at least X android devices, and registered the latency of retrieving music metadata, and transaction speeds of transferring money and audio files. 
+In a real-world experiment with Android phones, we tested the feasibility of such a phone-to-phone infrastructure-less system. We ran MusicDAO on at least X android devices, and registered the latency of retrieving music metadata, and transaction speeds of transferring money and audio files. 
+
+\section{Towards a Robot Economy}
+A full robot economy aims to have the following key characteristics: automation, transparency, fairness and democratic engagement. To accomplish these key characteristics in a software system, we envision the main building blocks to be as described in fig. \ref{tab:robot-economy-building-blocks}.
+
+\begin{table}[]
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Component}                         & \textbf{Focus in MusicDAO} \\ \hline
+Peer-to-peer leaderless infrastructure     & \checkmark                                      \\ \hline
+Resilient communication                    & \checkmark                                      \\ \hline
+Trustless content sharing and exploration  & \checkmark                                      \\ \hline
+Trustless monetary system                  & \checkmark                                      \\ \hline
+Democratic user engagement                      & $\times$                                      \\ \hline
+AI for decision making (robot tasks)       & $\times$                                      \\ \hline
+Continuous code evolution and distribution & $\times$                                       \\ \hline
+\end{tabular}
+\caption{The main components to achieve a robot economy in software}
+\label{tab:robot-economy-building-blocks}
+\end{table}
 
 % Music artists have a hard time making a living. The oligarchical power of music streaming services and labels squeeze  the  production  size  of  the  music  industry
 % Stolen from Resonate.is:
 % The music industry is dysfunctional. Power has become consolidated in the hands of a small number of technology companies and dominant major labels.
-\begin{figure}
-	\includegraphics[width=0.4\textwidth]{introduction/problem-image.png}
-	\caption{Artist compensation inconsistency}
-\end{figure}
 
 % Section X describes the design of the system, section Y its implementation and Z its testing results.
 % Most important: How can artists distribute and sell their work in a digital economy beholden to ruthlessly commercial and centralized interests?
