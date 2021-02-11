@@ -120,6 +120,9 @@ It should be noted that message complexity of the search algorithm grows exponen
 During experimentation, some of the Bittorrent traffic on Android devices were blocked by Network Address  Translators (NATs). MP3 transfers over Bittorrent were slowed down by this. The NAT Port Mapping Protocol (NAT-PMP) was used to be able to establish connections between different devices. NAT-PMP establishes connections using port scanning and port forwarding. However, this is a lengthy process: we observed that establishing such a connection usually takes more than 2 minutes. Analyzing and improving this process should be investigated in future distributed systems research.
 
 \section{Transaction fees}
+We use Bitcoin as peer-to-peer electronic cash system. Bitcoin uses transaction fees for every transaction. In our unsupervised experiments with MusicDAO, we observed an average transaction fee of 0.00003778 coins. As such we cannot say that artists receive 100\% of the donation money from users, but rather roughly 99.9996\%. This fee is calculated dynamically. It is based on the size of a transaction, and network conditions such as congestion. 
+
+Our AI DAO framework for the robot economy does not explicitly state the type of currency used. In MusicDAO, Bitcoin can be trivially swapped for any other currency as long as that currency uses a digital peer-to-peer public key infrastructure with public wallet addresses. As such, a different crypto-currency with no transaction fees (such as Nano~\citep{lemahieu2018nano}) can be used.
 
 \section{Missing features}
 \begin{itemize}
