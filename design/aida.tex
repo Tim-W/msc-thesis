@@ -1,0 +1,22 @@
+\begin{algorithm}
+\caption{Artist Income Division Algorithm (AIDA)}
+\label{alg:aida}
+\begin{algorithmic}
+\State artistInteraction$\gets$Map(key: walletID, value: amount)
+\Function{Subscribe}{artistInteraction, fee, k}\Comment{User registers for subscription}
+    \Comment{Artist interaction map: }
+    \Repeat{} Every time interval $t$
+    \State artistInteraction$\gets$orderDesc(artistInteraction)\Comment{Order artist interaction descending}
+    \State topArtists$\gets$pickFirst(k, artistInteraction)\Comment{Pick the top k artists}
+    \State total$\gets$0
+    \For{(walletID, value) in topArtists}
+        \State total$\gets$total+value
+    \EndFor
+    \For{(walletID, value) in topArtists}
+        \State amount$\gets fee \cdot\frac{value}{total}$
+        \State TRANSACT(amount, walletID)\Comment{Peer-to-peer monetary transaction}
+    \EndFor
+    \Until unsubscription
+\EndFunction
+\end{algorithmic}
+\end{algorithm}

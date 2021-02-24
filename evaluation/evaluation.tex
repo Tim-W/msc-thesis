@@ -8,10 +8,10 @@ In multiple \textit{supervised} experiments, we use 10 Android devices that are 
 % Discuss influence of BEP42 in bittorrent DHT network, our seedbox nodes may be blacklisted or throtled by other DHT nodes because our seedboxes are seeding a large amount of torrents (100) while having only 1 static ipv4 address
 
 \section{Unsupervised experiment: public release}
-MusicDAO was released publicly on the Google Play store and 11 test subjects were given the task to download music and send donations to artists. Upon installation and first running MusicDAO, it sends a request in the background to our Bitcoin node, asking for 10 coins in starter money. The responsiveness of our Bitcoin node for transferring starter money is analyzed in \ref{starter-money-flow}.
+MusicDAO was released publicly on the Google Play store and 11 test subjects were given the task to download music and send donations to artists. Upon installation and first running MusicDAO, it sends a request in the background to our Bitcoin node, asking for 10 coins in starter money. The responsiveness of our Bitcoin node for transferring starter money is analyzed in \ref{chap:starter-money-flow}.
 
 \subsection{Automated starter money transactions}
-\label{starter-money-flow}
+\label{chap:starter-money-flow}
 We analyze the responsiveness of our bitcoin node by obtaining two datasets, and inspecting their correlation in terms of timing of events.
 
 The two datasets are: 
@@ -20,74 +20,90 @@ The two datasets are:
     \item Transactions from our Bitcoin node with a value of 10 coins, scraped from our blockchain.
 \end{enumerate}
 
-When there are $x$ app installations on some day, there should be $y \gte x$ transactions outgoing from our Bitcoin faucet. In the graph shown by \ref{fig:faucet-app-installs}, this is not always the case. On 19-01-2021 there was (at least) one transaction missing. This was due to a server outage where the Bitcoin faucet was running. There are also cases in which there are transactions but no installations. This may be due to multiple app installations from one device on the same day (which is measured as one by the Google Play store console) or app installations outside of the Play store. 
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{evaluation/faucet-app-installs.png}
     \caption{Graph showing the relationship between faucet transactions of 10BTC and app installations. Every app installation should correspond to at least one faucet transaction.}
     \label{fig:faucet-app-installs}
 \end{figure}
+When there are $x$ app installations on some day, there should be $y \gte x$ transactions outgoing from our Bitcoin faucet. In the graph shown in fig this is not always the case. On 19-01-2021 there was (at least) one transaction missing. This was due to a server outage where the Bitcoin faucet was running. There are also cases in which there are transactions but no installations. This may be due to multiple app installations from one device on the same day (which is measured as one by the Google Play store console) or app installations outside of the Play store. 
 
 \subsection{Donation money flow}
-The datasets used to create the plots shown in figs. \ref{fig:artist-income} and \ref{fig:transactions} are received by scraping blockchain block data from our Bitcoin node. Fig. \ref{fig:artist-income} shows the relation between created blocks and money transacted per block (cumulative). We observe that, during the timeline of the release experiment, nearly 500 BTC has been received by artists.
-
-Note that the Bitcoin blockchain only contains timestamps for blocks, and no timestamps for individual transactions. This means we could not analyze transaction confirmation time in our unsupervised experiment, as this requires the timestamp of creating a transaction. However, prediction and analysis of confirmation times in Bitcoin have already been performed multiple times in recent literature~\citep{kawase2017transaction}~\citep{koops2018predicting}.
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{evaluation/artist-income.png}
+    \includegraphics[width=1\textwidth]{evaluation/artist-income.png}
     \caption{Artist income (cumulative) over time and block creation}
     \label{fig:artist-income}
 \end{figure}
-We observe that artist income is 
+% We observe that artist income is 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{evaluation/transactions.png}
+    \includegraphics[width=1\textwidth]{evaluation/transactions.png}
     \caption{Transactions (cumulative) over time and block creation}
     \label{fig:transactions}
 \end{figure}
+
+The datasets used to create the plots shown in figs. \ref{fig:artist-income} and \ref{fig:transactions} are received by scraping blockchain block data from our Bitcoin node. Fig. \ref{fig:artist-income} shows the relation between created blocks and money transacted per block (cumulative). We observe that, during the timeline of the release experiment, nearly 500 BTC has been received by artists.
+
+Note that the Bitcoin blockchain only contains timestamps for blocks, and no timestamps for individual transactions. This means we could not analyze transaction confirmation time in our unsupervised experiment, as this requires the timestamp of creating a transaction. However, prediction and analysis of confirmation times in Bitcoin have already been performed multiple times in recent literature~\citep{kawase2017transaction}~\citep{koops2018predicting}.
 
 \section{Supervised experiments}
 During several supervised experiments, we were in control of a network of 10 Android devices, of which 5 virtual emulators and 5 real world devices. By performing several experiments, throughput and latency of several actions in this network is analyzed. Performing measurements in different network sizes (2 up to 10 devices), enables making predictions of the scalability of MusicDAO.
 
 \subsection{Downloading and streaming}
 \ref{fig:download-times} shows the download time of each stage in the bittorrent downloading process. By running 10 runs per network configuration, we inspected the effects of a bittorrent tracker on throughput and handshake time. The 4 different download stages marked in this figure are as follows.
+
 \begin{enumerate}
     \item Time to receive metadata (including establishing handshake)
     \item Time to fill stream buffer
     \item Time to download first track
     \item Time to download full album
 \end{enumerate}
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{evaluation/download-times.png}
+    \includegraphics[width=0.4\textwidth]{evaluation/download-times.png}
     \caption{Average time spent per download stage. Measured by 20 runs in total, in two different network configurations.}
     \label{fig:download-times}
 \end{figure}
-The measurements show that a bittorrent tracker significantly reduces transfer times, for a small bittorrent swarm with 5 seeders. The largest difference is in the \textit{fetching metadata} stage, during which the device under test must find and connect with seeders. Discovering seeders over DHT requires asking multiple peers, and as such requires more time and messages before the download can start. Once the download starts, the runs using a tracker also reach significantly higher throughput, as the tracker assists the device in finding more seeders and healthier seeders. We found that the major factor slowing down download stages when using DHT only is the NAT puncturing stage, where devices try to connect to each other when there are one or more NAT devices in between. As expected, finding peers over DHT is also slower than via a tracker, however the time taken to create a handshake during NAT puncturing has a much larger effect on the peer-to-peer connecting time (the time taken to create a reliable connection for data transfer). 
 
-\ref{fig:download-traces} shows 5 traces of downloading a 38 Megabyte album. The red line shows the moving average over these 5 runs. The slow-start nature of bittorrent can be observed here. Roughly the first 5 seconds are used for fetching the bittorrent metadata (see also \ref{fig:download-times}).
+The measurements show that a BitTorrent tracker significantly reduces transfer times, for a small BitTorrent swarm with 5 seeders. The largest difference is in the \textit{fetching metadata} stage, during which the device under test must find and connect with seeders. Discovering seeders over DHT requires asking multiple peers, and as such requires more time and messages before the download can start. Once the download starts, the runs using a tracker also reach significantly higher throughput, as the tracker assists the device in finding more seeders and healthier seeders. We found that the major factor slowing down download stages when using DHT only is the NAT puncturing stage, where devices try to connect to each other when there are one or more NAT devices in between. As expected, finding peers over DHT is also slower than via a tracker, however the time taken to create a handshake during NAT puncturing has a much larger effect on the peer-to-peer connecting time (the time taken to create a reliable connection for data transfer). 
+
+\ref{fig:download-traces} shows 5 traces of downloading a 38 Megabyte album. The red line shows the moving average over these 5 runs. The slow-start nature of BitTorrent can be observed here. Roughly the first 5 seconds are used for fetching the BitTorrent metadata (see also \ref{fig:download-times}).
+
 \begin{figure}
-    The datasets used to create the plots shown in figs. \ref{fig:artist-income} and \ref{fig:transactions} are received by scraping blockchain block data from our Bitcoin node. Fig. \ref{fig:artist-income} shows the relation between created blocks and money transacted per block (cumulative). We observe that, during the timeline of the release experiment, nearly 500 BTC has been received by artists.
-
-\centering
+    \centering
     \includegraphics[width=0.7\textwidth]{evaluation/download-traces.png}
     \caption{5 traces of download throughput, downloading an album of around 38 Mbs. Measured with Nokia 7.}
     \label{fig:download-traces}
 \end{figure}
 
-Note that all devices evaluated in experiments \ref{fig:download-times} and \ref{fig:download-traces} use Bittorrent Local Peer Discovery. This means that some of the data transfers may be over local area network, which reaches considerably higher throughput than regular transfers. 
+The datasets used to create the plots shown in figs. \ref{fig:artist-income} and \ref{fig:transactions} are received by scraping blockchain block data from our Bitcoin node. Fig. \ref{fig:artist-income} shows the relation between created blocks and money transacted per block (cumulative). We observe that, during the timeline of the release experiment, nearly 500 BTC has been received by artists.
+
+Note that all devices evaluated in experiments \ref{fig:download-times} and \ref{fig:download-traces} use Bittorrent Local Peer Discovery. This means that some of the data transfers may be over local area network, which reaches considerably higher throughput than regular transfers over TCP across NATs.
+
+\subsection{File headers and BitTorrent piece ordering}
+The streaming algorithm implemented and evaluated uses the BitTorrent priorities system. The first $x=5$ pieces at the selected portion of the file (by default, the start of the file) have a higher priority than the other pieces. However, even though some pieces $A$ have higher priority than other pieces $B$, BitTorrent does not guarantee that all $a\in A$ are received earlier before any $b\in B$. Therefore, the actual ordering of the received pieces is non-deterministic. The simple heuristic used in the streaming algorithm is: start playing the file when 30\% has been downloaded; but this does not always work and this leads to inconsistent stream buffer times. Additionally, we use the assumption that the header of the audio file is at the first few bytes of the file, but this is not always true.
+
+There is significant ongoing research related to peer-to-peer streaming in literature that can be used to improve our streaming algorithm~\citep{erman2008piece}~\citep{akkanen2017continuous}.
 
 \subsection{Content discovery}
 Fig. \ref{fig:content-discovery} shows measurements of an Android device discovering content, after running MusicDAO for the first time. More specifically, it is a measurement of music metadata, received as TrustChain blocks. All participating devices are configured as follows: Every device sends a random block to a random peer every 5 seconds. A Nokia 7 Android device ran the MusicDAO in an idle state for 5 minutes. The app measured the amount of content metadata discovered every 2 seconds. 
 
-\subsubsection{\textbf{Mathematical model for evaluating experiment data}}
+\subsubsection{\textbf{Mathematical model}}
 For evaluating content discovery over time, we compare three different experiments with a mathematical model for expected discovered items over time.
+
 \begin{itemize}
-    \item Gossip interval $i=5$ seconds
+    \item Gossip interval $t=5$ seconds
     \item Total items to discover: $R=50$
 \end{itemize}
-We device \textit{hit chance} as such: every interval $i$, the hit chance $C$ to receive any item is $$C=1-(\frac{p-1}{p})^p$$ with $p$ as the number of peers. This is according to \textit{Montmort's Matching Problem}~\citep{de1713essay}. We compute $C$ for the network sizes $n=2, n=4, n=10$ with $$p=n-1$$ The expected value for the cumulative amount of unique items discovered after $x$ iterations is $$E[R]=R(1-(\frac{R-1}{R})^{Cx})$$ where $$x=\frac{1}{i}$$ This expected value $E[R]$ over time is plotted in \ref{fig:content-discovery} as Model, for three different network sizes $n$.
+
+Every time interval, all devices send one music block to a random neighbor. As such, the expected amount of blocks received in one interval is 1. When receiving a music block, the chance that it is a block that has not been received before is $$\frac{R-r}{R}$$ with $r\leq R$ the amount of items received so far. It follows that the expected value for the cumulative amount of unique items discovered after $x$ iterations is $$E[R]=R(1-(\frac{R-1}{R})^{x})$$ where $$x=\frac{1}{t}$$ This expected value $E[R]$ over time is plotted in \ref{fig:content-discovery} as Model.
+
+As every device sends one item per time interval to a neighbor, the gossiped items per time interval is equal to network size $n$. This means message complexity $M$ is equal to network size: $$M=O(n)$$
+
+Every device participating in gossiping sends 1 message and receives, on average, 1 message back. So the expected messages to process is $E[M]=2$ per iteration. Therefore the message complexity for a single device is $$M=O(1)$$ This means that the network size does not affect the message processing workload of each device, and makes the algorithm highly scalable.
 
 \begin{figure}
     \centering
@@ -95,15 +111,18 @@ We device \textit{hit chance} as such: every interval $i$, the hit chance $C$ to
     \caption{Measurements of content discovery: releases discovered after a fresh installation. $n$: network size (amount of Android devices)}
     \label{fig:content-discovery}
 \end{figure}
+
 In \ref{fig:content-discovery} we can see a correlation between model and experiment for network sizes $n=2$ and $n=4$. For $n=10$ the experiment and model correlate until 3 minutes into the experiment. The reasons for this are for now not clear. More investigation and more experiments on larger networks are necessary to make conclusions.
 
 \subsection{Random access latency}
 Random access latency of metadata is evaluated through measuring search latency. Search latency is the round-trip time between initiating keyword search and receiving metadata for the release. During this experiment, the content that was searched for was present in all devices except the one under test. The distributed search algorithm (alg. \ref{alg:algorithm-distributed-search}) is used with the following parameters.
+
 \begin{itemize}
     \item $maxPeers=20$
     \item $ttl=1$ 
 \end{itemize}
-This means that a maximum of 20 neighbours are contacted when performing a search, and that search is not recursive; meaning only neighbours are contacted (not neighbours of neighbours).
+
+This means that a maximum of 20 neighbors are contacted when performing a search, and that search is not recursive; meaning only neighbors are contacted (not neighbors of neighbors).
 
 For two different situations, 10 runs are done and the latency and average latency are plotted in \ref{fig:search-latency}. We observe that for these 20 runs, latency is $<1s$. Another observation is: increase in network size (10 versus 2) does not negatively affect latency. Current music streaming systems have a search latency of roughly $<2s$ in ideal situations.
 
@@ -122,18 +141,32 @@ During experimentation, some of the Bittorrent traffic on Android devices were b
 \section{Transaction fees}
 We use Bitcoin as peer-to-peer electronic cash system. Bitcoin uses transaction fees for every transaction. In our unsupervised experiments with MusicDAO, we observed an average transaction fee of 0.00003778 coins. As such we cannot say that artists receive 100\% of the donation money from users, but rather roughly 99.9996\%. This fee is calculated dynamically. It is based on the size of a transaction, and network conditions such as congestion. 
 
-Our AI DAO framework for the robot economy does not explicitly state the type of currency used. In MusicDAO, Bitcoin can be trivially swapped for any other currency as long as that currency uses a digital peer-to-peer public key infrastructure with public wallet addresses. As such, a different crypto-currency with no transaction fees (such as Nano~\citep{lemahieu2018nano}) can be used.
+Our framework for the robot economy does not explicitly state the type of currency used. In MusicDAO, Bitcoin can be trivially swapped for any other currency as long as that currency uses a digital peer-to-peer public key infrastructure with public wallet addresses. As such, a different crypto-currency with no transaction fees (such as Nano~\citep{lemahieu2018nano}) can be used.
 
-\section{Missing features}
-\begin{itemize}
-    \item Artist Income Division Algorithm
-\end{itemize}
 \section{Scalability}
-Scalability beyond 20 nodes
-\section{Music publishing protocol}
-Music publishing currently requires a block signing/agreement from one other peer, before it is added to the TrustChain and sent to other peers.  
+We presented an infrastructureless network of phones that together form a fully operating application. During supervised experiments, a network size of up to 10 phones was used. Now we present our expectations of scalability beyond 10 active devices. 
+
+As every device cooperates in the network by being both an uploader and downloader for content, the network size should not affect download speeds for users. The bandwidth, processing power and storage capacity of the application should naturally grow with the amount of users. An important note is that we do not take into account free-riders (peers that use the network but do not deliver resources) or adversaries (peers that perform attacks such as network flooding or sybil attack).
+
+TrustChain DLT is highly scalable as it does not require global consensus. Instead, it uses a single blockchain per user instead of a single global blockchain. 
+
+% \section{Content moderation and publishing protocol}
+% We do not present a 
+
+% Music publishing currently requires a block signing/agreement from one other peer, before it is added to the TrustChain and sent to other peers.  
+
 \section{Bitcoin node}
-The experiments made use of a bitcoin node, which ran on a dedicated server 24/7.
-\section{Bootstrap node}
+We made use of a bitcoin node, running on a dedicated server continuously throughout the experimentation phase.
+
+\section{P2P bootstrap problem}
+Our goal, as described in the Design section, was to create a phone-only network. This is not fully accomplished as we use a bootstrap node to tackle the \textit{peer-to-peer bootstrap problem}. As recognized by \cite{wolinsky2010addressing}, the peer-to-peer bootstrap problem is the problem of finding peers in a P2P overlay network, when there are no connected peers to begin with. This is a widely known, yet unsolved problem for any peer-to-peer network, and it is also relevant in MusicDAO. 
+
+It must be noted that a bootstrap node is not necessary when you can connect to a peer that is already on the MusicDAO network, for example via a local area network or Bluetooth. Moreover, a bootstrap node can be discarded once the bootstrapping procedure is successful.
+
 \section{Battery usage}
-As \citep{mattskala2020} experimented previously, running an IPv8 instance with a large set of peers impacts the battery usage of Android majorly. The main reason for this is that the Superapp spawns a background process in order to continuously communicate with peers. (add exact numbers/graph)
+The challenge of any peer-to-peer mobile app is battery usage, as it should be connected and contribute to the network as much as possible to optimally support other peers. To do this, TrustChain Superapp sends regular keep-alive messages in order to track the status of peers. To do this, the Superapp runs in the background as an Android service. Therefore it can still be used when the app is closed. The downside is that this appears to have a major effect on battery usage, as found in previous experimentation by \cite{mattskala2020}. He found that, during a 10 hour experiment, when a Google Pixel phone runs the app in the background and is connected to 20 peers, its battery consumption is roughly 10 times higher than normally. 
+
+Battery usage could be improved by adjusting the peer-to-peer connectivity protocol of IPv8, such as by reducing the interval of keepalive messages. This requires further investigation and more research.
+
+% Mention philisophical problem: The problem of shared responsibility (+citations)
+% The problem of "Who is responsible when shit hits the fan"

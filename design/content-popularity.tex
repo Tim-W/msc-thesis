@@ -1,0 +1,32 @@
+\begin{algorithm}
+\caption{Gossiping algorithm for content popularity}
+\label{alg:algorithm-content-popularity}
+\begin{algorithmic}
+\State localDatabase $\gets$ Map(key: item, value: health)
+\Function{Gossip}{localDatabase, peers, t, margin}
+    \Repeat{} Every $t$ ms
+    \For{healthItem in localDatabase}
+        \If{timestamp $\le$ timestampNow $-$ margin}
+            \State localDatabase->remove(healthItem)
+        \EndIf
+    \EndFor
+    \State healthItem$\gets$pickRandom(localDatabase)\Comment{Pick a random item}
+    \State orderDesc(localDatabase)\Comment{Order based on health}
+    \State healthItem2$\gets$pickFirst(localDatabase)
+    \State peer$\gets$pickRandom(peers)
+    \State sendGossipMessage(peer, list(healthItem, healthItem2))
+    % \If {$|results|\geq minResults$}
+    %         \State \textbf{return} $results$
+    % \EndIf
+    % \State $origin \gets myAddress()$\Comment{Address of the device initiating the search}
+    % \For{$i\gets 1, maxPeers$}
+    %     \State $peer \gets peers[i]$\Comment{Select a random neighbor}
+    %     \State $sendQuery(origin, peer, query, ttl)$
+    % \EndFor
+    \Until end
+\EndFunction
+\Function{OnGossipMessage}{items}\Comment{}
+    \State localDatabase->overwrite(item)
+\EndFunction
+\end{algorithmic}
+\end{algorithm}

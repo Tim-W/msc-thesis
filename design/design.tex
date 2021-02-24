@@ -18,49 +18,70 @@ right] at (current bounding box.north west) {
 \end{tikzpicture}
 
 \begin{figure}
+    \centering
     \includegraphics[width=0.6\textwidth]{design/architecture-v1.png}
     \caption{Architecture overview, with in green the external libraries. MusicService is the central component in our system}
     \label{fig:architecture}
 \end{figure}
 
 \section{Zero-cost autonomous music industry}
-We design a system that takes important first steps towards a zero-cost autonomous music streaming industry, with no intermediaries. In this utopia, intermediaries that add no real value to the industry receive no money. Artists receive near-100\% of all income as they are the core contributors to the industry. Anyone in the community of artists and listeners can create and share music without contacting a party for a contract or allowance. An open protocol over which money and music is exchanged, can be used with different applications, so that users have a choice of user interface. 
+We design a system that takes important steps towards a zero-cost autonomous music streaming industry, with no intermediaries. In this utopia, intermediaries that add no real value to the industry receive no money. Artists receive near-100\% of all income as they are the core contributors to the industry. Anyone in the community of artists and listeners can create and share music without contacting a party for a contract or allowance. An open protocol over which money and music is exchanged, can be used with different applications, so that users have a choice of user interface. 
 
 Real-world thriving examples such as Linux or Wikipedia are driven by community and effort instead of profit. Consensus is reached through discussion instead of through pyramid schemes. We envision a similar transition for the digital music industry. The next sections will explain the design of our proof-of-concept of MusicDAO, which aims to be the first piece for reaching a fair music industry.
 
-\section{Phone-to-phone censorship-free network}
-We design a network which only consists of mobile phones. Every phone cooperates by storing, sharing and validating content. Each mobile phone has access to the same functionalities. The reason for this topology is to have no single, powerful party or centralized server, and that scales naturally. With the latter is meant: the computational power and bandwidth capacity grows with the amount of devices requiring these resources.
+\section{Zero-server phone-to-phone application}
+Traditional Internet services are built around a single server or a set of servers (fig. \ref{fig:centralized-service}). We design a network which only consists of mobile phones (fig. \ref{fig:decentralized-phones}). Every phone cooperates by storing, sharing and validating content. Each mobile phone has access to the same functionalities. The reason for this topology is to have no single, powerful party or centralized server, and that scales naturally. With the latter is meant: the computational power and bandwidth capacity grows with the amount of devices requiring these resources.
 
 A proof-of-concept will show an important step towards mobile infrastructure for the common good: a system in which participants do not lose money and power to greedy intermediaries. Instead, they will benefit from cooperation. This concept aims for absolute fairness, controlled by the community from the ground up instead of dictated top-down. All money going into the system is divided over the participants, following rules written in code that are defined by the community.
 
-\subsection{Censorship-resiliency}
 A key attribute of the network is censorship-resiliency. That means that no single authority (company, institution or government) can remove tracks, or prevent devices from participating in the network. Censorship-resiliency is an important requirement for the system because of the issues described in \ref{sec:problem-description-censoring}. Attempting to build a resilient system while using Internet technologies results in a few key challenges as identified by \cite{pouwelse2012censorship} and \cite{di2014bypassing}. To articulate these challenges, we specify a powerful adversary which has the goal to reduce the freedom of a user of the system. The adversary is known to manage the following attacks:
-\begin{itemize}
-    \item Eavesdropping.
-    \item Killing Internet switches. 
-    \item Direct censorship: installing malware or spyware.
-    \item IP Filtering: block or filter content by restricting access of a specific IP address.
-    \item Content filtering: removing or hiding specific content from several hosts.
-    \item Confiscating devices: manually take some devices down (a small proportion of the whole network).
-\end{itemize}
-The following paragraphs explain how MusicDAO is designed to defend against these attacks.
-
-\textit{Eavesdropping}: In a censorship-resistant network, devices talking to each other must trust the network infrastructure to be free of eavesdropping. Preventing eavesdropping can be achieved using end-to-end encryption. However, an adversary may take down certain networking infrastructure to prevent communication altogether (Killing Internet switches).
-
-\textit{Killing Internet switches}: An alternative approach is to establish \textit{direct communication} between devices, which means that data is transmitted device-to-device, without the use of a central access point such such as a router. We use BlueTooth LTE~\citep{townsend2014getting} as a back-up strategy for when Internet traffic is being eavesdropped or when Wi-Fi is killed. This is a widely supported technology in present-day mobile phones and has existing integration into the framework by \cite{mattskala2020}.
-
-\textit{Direct censorship} is another challenge in designing an application. Direct censorship means that there is a piece of code installed on-device that tracks user activity, without the user knowing this. Our solution is two-fold. Firstly, the ecosystem is by default open source. Secondly, the evolution of the code-base is determined by a governance system and majority voting. This means that proposals to change the code-base will need to be voted on by its community. This idea is inspired by previous work from \cite{jentzsch2016decentralized}.
-
-\textit{Content filtering} is not a threat to MusicDAO, because it uses an immutable data structure (see \ref{sec:distributed-storage} for details). This means, in current context, that it is not possible to change or remove any (meta)data of music tracks after they have been published. In addition, multiple copies of track files are available through content duplication. The system uses simple duplication heuristics, such that all objects that a phone receives is stored in cache. This strategy also defends against \textit{confiscating devices} and \textit{IP filtering}. When an adversary takes down, or blocks, a small portion of devices from the network, there will still be back-ups available on the other devices.
 
 \section{Phone-to-phone connectivity}
-As mentioned above, MusicDAO is designed to have a network consisting of only mobile phones. Key challenges to establishing and maintaining such a network are: discovering other devices, network connectivity, longevity and scalability.
+MusicDAO is designed to have a network consisting of only mobile phones (fig. \ref{fig:decentralized-phones}). Key challenges to establishing and maintaining such a network are: discovering other devices, network connectivity, longevity and scalability.
+
+\begin{figure}
+    \minipage{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.6\linewidth]{design/centralized-service.png}
+        \caption{Traditional (centralized) Internet service infrastructure}
+        \label{fig:centralized-service}
+    \endminipage\hfill
+    \minipage{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.6\linewidth]{design/decentralized-phones.png}
+        \caption{Peer-to-peer network of phones, as in MusicDAO}
+        \label{fig:decentralized-phones}
+    \endminipage
+\end{figure}
 
 Every device that wants to participate, will try to find other devices to join the network. Every device also keeps track of a routing table, containing public IP addresses of connected and connectable peers, including latency for each peer. This routing table is inspired by the routing table implemented by BitTorrent DHT~\citep{bittorrentbep5dht}. To discover an \textit{initial} list of devices, we use a bootstrap server, which keeps track of other devices on the network to connect with. A bootstrap server should not be necessary when there are devices on the same Local Area Network that can introduce a new device to the network. However, the network of MusicDAO will be sparse at the start. After a few devices are discovered, the bootstrap server can be disregarded, as new devices are then trivially found via neighbor search.
 
 As there will be no central server, each device acts as both a client and server. As devices may be behind routers or other \textit{Network Address Translators} (NATs), establishing a direct connection between devices is not trivial. To achieve this, we use network address translation (NAT) traversal. NAT traversal is a set of methods used to establish a connection between devices which have no static, public IP address.
 
 To support a healthy evolution of the network, every device will maintain a list of connected devices. Devices will send periodic \textit{keepalive} messages to its connected peers to track which are alive and reachable. By doing this, devices can decide which peers are healthy connections. This list should grow to a few dozen, so that there are always connectable peers.
+
+% \section{Censorship-resistance: suppression of artists}
+
+
+% % \subsection{Censorship-resiliency}
+
+% \begin{itemize}
+%     \item Eavesdropping.
+%     \item Killing Internet switches. 
+%     \item Direct censorship: installing malware or spyware.
+%     \item IP Filtering: block or filter content by restricting access of a specific IP address.
+%     \item Content filtering: removing or hiding specific content from several hosts.
+%     \item Confiscating devices: manually take some devices down (a small proportion of the whole network).
+% \end{itemize}
+% The following paragraphs explain how MusicDAO is designed to defend against these attacks.
+
+% \textit{Eavesdropping}: In a censorship-resistant network, devices talking to each other must trust the network infrastructure to be free of eavesdropping. Preventing eavesdropping can be achieved using end-to-end encryption. However, an adversary may take down certain networking infrastructure to prevent communication altogether (Killing Internet switches).
+
+% \textit{Killing Internet switches}: An alternative approach is to establish \textit{direct communication} between devices, which means that data is transmitted device-to-device, without the use of a central access point such such as a router. We use BlueTooth LTE~\citep{townsend2014getting} as a back-up strategy for when Internet traffic is being eavesdropped or when Wi-Fi is killed. This is a widely supported technology in present-day mobile phones and has existing integration into the framework by \cite{mattskala2020}.
+
+% \textit{Direct censorship} is another challenge in designing an application. Direct censorship means that there is a piece of code installed on-device that tracks user activity, without the user knowing this. Our solution is two-fold. Firstly, the ecosystem is by default open source. Secondly, the evolution of the code-base is determined by a governance system and majority voting. This means that proposals to change the code-base will need to be voted on by its community. This idea is inspired by previous work from \cite{jentzsch2016decentralized}.
+
+% \textit{Content filtering} is not a threat to MusicDAO, because it uses an immutable data structure (see \ref{sec:distributed-storage} for details). This means, in current context, that it is not possible to change or remove any (meta)data of music tracks after they have been published. In addition, multiple copies of track files are available through content duplication. The system uses simple duplication heuristics, such that all objects that a phone receives is stored in cache. This strategy also defends against \textit{confiscating devices} and \textit{IP filtering}. When an adversary takes down, or blocks, a small portion of devices from the network, there will still be back-ups available on the other devices.
 
 % NAT traversal
 % Identification of devices: IPv8 (move identity section)
@@ -98,20 +119,19 @@ To achieve this situation, a main component of our system is the storage of meta
     \label{fig:desired-music-publishing-situation}
 \end{figure}
 
-A Release object contains a list of tracks that are published by a clearly identifiable artist or group of artists. It is modeled as shown in fig. \ref{fig:release-model}. Release objects are shared between peers in the network. By discovering many of those objects, a user can see and browse through them to select a track to play. A Release object merely contains metadata of the tracks. We design the network to have a separate channel for downloading the track files. This is to enable fast discovery and
-searching of Releases, as Release objects have a small byte size. 
+A Release object contains a list of tracks that are published by a clearly identifiable artist or group of artists. It is modeled as shown in fig. \ref{fig:release-model}. Release objects are shared between peers in the network. By discovering many of those objects, a user can see and browse through them to select a track to play. A Release object merely contains metadata of the tracks. We design the network to have a separate channel for downloading the track files. This is to enable fast discovery and searching of Releases, as Release objects have a small byte size. 
 \begin{figure}
-    \minipage{0.2\textwidth}
-        \includegraphics[width=\linewidth]{design/release-model.png}
+    \minipage{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{design/release-model.png}
         \caption{Release blocks structure as seen on TrustChain}
         \label{fig:release-model}
     \endminipage\hfill
-    \minipage{0.3\textwidth}
-        \includegraphics[width=\linewidth]{design/KeywordSearchMessage-model.png}
+    \minipage{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.6\linewidth]{design/KeywordSearchMessage-model.png}
         \caption{KeywordSearchMessage object sent over IPv8 in MusicCommunity}
         \label{fig:keyword-search-message-model}
-    \endminipage\hfill
-    \minipage{0.5\textwidth}
     \endminipage
 \end{figure}
 
@@ -149,8 +169,8 @@ This algorithm is inspired by the more general Gnutella search and retrieval pro
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.4\textwidth]{design/search-algorithm-diagram.png}
-    \caption{Search algorithm execution example: node A initiates a search query.}
+    \includegraphics[width=0.3\textwidth]{design/search-algorithm-diagram.png}
+    \caption{Search algorithm execution example: node A initiates a search query}
     \label{fig:search-algorithm-diagram}
 \end{figure}
 
@@ -182,9 +202,18 @@ Cryptocurrency implementations allow for private/public key-pairs which can be i
 
 \subsection{Artist Income Division Algorithm}
 \label{sec:aida-design}
-To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. Interaction can be measured in e.g. time listened, plays or feedback in the form of likes. The details of this division is explained in the implementation section of AIDA (see TODO).
+To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. The algorithm lacks no generality in how interaction is measured. It could be measured in e.g. time listened, plays, feedback in the form of likes or any linear combination of such. These parameters could be voted on by the community. The details of this division is shown in pseudocode, in alg. \ref{alg:aida}. We choose to only create transactions to the first $k$ artists in order to have a constant message complexity for each iteration: $O(k) = O(1)$. This means that artists falling outside of this value of $k$ do not receive money from the corresponding listener, so the value of $k$ becomes a trade-off between network bandwidth usage to process the payments and fairness for artists.
 
-\section{Content popularity gossip protocol}
+\input{design/aida}
+
+\section{Content popularity gossiping algorithm}
+In order to present users with content that is reachable (downloadable), we track \textit{content healthiness}. Content healthiness is the amount of peers that have and upload some specific piece of content. In the context of music this is the amount of uploaders for a music release (see fig. \ref{fig:release-model}). This idea is heavily influenced by the \textit{swarm health} terminology as part of BitTorrent, which interprets the number of seeders and leechers.
+
+% Explain the algorithm here and extend the section
+
+Our gossiping algorithm used for spreading information about content healthiness is presented in alg.~\ref{alg:algorithm-content-popularity}.
+
+\input{design/content-popularity}
 
 \section{Scalability}
 MusicDAO is scalable by using a scalable accounting system (see \ref{sec:distributed-storage}) and distributed file system (see \ref{sec:p2p-music-sharing}). Every device records its own history. When a device wants to publish music, it only transacts with one other party, to sign the metadata record. As such, there is no global consensus, nor a global ordering of transactions, so all records are processed in parallel.

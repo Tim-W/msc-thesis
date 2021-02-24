@@ -1,20 +1,32 @@
-\chapter{Conclusion}
-\section{Main characteristics of our presented framework}
-\begin{itemize}
-    \item Leaderless, fully distributed system
-    \item Fairness, middleman-free, 100\% money to artists
-    \item Transparency in database layer (trustchain) and source (open source)
-    \item Identity system with public history, chains-of-trust
-    \item Peer-to-peer streaming
-    \item 
-\end{itemize}
-\section{Generality of our AI DAO framework}
-Applications in other domains: decentral markets, youtube alternative, 
+\chapter{Conclusion and Future Work}
+This thesis presents a novel framework for building a robot economy in software. This framework allows for designing and implementing software for the common good: software that (1) handles financial transactions in a fair way (2) as decided by democratic engagement, (3) runs transparently and autonomously, (4) is open to any participant (permissionless), (5) is decentralized and leaderless, (6) supports a self-evolving codebase, and finally (7) can make intelligent decisions on its own using AI.
+
+This thesis presents a music streaming alternative for the Big Tech industry: we implemented our framework in order to build a fully working decentralized music streaming, publishing and discovery mobile app with peer-to-peer donations. In this proof-of-concept called MusicDAO, we applied the theory of the robot economy in software to an industry of which the core contributors (artists) suffer majorly from centralization on the Internet: the music industry. Most music streaming platforms take a 20-40\% cut of music revenue; MusicDAO takes 0\%. MusicDAO implements 1, 3, 4 and 5 of the key features of a robot economy in software (see above).
+
+MusicDAO is completely free of label and platform intermediaries taking large revenue cuts. It forwards $>99.99\%$ of all music revenue to artists. All money flow is public and transparent. Artists using our DAO can be independent and self-publishing. Apart from the \textit{music platform oligarchy}, it also surpasses the \textit{label oligarchy} as it requires no music label to publish music.
+
+MusicDAO implements a peer-to-peer audio streaming algorithm, which is able to stream any BitTorrent audio swarm. Its buffer loading time does not reach industry standards yet but this can be improved by more optimized pre-fetching and piece ordering algorithms. 
+
+\section{Generality: beyond music}
+The framework presented in this thesis can be applied to many other domains beyond music. It can transform Internet platforms, or even complete value chains that currently have unfair or opaque money flows. One may think of a production and sales chain with no retail cut, or a video publishing network with a subscription model without intermediaries. This thesis aims to be a step into an evolving research direction, \textit{infrastructure for the common good}: infrastructureless software that works in favor of its user community instead of companies or profit.
+
 \section{Future research directions}
-\begin{itemize}
-    \item Actual AI used for decision making
-    \item Content moderation by voting and/or AI
-    \item Continuous, democratic code evolution (based on voting protocol), bountysource.com, secure plugin system related work
-    \item Artist identity/passport, relate to Self-Sovereign Identity related work (SSI)
-    \item Towards fully fair, transparent and open democratic systems for the common good (discuss what the holy grail is of a Robot Economy)
-\end{itemize}
+In the MusicDAO proof-of-concept, there is no use of intelligent robots. Decision making based on AI is the next key step to the robot economy in software. We envision a symbiotic interaction between humans and robots: humans vote for the baselines and rules within which robots play, while robots use AI such as machine learning or evolutionary algorithms to perform tasks and make decisions. 
+
+Content moderation is a key ingredient of any Internet platform. In MusicDAO, any music that is published is automatically admitted to the network. Therefore the network does not automatically remove any duplicates (copies), illegal remixes or other illegal audio. Using DAO and intelligent robots, a system can be created in which robots moderate content using AI, while humans democratically vote on the rules for content.
+
+Ongoing research into Self-Sovereign Identity (SSI) can fix part of this problem: SSI can create a certain passport for content creators, with which creators can prove their identity and thus ownership of certain content.
+
+%\section{Future research directions}
+%\begin{itemize}
+%    \item Actual AI used for decision making
+%    \item Content moderation by voting and/or AI
+%    \item Continuous, democratic code evolution (based on voting protocol), %bountysource.com, secure plugin system related work
+%    \item Artist identity/passport, relate to Self-Sovereign Identity %related work (SSI)
+%    \item Towards fully fair, transparent and open democratic systems for %the common good (discuss what the holy grail is of a Robot Economy)
+% Active democratic engagement: forums, voting rounds (procedures), public interaction/discussion, etc.
+%\end{itemize}
+
+Streaming income is only a part of revenue from music. MusicDAO can be extended to include other revenue flows to artists, to make also those incomes higher and more transparent for artists. Possibilities are e.g. live concert tickets, merchanidise or physical audio sales.
+
+A robot economy is highly susceptible for the problem of \textit{determining responsibility} when things go wrong. For example, a software bug may occur or a robot can make an unexpected monetary transaction. This challenge requires research into new theories and ideas in the context of law and philosophy for the robot economy.
