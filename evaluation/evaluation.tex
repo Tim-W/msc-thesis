@@ -1,6 +1,12 @@
 \chapter{\label{chap:evaluation}Evaluation}
-We evaluated the viability of our DAO as a Big Tech alternative. An ideal evaluation would be by measuring the impact of a large-scale (millions of users) and long term deployment of MusicDAO in terms of artist income and artist happiness. However, the time and scale required is not feasible in the scope of this thesis. Instead, we deploy MusicDAO on a smaller scale (20 Android devices, 11 users). We measure performance of money transaction flow, music streaming and search latency in supervised and unsupervised experiments. These measurements determine the responsiveness of our infrastructure in small network sizes. By comparing latency and throughput in several network sizes, we can make conclusions of the performance of our infrastructure in larger networks.
+Our system was installed and executed on 50+ Android devices in a public release. Its crash-free rate throughout this public experiment was $>94\%$ as measured by Crashlytics\footnote{\url{https://firebase.google.com/docs/crashlytics}} (see fig. \ref{fig:crash-free-users}). We evaluated the viability of our DAO as a Big Tech alternative. An ideal evaluation would be by measuring the impact of a large-scale (millions of users) and long term deployment of MusicDAO in terms of artist income and artist happiness. However, the time and scale required is not feasible in the scope of this thesis. Instead, we deploy MusicDAO on a smaller scale. We measure performance of money transaction flow, music streaming and search latency in supervised and unsupervised experiments. These measurements determine the responsiveness of our infrastructure in small network sizes. By comparing latency and throughput in several network sizes, we can make conclusions of the performance of our infrastructure in larger networks.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\linewidth]{evaluation/crash-free-users-90-days.png}
+    \caption{Crash-free users over time, as measured by Firebase Crashlytics}
+    \label{fig:crash-free-users}
+\end{figure}
 In an \textit{unsupervised} experiment, all test subjects are given the MusicDAO application and are asked to stream music and send money to artists, but with no specific rules or guidelines. We have no control over the actions of these test subjects.
 
 In multiple \textit{supervised} experiments, we use 10 Android devices that are under our control. we measure latency and throughput of music data and money transfers, and analyze the impact of network size on these measurements.
@@ -16,7 +22,7 @@ We analyze the responsiveness of our bitcoin node by obtaining two datasets, and
 
 The two datasets are: 
 \begin{enumerate}
-    \item App installations per day, as measured by the Google Play console.
+    \item App installations per day, as measured by the Google Play console\footnote{\url{https://play.google.com/console}}.
     \item Transactions from our Bitcoin node with a value of 10 coins, scraped from our blockchain.
 \end{enumerate}
 
@@ -26,25 +32,26 @@ The two datasets are:
     \caption{Graph showing the relationship between faucet transactions of 10BTC and app installations. Every app installation should correspond to at least one faucet transaction.}
     \label{fig:faucet-app-installs}
 \end{figure}
-When there are $x$ app installations on some day, there should be $y \gte x$ transactions outgoing from our Bitcoin faucet. In the graph shown in fig this is not always the case. On 19-01-2021 there was (at least) one transaction missing. This was due to a server outage where the Bitcoin faucet was running. There are also cases in which there are transactions but no installations. This may be due to multiple app installations from one device on the same day (which is measured as one by the Google Play store console) or app installations outside of the Play store. 
+When there are $x$ app installations on some day, there should be $y \gt x$ transactions outgoing from our Bitcoin faucet. In the graph shown in fig this is not always the case. On 19 Jan 2021 there was (at least) one transaction missing. This was due to a server outage where the Bitcoin faucet was running. There are also cases in which there are transactions but no installations. This may be due to multiple app installations from one device on the same day (which is measured as one by the Google Play console\footnote{\url{https://play.google.com/console}}) or app installations outside of the Play store.
 
 \subsection{Donation money flow}
+The datasets used to create the plots shown in figs. \ref{fig:artist-income} and \ref{fig:transactions} are received by scraping blockchain block data from our Bitcoin node. Fig. \ref{fig:artist-income} shows the relation between created blocks and money transacted per block (cumulative).
+
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{evaluation/artist-income.png}
+    \includegraphics[width=0.9\textwidth]{evaluation/artist-income.png}
     \caption{Artist income (cumulative) over time and block creation}
     \label{fig:artist-income}
 \end{figure}
-% We observe that artist income is 
+We observe that artist income is 104.4 coins over a time-span of 45 days. We asked a small group of 11 people to install the app and spend all their starter money (10 coins) on donations to artists. During this time-frame, there were at least 12 unique app installations through the Google Play console, which means that these users were given a combined budget of at least 120 coins. This conforms the validity of the artist income measurement and shows the effectiveness of the decentralized financial infrastructure in a small network of users.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{evaluation/transactions.png}
-    \caption{Transactions (cumulative) over time and block creation}
+    \includegraphics[width=0.9\textwidth]{evaluation/transactions-torrentfreak.png}
+    \caption{Transactions (cumulative) over time and block creation (1 hour block interval)}
     \label{fig:transactions}
 \end{figure}
-
-The datasets used to create the plots shown in figs. \ref{fig:artist-income} and \ref{fig:transactions} are received by scraping blockchain block data from our Bitcoin node. Fig. \ref{fig:artist-income} shows the relation between created blocks and money transacted per block (cumulative). We observe that, during the timeline of the release experiment, nearly 500 BTC has been received by artists.
+During a 7-day public trial using an online news publication for user growth, we configured the Bitcoin node to mine one block per hour. This block creation interval is well adopted by the node, as can be seen in fig. \ref{fig:transactions}. This graph also shows the effect of an influx of users: On 20 Feb 2021, MusicDAO was promoted in a news article\footnote{\url{https://torrentfreak.com/university-runs-massive-bittorrent-seedbox-to-showcase-music-streaming-app-210220/}}) leading to a 220\%+ growth in app installations on a weekly basis. In the few days after this moment, the average transactions per block was significantly higher.
 
 Note that the Bitcoin blockchain only contains timestamps for blocks, and no timestamps for individual transactions. This means we could not analyze transaction confirmation time in our unsupervised experiment, as this requires the timestamp of creating a transaction. However, prediction and analysis of confirmation times in Bitcoin have already been performed multiple times in recent literature~\citep{kawase2017transaction}~\citep{koops2018predicting}.
 
@@ -122,9 +129,9 @@ Random access latency of metadata is evaluated through measuring search latency.
     \item $ttl=1$ 
 \end{itemize}
 
-This means that a maximum of 20 neighbors are contacted when performing a search, and that search is not recursive; meaning only neighbors are contacted (not neighbors of neighbors).
+This means that a maximum of 20 neighbors are contacted when performing a search, and that search is not recursive; meaning only neighbors are contacted (not neighbors of neighbors). We expect that random access latency does not increase in correspondence to relation to its network size.
 
-For two different situations, 10 runs are done and the latency and average latency are plotted in \ref{fig:search-latency}. We observe that for these 20 runs, latency is $<1s$. Another observation is: increase in network size (10 versus 2) does not negatively affect latency. Current music streaming systems have a search latency of roughly $<2s$ in ideal situations.
+For three different network sizes of 2, 6 and 10, 10 runs are done and the latency and average latency are plotted in \ref{fig:search-latency}. We observe that for these 20 runs, latency is $<1s$. Another observation is: increase in network size (10 versus 2) does not negatively affect latency. Current music streaming systems have a search latency of roughly $<2s$ in ideal situations.
 
 \begin{figure}
     \centering
@@ -135,38 +142,35 @@ For two different situations, 10 runs are done and the latency and average laten
 
 It should be noted that message complexity of the search algorithm grows exponentially with the value of \textit{time-to-live} (ttl). For time-to-live $T$ and the maximum number of neighboring peers to ask $P$, the amount of messages for a single search is $p^T$ for $p\leq P$. This leaves a message complexity of $O(P^T)$. This could be improved by using a different distributed data structure that is optimized for search, such as a balance tree or a distributed hash table. 
 
-\section{Devices behind NATs}
+\section{Device connectivity and network bootstrapping}
 During experimentation, some of the Bittorrent traffic on Android devices were blocked by Network Address  Translators (NATs). MP3 transfers over Bittorrent were slowed down by this. The NAT Port Mapping Protocol (NAT-PMP) was used to be able to establish connections between different devices. NAT-PMP establishes connections using port scanning and port forwarding. However, this is a lengthy process: we observed that establishing such a connection usually takes more than 2 minutes. Analyzing and improving this process should be investigated in future distributed systems research.
 
-\section{Transaction fees}
-We use Bitcoin as peer-to-peer electronic cash system. Bitcoin uses transaction fees for every transaction. In our unsupervised experiments with MusicDAO, we observed an average transaction fee of 0.00003778 coins. As such we cannot say that artists receive 100\% of the donation money from users, but rather roughly 99.9996\%. This fee is calculated dynamically. It is based on the size of a transaction, and network conditions such as congestion. 
+Our goal, as described in the Design section, was to create a phone-only network. This is not fully accomplished as we use a bootstrap node to tackle the \textit{peer-to-peer bootstrap problem}. As recognized by \cite{wolinsky2010addressing}, the peer-to-peer bootstrap problem is the problem of finding peers in a P2P overlay network, when there are no connected peers to begin with. This is a widely known, yet unsolved problem for any peer-to-peer network, and it is also relevant in MusicDAO. 
 
-Our framework for the robot economy does not explicitly state the type of currency used. In MusicDAO, Bitcoin can be trivially swapped for any other currency as long as that currency uses a digital peer-to-peer public key infrastructure with public wallet addresses. As such, a different crypto-currency with no transaction fees (such as Nano~\citep{lemahieu2018nano}) can be used.
+It must be noted that a bootstrap node is not necessary when you can connect to a peer that is already on the MusicDAO network, for example via a local area network or Bluetooth. Moreover, a bootstrap node can be discarded once the bootstrapping procedure is successful.
+
 
 \section{Scalability}
 We presented an infrastructureless network of phones that together form a fully operating application. During supervised experiments, a network size of up to 10 phones was used. Now we present our expectations of scalability beyond 10 active devices. 
 
 As every device cooperates in the network by being both an uploader and downloader for content, the network size should not affect download speeds for users. The bandwidth, processing power and storage capacity of the application should naturally grow with the amount of users. An important note is that we do not take into account free-riders (peers that use the network but do not deliver resources) or adversaries (peers that perform attacks such as network flooding or sybil attack).
 
-TrustChain DLT is highly scalable as it does not require global consensus. Instead, it uses a single blockchain per user instead of a single global blockchain. 
+The system is scalable by using a scalable accounting system (see \ref{sec:distributed-storage}) and distributed file system (see \ref{sec:p2p-music-sharing}). Every device records its own history. When a device wants to publish music, it only transacts with one other party, to sign the metadata record. As such, there is no global consensus, nor a global ordering of transactions, so all records are processed in parallel.
 
-% \section{Content moderation and publishing protocol}
-% We do not present a 
+In addition, by using BitTorrent as the streaming/content layer, any participant can publish a torrent with music, without needing to interact with any other peer (in contrary to centralized streaming infrastructure). 
 
-% Music publishing currently requires a block signing/agreement from one other peer, before it is added to the TrustChain and sent to other peers.  
+The transaction system, Bitcoin, may become a bottleneck in scalability~\citep{chauhan2018blockchain}. It has a single, global blockchain and blocks take on average 10 minutes to mine. There are other, more scalable protocols for transacting cryptocurrency in active development~\citep{lemahieu2018nano}, but they are not yet mature. However, our financial system of wallets using public-key cryptography is easily adaptable to any other cryptocurrency. We do not consider centralized technologies as that would concentrate power, in contrary to the aim of this thesis.
 
-\section{Bitcoin node}
-We made use of a bitcoin node, running on a dedicated server continuously throughout the experimentation phase.
+\section{Bitcoin node and transaction fees}
+We made use of a bitcoin miner, running on a dedicated server continuously throughout the experimentation phase. At least one miner is necessary on our test network in order to process payments. The use of a dedicated server contradicts our design of a zero-server software system, and creates a single point of failure. However, this situation could be improved by decentralizing the network: by running miners on each device participating in the network, the resources become more balanced, and this would reduce the risk of hardware failures.
 
-\section{P2P bootstrap problem}
-Our goal, as described in the Design section, was to create a phone-only network. This is not fully accomplished as we use a bootstrap node to tackle the \textit{peer-to-peer bootstrap problem}. As recognized by \cite{wolinsky2010addressing}, the peer-to-peer bootstrap problem is the problem of finding peers in a P2P overlay network, when there are no connected peers to begin with. This is a widely known, yet unsolved problem for any peer-to-peer network, and it is also relevant in MusicDAO. 
+We use Bitcoin as peer-to-peer electronic cash system. Bitcoin uses transaction fees for every transaction. In our unsupervised experiments with MusicDAO, we observed an average transaction fee of 0.00003778 coins. As such we cannot say that artists receive 100\% of the donation money from users, but rather roughly 99.9996\%. This fee is calculated dynamically. It is based on the size of a transaction, and network conditions such as congestion. 
 
-It must be noted that a bootstrap node is not necessary when you can connect to a peer that is already on the MusicDAO network, for example via a local area network or Bluetooth. Moreover, a bootstrap node can be discarded once the bootstrapping procedure is successful.
+Our framework for the robot economy does not explicitly state the type of currency used. In MusicDAO, Bitcoin can be trivially swapped for any other currency as long as that currency uses a digital peer-to-peer public key infrastructure with public wallet addresses. As such, a different crypto-currency with lower transaction fees (such as Nano~\citep{lemahieu2018nano}) can be used.
 
 \section{Battery usage}
 The challenge of any peer-to-peer mobile app is battery usage, as it should be connected and contribute to the network as much as possible to optimally support other peers. To do this, TrustChain Superapp sends regular keep-alive messages in order to track the status of peers. To do this, the Superapp runs in the background as an Android service. Therefore it can still be used when the app is closed. The downside is that this appears to have a major effect on battery usage, as found in previous experimentation by \cite{mattskala2020}. He found that, during a 10 hour experiment, when a Google Pixel phone runs the app in the background and is connected to 20 peers, its battery consumption is roughly 10 times higher than normally. 
 
 Battery usage could be improved by adjusting the peer-to-peer connectivity protocol of IPv8, such as by reducing the interval of keepalive messages. This requires further investigation and more research.
 
-% Mention philisophical problem: The problem of shared responsibility (+citations)
 % The problem of "Who is responsible when shit hits the fan"

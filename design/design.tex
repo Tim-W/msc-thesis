@@ -1,5 +1,6 @@
 \chapter{Design}
-In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery application, with peer-to-peer payment to artists in the form of donations and subscriptions. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. It is a first step towards a fully autonomous and zero-cost music streaming industry. It is non-profit by design, as there is no single leader or company controlling it. Instead, its users determine its future. All users of the app form a community to share audio tracks and transfer money using mobile devices. Any user can join this community, publish their musical works and receive money from its listeners. All participants cooperate in the network, which makes it self-scaling by design.
+\label{chap:design}
+In this section we present the design of our software application MusicDAO. MusicDAO is a mobile music streaming and discovery application, with peer-to-peer payment to artists in the form of donations and subscriptions. It implements a few key components (see table \ref{tab:robot-economy-building-blocks-2}) of our framework for the robot economy presented in fig. \ref{fig:robot-economy-in-software}. The MusicDAO is fully decentralized by design. This means there are no intermediaries, third parties or proprietary servers needed. It is a first step towards a fully autonomous and zero-cost music streaming industry. It is non-profit by design, as there is no single leader or company controlling it. Instead, its users determine its future. All users of the app form a community to share audio tracks and transfer money using mobile devices. Any user can join this community, publish their musical works and receive money from its listeners. All participants cooperate in the network, which makes it self-scaling by design.
 
 The overall design of the system can be seen in fig. \ref{fig:architecture}. This describes the interaction between the different components, libraries and frameworks. The following sections explain the designed features, components and design choices.
 \\
@@ -16,6 +17,25 @@ right] at (current bounding box.north west) {
 \textit{Main goal of our system}
 };
 \end{tikzpicture}
+\\
+\\
+We build upon the theory of a Decentralized Autonomous Organization (DAO) (see sec. \ref{sec:dao}). This is a piece of software that lives autonomously but also heavily relies on humans to do certain tasks. A DAO has internal capital: some kind of value that is used internally to pay humans or robots to complete tasks.
+
+\begin{table}[H]
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Robot Economy component}                         & \textbf{Focus in MusicDAO} \\ \hline
+Peer-to-peer leaderless infrastructure     & \checkmark                                      \\ \hline
+Resilient communication                    & \checkmark                                      \\ \hline
+Trustless content sharing and exploration  & \checkmark                                      \\ \hline
+Trustless monetary system                  & \checkmark                                      \\ \hline
+Democratic user engagement                      & $\times$                                      \\ \hline
+AI for decision making (robot tasks)       & $\times$                                      \\ \hline
+Continuous code evolution and distribution & $\times$                                       \\ \hline
+\end{tabular}
+\caption{The main components to achieve a robot economy in software (repeated)}
+\label{tab:robot-economy-building-blocks-2}
+\end{table}
 
 \begin{figure}
     \centering
@@ -101,10 +121,9 @@ To support a healthy evolution of the network, every device will maintain a list
 % We choose to use the Android framework for decentralized apps as proposed by~\cite{mattskala2020}. This gives us a toolbox for building phone-to-phone zero-server apps and make use of its distributed ledger technology to build a public database. It also gives us a public-key infrastructure to identify and authenticate artists. 
 
 \section{Open protocol and artist freedom}
-The design of our system contains both an open protocol and an application for the end-user. This is inspired by the ideas from \cite{masnick2019protocols}, who describes that the Internet should go back to open protocols instead of platforms, and that there should be a clear distinction between applications and protocols, so that users have the choice between different applications. Then, every application can have its own strategy of content moderation. This should result in more competition to ``[...] provide better services that minimize the impact of those
-with malicious intent, without cutting off their ability to speak entirely''~\citep{masnick2019protocols}.
+The design of our system contains both an open protocol and an application for the end-user. This is inspired by the ideas from \cite{masnick2019protocols}, who describes that the Internet should go back to open protocols instead of platforms, and that there should be a clear distinction between applications and protocols, so that users have the choice between different applications. Then, every application can have its own strategy of content moderation. This should result in more competition to ``[...] provide better services that minimize the impact of those with malicious intent, without cutting off their ability to speak entirely''~\citep{masnick2019protocols}.
 
-In our context, we envision different applications using the same streaming, discovery and payment protocol, but with each application having strategies for content filtering and user interfaces. This way, music can not be censored in a centralized manner. Moderation of content happens on the side of the application, so that the user is in control of the settings of moderation and we do not lose freedom of speech or data resiliency.
+In our context, we envision a wide range of applications to emerge, all using the same streaming, discovery and payment protocol, but with various different user interfaces and strategies for content filtering. This way, music can not be censored in a centralized manner. Moderation of content happens on the side of the application, so that the user is in control of the settings of moderation and we do not lose freedom of speech or data resiliency.
 
 \section{End-to-end music delivery model}
 \label{sec:release-model}
@@ -139,14 +158,16 @@ A Release object contains a list of tracks that are published by a clearly ident
 \label{sec:pki-design}
 The MusicDAO allows any person to participate, and start publishing or listening to music. It requires a permissionless infrastructure, in which artists can be identified. As we design a system that is fully decentralized, we cannot use a central database to record user identities. Therefore every user generates a unique identity to be used in the network, and must be able to give proof of this identity. We use a public key infrastructure (PKI) which achieve these goals. Every user stores their private and public key on their device, and only share their public key. The keypair has a mathematical property that allows verification of messages that are signed with a private key. By comparing the public key of a peer with their signed message, anyone can verify the authenticity of the message.
 
-In the context of MusicDAO we use this PKI to proof ownership of Release objects. All Release objects are signed using the owner's private key and the signature is added to the object. Any user receiving this object can verify its authenticity.
+In the context of MusicDAO we use this PKI to proof ownership of Release objects. All Release objects are signed using the owner's private key and the signature is added to the object. Using these signatures, any user receiving this object can verify its authenticity.
 
 We choose to use the public key infrastructure as implemented in the TrustChain-Superapp~\citep{mattskala2020}. This abstracts network identifiers such as IP addresses, which may change over time; so it provides a unique identity per Android phone.
 
 \section{Establishing trust and reducing sybil attacks}
-In any permissionless infrastructure, legitimacy of parties is not defined by a centralized authority. To still establish trust in the legitimacy of artists, we use the TrustChain DLT~\citep{otte2017trustchain}. Using this technology, we record the history of uploaded tracks in an immutable and transparent way. In essence, every artist adds Release blocks to its personal chain, and due to the interlinking mechanism of TrustChain, it is not possible to hide parts of this history. Every participant can view this timestamped history, as it is public by design. 
+In a centralized system, a single entity (such as a corporation) performs moderation of the authenticity of users and content. In a permissionless infrastructure, maintaining a record of legitimate parties is challenging. Reaching consensus is non-trivial. To still establish trust in the legitimacy of artists, we use the TrustChain DLT~\citep{otte2017trustchain}.
 
-This way, an application can inspect the legitimacy of an artist. For example, if an application finds a song X, published by both participant A and B, but the song published by participant A was published later, it can be concluded that A is more trustworthy than B, as B may have copied the song. This system can also be extended trivially to user ratings, or other interactions between parties, to achieve better measurements of trust. This distributed datastore of immutable and transparent histories then becomes a measure against Sybil attacks~\citep{douceur2002sybil} and artist impersonation.
+Using this technology, we record the history of uploaded tracks in an immutable and transparent way. In essence, every artist adds Release blocks to its personal chain, and due to the interlinking mechanism of TrustChain, it is not possible to hide parts of this history. Every participant can view this timestamped history, as it is public by design. This way, an application can inspect the legitimacy of an artist. For example, if an application finds a song X, published by both participant A and B, but the song published by participant A was published later, it can be concluded that A is more trustworthy than B, as B may have copied the song. This is a simple implementation of the Trust on First Use (TOFU) model~\citep{toth2013public}.
+
+This system can also be extended trivially to user ratings, or other interactions between parties, to achieve better measurements of trust. This distributed datastore of immutable and transparent histories then becomes a measure against Sybil attacks~\citep{douceur2002sybil} and artist impersonation.
 
 \section{Distributed storage}
 \label{sec:distributed-storage}
@@ -156,9 +177,13 @@ One implementation of this technology is TrustChain~\citep{otte2017trustchain} w
 
 \section{Peer-to-peer music sharing}
 \label{sec:p2p-music-sharing}
-To be able to have low latency for discovering and playing music tracks, while using no central nor high-throughput servers, the network demands participants to upload content continuously. We design the app to, by default, use the network capabilities of the mobile device to upload content as much as possible. This is constrained by networking hardware, data subscription plans and other software running on the phone.
+In order to minimize latency for discovering and playing music tracks, while using no central nor high-throughput servers, the network demands participants to upload content continuously. 
 
 The peer-to-peer file sharing protocol BitTorrent is suitable to share audio files in MusicDAO. We make BitTorrent a design choice as it does not require synchronizing with a global data store, in contrary to IPFS. This means we can build a metadata store independently from BitTorrent (for example, using TrustChain as explained in \ref{sec:distributed-storage}). BitTorrent also has stable implementations for Android.
+
+We design the app to, by default, seed the content of $\leq k$ Releases, which are sorted in descending order on publication date. This means that the seeding protocol uses a first-in-first-out strategy. This simple heuristic is used because of ease of implementation, because it requires no communication between devices. However, it could lead to unhealthy BitTorrent swarms for music released long ago. A peer-to-peer load balancing mechanism could prevent this but is out of scope for this thesis because of complexity.
+
+Seeding of content should be done as a background process on the phone, so that it is still running when the app is not in use, and therefore maximize the availability of content.  However, this is constrained by networking hardware, data subscription plans and other software running on the phone. The effectiveness of this approach should be evaluated with through experimentation.
 
 \section{Distributed search}
 For searching content we use introduce our simple distributed algorithm. Pseudocode of this algorithm is shown in alg. \ref{alg:algorithm-distributed-search}. It asks peers around for content tagged with some keyword. When a peer finds a match on their local database, it sends this Release object to the original asking peer. Otherwise it forwards the query to their neighbours, after reducing the time-to-live property by 1. The messages stop being forwarded once their time-to-live property hits below 1. The structure of search messages are shown in fig. \ref{fig:keyword-search-message-model}. 
@@ -177,11 +202,11 @@ This algorithm is inspired by the more general Gnutella search and retrieval pro
 Fig. \ref{fig:search-algorithm-diagram} shows a visualization of execution of the algorithm in a small network. Participant A wishes to find a set of results $R$ for query $q$, so it initiates a search query. Firstly it inspects its local database. Because there are $|R|=0$ results, it sends a query to its neighboring peers (B and C). The peers depicted in grey finds $|R|\gte 1$ results; they send their result back directly to A and do no other action. Other peers forward $q$ to its neighbors, reducing $q_{ttl}$ by 1. \textit{Time-to-live} hits 1 when arriving in F,G,H so the search terminates. 
 
 \section{Transparent money flow}
-Figures \ref{fig:current-money-flow} and \ref{fig:desired-money-flow} visualize, in a simplified fashion, the difference of how money flows in the current situation and in MusicDAO. It shows that, when intermediaries are cut from the flow, artists will have a higher income for the same fees from the listener. Streaming services and record holders introduce many overhead costs. Our system allows artists to publish their songs without the need to contact a label. The biggest difference in income will be seen for independent artists, as streaming services gives particularly low payouts for unsigned artists.
+Figures \ref{fig:current-money-flow} and \ref{fig:desired-money-flow} visualize the difference of money flow in the current situation and in MusicDAO. It shows that, when intermediaries are cut from the flow, artists will have a higher income for the same fees from the listener. Streaming services and record holders introduce many overhead costs. Our system allows artists to publish their songs without the need to contact a label. The biggest difference in income will be seen for independent artists, as streaming services gives particularly low payouts for unsigned artists.
 
 As we are designing a system with no intermediaries, it should be possible to give money directly to artists. Cryptocurrency allows for peer-to-peer payments which achieve this goal, so we use this in the MusicDAO. Cryptocurrency payments will be used for two different functionalities: a user can send a donation to an artist, or a user can pay artists using a monthly subscription system. This subscription system pays artists that the user listened to, using the Artist Income Division Algorithm (see \ref{sec:aida-design}). 
 
-In the desired money flow, we have a  Fig. \ref{fig:desired-money-flow} shows another component: an automated and transparent payment division system. In practice, this should be an algorithm running locally on the machine of the user which calculates how much money should go to each of the shareholders of a particular song. Currently, record holders have this task, but there exists no transparent system for this, so they can give low payouts to its artists. We design the transparent payment system to be an immutable record on a distributed ledger, on which a specification of the exact shares per artists are written down. This can be implemented using TrustChain blocks~\citep{otte2017trustchain}.
+Fig. \ref{fig:desired-money-flow} shows another component: an automated and transparent payment division system. Currently, record holders have the task of paying artists, but the contracts and systems are often opaque and result in slow and low payouts. Automating this process should reduce these problems. We design the transparent payment system to be an immutable record on a distributed ledger, on which a specification of the exact shares per artists are written down.
 
 We choose to use Bitcoin as a cryptocurrency as it has shown to be a fully peer-to-peer, secure and popular payment system, and it does not rely on any third parties to run. It also allows for making a experimentation environment without any high-throughput external servers. 
 
@@ -197,27 +222,23 @@ We choose to use Bitcoin as a cryptocurrency as it has shown to be a fully peer-
         \label{fig:desired-money-flow}
     \endminipage
 \end{figure}
-\subsection{Wallet}
 Cryptocurrency implementations allow for private/public key-pairs which can be interpreted as a kind of wallet; the funds can only be unlocked by a holder of the private key. In the case of MusicDAO we design the app to include a wallet for every user. To receive money, every artist should share their public key to all of their listeners. To achieve this, the public key of their cryptocurrency wallet is included as a property of the Release objects (see \ref{sec:release-model}). As there are no institutions or banks involved in storing money, users will be required to keep their private key safe.
 
-\subsection{Artist Income Division Algorithm}
+\section{Artist income division algorithm}
 \label{sec:aida-design}
-To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of interaction with each artist. The algorithm lacks no generality in how interaction is measured. It could be measured in e.g. time listened, plays, feedback in the form of likes or any linear combination of such. These parameters could be voted on by the community. The details of this division is shown in pseudocode, in alg. \ref{alg:aida}. We choose to only create transactions to the first $k$ artists in order to have a constant message complexity for each iteration: $O(k) = O(1)$. This means that artists falling outside of this value of $k$ do not receive money from the corresponding listener, so the value of $k$ becomes a trade-off between network bandwidth usage to process the payments and fairness for artists.
+To provide a stable income for artists, in the form of reoccurring payments, we design the Artist Income Division Algorithm. This algorithm calculates how subscription money is split into payments to artists. The user can enable a periodic payment. This money is then divided over the artists the user listens to, in proportion to the amount of \textit{interaction} with each artist. 
+
+The algorithm is flexible in the way of measuring interaction. It could be measured in e.g. time listened, plays, feedback in the form of likes or any linear combination of such. These parameters could be voted on by the community. The details of this division is shown in pseudocode, in alg. \ref{alg:aida}. We choose to only create transactions to the first $k$ artists in order to have a constant message complexity for each iteration: $O(k) = O(1)$. This means that artists falling outside of this value of $k$ do not receive money from the corresponding listener, so the value of $k$ becomes a trade-off between network bandwidth usage to process the payments and fairness for artists.
 
 \input{design/aida}
 
-\section{Content popularity gossiping algorithm}
+\section{Content popularity algorithm}
 In order to present users with content that is reachable (downloadable), we track \textit{content healthiness}. Content healthiness is the amount of peers that have and upload some specific piece of content. In the context of music this is the amount of uploaders for a music release (see fig. \ref{fig:release-model}). This idea is heavily influenced by the \textit{swarm health} terminology as part of BitTorrent, which interprets the number of seeders and leechers.
 
 % Explain the algorithm here and extend the section
 
-Our gossiping algorithm used for spreading information about content healthiness is presented in alg.~\ref{alg:algorithm-content-popularity}.
+Our gossip-based algorithm used for spreading information about content healthiness is presented in alg.~\ref{alg:algorithm-content-popularity}. Gossip-based algorithms are suitable in distributed systems because of their simplicity and flexibility~\citep{kermarrec2007gossiping}. Our algorithm is influenced by previous work present in the Tribler application~\citep{pouwelse2008tribler}. 
+
+In essence, the algorithm works as follows: every peer in the network communicates with a few random neighboring peers periodically. The sending peer sends one message to each of its selected peers containing information about how well content (e.g. a musical Release) is available, measured by the amount of devices that have this piece of content. Every peer in the network has a local registration of content popularity, and updates this periodically. All messages are timestamped, so outdated information is removed after time.
 
 \input{design/content-popularity}
-
-\section{Scalability}
-MusicDAO is scalable by using a scalable accounting system (see \ref{sec:distributed-storage}) and distributed file system (see \ref{sec:p2p-music-sharing}). Every device records its own history. When a device wants to publish music, it only transacts with one other party, to sign the metadata record. As such, there is no global consensus, nor a global ordering of transactions, so all records are processed in parallel.
-
-In addition, by using BitTorrent as the streaming/content layer, any participant can publish a torrent with music, without needing to interact with any other peer. 
-
-Finally, the transaction system, Bitcoin, may become a bottleneck in scalability. It requires global consensus and a voting process for every transaction. However, as of the time of writing, there is no mature and more scalable alternative as peer-to-peer payment system technology. We do not consider centralized technologies as that would concentrate power, in contrary to the aim of this thesis.

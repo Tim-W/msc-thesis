@@ -27,16 +27,18 @@ It is available on Google Play\footnote{\url{https://play.google.com/store/apps/
 The Internet is moving from a network of people to a sparse selection of platforms over which nearly all commerce is regulated. The consumer choice is diminishing due to the power of oligarchs and monopolies. A few Big Tech corporations are gaining increasing power in the the surface on which market exchange takes place. These corporations take a large cut in revenue streams which majorly affects income for creators of content and services. Examples are Uber, Ebay and Spotify. Revenue streams towards the core contributors on a platforms are opaque on purpose. The software and algorithms powering these platforms are also a black box to creators and consumers. Furthermore, users have negligible influence on the future of these platforms. As explained by \citep{stiglitz2019market}, the funcamental problem is the growing ``concentration of market power, which allows dominant firms to exploit their customers and squeeze their employees, whose own bargaining power and legal protections are being weakened'', while ``[...] CEOs and executives are extracting higher pay for themselves''.
 
 \section{Towards a robot economy}
-An alternative for Big Tech is building a robot economy in software. Our novel vision of a robot economy follows recent theoretical groundwork by \cite{arduengo2020robot}: In a robot economy, intelligent robots play a key role, by performing economic operations autonomously. Robot tasks are driven by artificial intelligence, and cooperate with humans. While robots already take an active part in society today, the key difference in this vision is that robots have internal funds (which may be money, tokens or other assets) and can perform transactions on their own. Our work sets the first steps for this robot economy in software. Software as a robot economy is a service that runs autonomously, with which humans interact. Humans can spend funds, perform decisions or interact with data, while the software is run by robots.
+An alternative for Big Tech is building a robot economy in software. Our novel vision of a robot economy follows recent theoretical groundwork by \cite{arduengo2020robot}: In a robot economy, intelligent robots play a key role, by performing economic operations autonomously. Robot tasks are driven by artificial intelligence, and cooperate with humans. While robots already take an active part in society today, the key difference in this vision is that robots have internal funds (which may be money, tokens or other assets) and can perform transactions on their own. Our work sets the first steps towards a robot economy in software by building and evaluating a few key components of this theory. Software as a robot economy is a service that runs autonomously, with which humans interact. Humans can spend funds, perform decisions or interact with data, while the software is run by robots.
 
-A robot economy in software can have large influence: it can replace a company, or even a full value chain, by software. With this vision, we can design and implement systems that work in favor of its users instead of a company. In a traditional software system, a company decides the parameters and functions of software. The software is run on company infrastructure only, which creates central points of failure. In a software system in the robot economy, its parameters and functions are voted on by its user base in a democratic voting process. It is run on distributed infrastructure, so is not susceptible to central points of failure. Since to the introduction of blockchains and crypto-currency, this voting process can be automated and transparent. Robots make intelligent decisions based on data and value given by humans. Such an implementation can replace entire value chains of industries.
+A robot economy in software can have large influence: it can replace a company, or even a full value chain, Our framework for a robot economy in software allows designing and implementing \textit{infrastructure for the common good}: software that is governed by its key users and contributors, and as such leads to more fairness on Internet platforms. In a traditional software system, a company decides the parameters and functions of software. The software is run on company infrastructure only, which creates central points of failure. In a software system in the robot economy, its parameters and functions are voted on by its user base in a democratic voting process. It is run on distributed infrastructure, so is not susceptible to central points of failure. Since to the introduction of blockchains and crypto-currency, this voting process can be automated and transparent. Robots make intelligent decisions based on data and value given by humans. Such an implementation can replace entire value chains of industries.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{introduction/robot-economy.png}
+    \includegraphics[width=1\textwidth]{introduction/robot-economy-2.png}
     \caption{A robot economy in software: democratic and autonomous software}
     \label{fig:robot-economy-in-software}
 \end{figure}
+
+As seen in \ref{fig:robot-economy-in-software}, the central component of the Robot Economy in software is an intelligent autonomous software system using a DAO. Every participant can vote on changes of the inner workings of the software using a democratic voting protocol. 
 
 A full robot economy aims to have the following key characteristics: 
 \begin{itemize}
@@ -72,7 +74,7 @@ We design and implement a decentralized system which attempts to replace the ful
 
 In essence, the solution is a decentralized autonomous organization (DAO) which is formed by listeners and artists. A DAO is defined by \cite{buterin2014dao} as an ``entity that lives on the internet and exists autonomously, but also heavily relies on hiring individuals to perform certain tasks that the automation itself cannot do'' (see \ref{fig:dao-quadrants}). In this thesis we present the design and implementation of our mobile android app MusicDAO: a music streaming service for the common good. Users of this app form a phone-to-phone zero-server network over which they publish music, download music and transfer money. This proof-of-principle of a DAO shows a fair and transparent music streaming service in which no external servers, third parties or intermediaries are necessary. Any person can join the network, publish music and get paid for it. 100\% of music revenue goes to artists.
 
-MusicDAO supports the following functionalities:
+MusicDAO contains the following key functionalities:
 \begin{itemize}
     \item Defining and publishing music content with metadata;
     \item Streaming music over BitTorrent;
@@ -82,9 +84,7 @@ MusicDAO supports the following functionalities:
     \item Peer-to-peer donations to artists using Bitcoin.
 \end{itemize}
 
-\subsection{Experimentation and evaluation}
-In a real-world experiment with Android phones, we tested the feasibility of such a phone-to-phone infrastructure-less system. We ran MusicDAO on at least X android devices, and registered the latency of retrieving music metadata, and transaction speeds of transferring money and audio files. 
-% Add key findings (but longer than in intro-intro)
+In a real-world experiment with Android phones, we tested the feasibility of such a phone-to-phone infrastructure-less system. In a public release experiment, MusicDAO is published to the crowd via the Google Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}}, and is installed on more than 50 devices. We evaluated all the money flow from its users towards the artists using a public blockchain. We evaluated the responsiveness of our decentralized infrastructure using supervised experiments, in which we measured the effect of network size on the latency of the key functionalities of our system.
 
 \begin{table}[]
 \begin{tabular}{|l|l|}

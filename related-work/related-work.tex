@@ -4,6 +4,7 @@ In this chapter we describe existing algorithms, protocols and applications in c
 For an application to evolve in a fully distributed network, without a company or a single point of responsibility, decisions need to be made on protocol or feature additions and changes. We inspect the state-of-the-art technologies and organizational theories which enable autonomous communities to solve these problems by organizing themselves.
 
 \section{Decentralized Autonomous Organizations}
+\label{sec:dao}
 As an alternative organizational framework for distributing money and music, we examine a recent concept and technology: Decentralized Autonomous Organizations (DAO).
 A DAO is ``an entity that lives on the internet and exists autonomously, but also heavily relies on hiring individuals to perform certain tasks that the automaton itself cannot do''~\citep{buterin2014dao}. It is not owned by a single person or legal entity. It should also not require a specifically specified party to operate. For example, it should not depend on a single server or database, but rather have flexibility in adopting resources. As such we say it lives \textit{autonomously}. \cite{buterin2014dao} also notes that a DAO should have \textit{internal capital}: `some kind of internal property that is valuable in some way, and it has the ability to use that property as a mechanism for rewarding certain activities'. A DAO is non-profit by nature, as there is no legal owner of the system.
 
@@ -66,8 +67,8 @@ As described in sec. \ref{sec:problem-financial-transparency}, there is a seriou
 
 Payments of royalties to artists can be described in transparent, public and immutable records on a blockchain. In addition, smart contracts can be used to automate payments~\citep{buterin2014next}. Smart contracts are self-executing (non-ambiguous) and self-verifying (guaranteeing its statements). In the music industry context, a smart contract can be used for transparent, immutable and automatic payment distribution of royalties. This technique was shown in practice in 2017, when Imogen Heap released the song `Tiny Human'~\citep{heap2017blockchain}. Its distribution of payments to the makers and recorders was written in a smart contract, in the form of a record on the Ethereum blockchain. When a user downloads the corresponding track and makes the payment using cryptocurrency, the forwarding details of the payment are located within the blockchain, and executed as declared on the smart contract, on a distributed virtual machine (VM) such as the Ethereum VM.
 
-\section{Distributed ledger technology}
-A distributed ledger is a technology used to create data stores in a distributed network. 
+% \section{Distributed ledger technology}
+% A distributed ledger is a technology used to create data stores in a distributed network. 
 % Expand, explain TrustChain
 
 \section{Decentralized application frameworks}
@@ -103,24 +104,24 @@ In the context of DAO, the TrustChain Superapp contains a mini-app for decentral
 \label{sec:decentralized-content-delivery}
 A fully decentralized audio streaming service requires sharing and streaming audio files over a network of nodes in which any participant can start and run a node. Well-established examples of such technologies are BitTorrent and IPFS.
 
+\subsection{BitTorrent}
 BitTorrent~\citep{cohen2002bittorrent} is an open peer-to-peer file sharing protocol. It invented by Bram Cohen, and has generated a massive influence on network traffic on the Internet since its release. Today, it is still the most popular peer-to-peer protocol for sharing data. In 2019, BitTorrent was measured to generate 2.5\% of all download and 24.6\% of all upload bandwidth~\citep{marozzo2020}. It went through many iterations and improvements. It has a large community, with over 3K repositories on GitHub related to the technology. Furthermore there are a few companies maintaining clients (such as \url{https://bittorrent.com} and \url{https://www.utorrent.com}).
 
 In essence, BitTorrent makes use of seeding while downloading: this means that when multiple clients download a file, they simultaneously share pieces of this file with the other downloaders. This results, with well connected and performing peers, in fast downloads. BitTorrent originally relied on trackers to perform peer discovery, and trackers can become a central point of failure. However, since the introduction of the DHT protocol~\citep{bittorrentbep5dht}, finding peers in the network can be done by querying any known peer, which makes the network more decentralized. 
-
-% The BitTorrent file distribution system uses tit-for-tat as a method of seeking pareto efficiency
 
 % Any person can join the network and start sharing files, by making a torrent which contains the metadata of the files. Content is specified using SHA1 hashes of the files. Checksums are used to make sure no changes to the original torrent have been made upon receiving files. This way all files are immutably shared. BitTorrent has implementations for various systems, including Android. This means mobile devices can participate in uploading and downloading content, and can even build an autonomous phone-only file sharing system.
 
 % Torrent files contain a list of chunks (torrent pieces), which represent the different parts of the related file. Flawless streaming of media files over BitTorrent requires a smart algorithm to predict what file is requested next, and what torrent pieces should be loaded. 
 
-There are no differences between hosters and downloaders. All participants have the same capabilities, so every user of the network can both download and upload content. A challenge of the BitTorrent protocol without extensions is incentivizing participants to host files. There are multiple proposed solutions for this, discussed in \ref{sec:file-spreading-incentives}.
-
-The Inter-Planetary FileSystem, introduced by \cite{benet2014ipfs}, is a distributed peer-to-peer file sharing system in which any person can start a node and start uploading and downloading files. Protocol Labs\footnote{\url{https://protocol.ai/}}, the team behind this technology, was founded in 2014 by Juan Benet. As of 2020, the team has grown globally to members from 19 countries, with substantial investments. However, there has not been large-scale adoption of this technology yet.
+There are no differences between hosters and downloaders. All participants have the same capabilities, so every user of the network can both download and upload content. It uses tit-for-tat as a method of efficiently downloading files. However, a challenge in BitTorrent is incentivizing participants to host files. There are multiple proposed solutions for this, discussed in \ref{sec:file-spreading-incentives}. 
+\subsection{IPFS}
+The Inter-Planetary FileSystem (IFPS), introduced by \cite{benet2014ipfs}, is a distributed peer-to-peer file sharing system in which any person can start a node and start uploading and downloading files. Protocol Labs\footnote{\url{https://protocol.ai/}}, the team behind this technology, was founded in 2014 by Juan Benet. As of 2020, the team has grown globally to members from 19 countries, with substantial investments. However, there has not been large-scale adoption of this technology yet.
 
 % It uses a Distributed Hash Table to address content using a combination of SHA-256 hashes and hyperlinks. 
 
 At its core, IPFS maintains a global key-value store for all files (and file parts). This is in contrast to BitTorrent, which works with torrent swarms and trackers. IPFS uses an efficient content addressing mechanism. Another feature is built-in file de-duplication. Additionally it supports public file history bookkeeping.
-
+//
+//
 End-users of content stored on IPFS can access content without supporting the network, so there is the possibility of free-riding. In addition, there are no direct (financial) incentives to run an IPFS node, other than to help the network and to host content. 
 % For example, users of the aforementioned Audius music streaming system are not required to run an IPFS node to improve the health of the network. 
 % \subsection{Comparison: IPFS and BitTorrent}
@@ -143,10 +144,10 @@ IPFS uses a global file index using a hash tree, which means that every two file
 %     \endminipage
 % \end{figure}
 
-\section{Incentives for file hosting}
+\section{File hosting incentive algorithms}
 \label{sec:file-spreading-incentives}
-In a DAO, the party responsible for hosting and spreading of files is not well-defined. To tackle the tragedy of the commons, entities should be incentivised just enough for the system to be sustainable and usable, but no more. An example incentive system is bandwidth tokens~\citep{de2018blockchain} as part of the Tribler system.
+In a DAO, the party responsible for hosting and spreading of files is not well-defined. To tackle the tragedy of the commons, participants should have an incentive to contribute their computational and bandwidth resources for the network to be sustainable and responsive. One example incentive system is bandwidth tokens~\citep{de2018blockchain} as part of the Tribler system. Another is the FileCoin 
 
 Tribler~\citep{pouwelse2008tribler} is a peer-to-peer system to share, download and stream multimedia. It has implementations for desktop environments and an Android prototype. It makes use of BitTorrent for file transfer and adds anonymization techniques on top of it. In addition, it makes use of its bandwidth tokens: an incentive system to increase cooperation between users, in order to achieve high availability of downloads. In essence, it subtracts tokens for downloading content from peers and rewards tokens for helping peers. An overview of the Tribler desktop interface can be seen in fig. \ref{fig:tribler}.
 
-% Add related work for incentives for file hosting: FileCoin
+FileCoin~\citep{benet2018filecoin} is an addition on top of the distributed file storage system IPFS. It is a distributed incentive protocol which rewards users for hosting files in the network. In essence, there is a decentralized market over which cryptocurrency (FileCoin) is transacted. Supply and demand of files in the network determine the reward value in terms of FileCoin. The mechanism for obtaining these coins is somewhat similar to the mining protocol in Bitcoin, but uses \textit{proof-of-storage} instead of \textit{proof-of-work} as a way to determine block rewards.

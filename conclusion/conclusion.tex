@@ -7,8 +7,10 @@ MusicDAO is completely free of label and platform intermediaries taking large re
 
 MusicDAO implements a peer-to-peer audio streaming algorithm, which is able to stream any BitTorrent audio swarm. Its buffer loading time does not reach industry standards yet but this can be improved by more optimized pre-fetching and piece ordering algorithms. 
 
+Our system is not yet resilient against free-riding, spam attacks or sybil attacks. Preventing such attacks is an active developing area in distributed systems research.
+
 \section{Generality: beyond music}
-The framework presented in this thesis can be applied to many other domains beyond music. It can transform Internet platforms, or even complete value chains that currently have unfair or opaque money flows. One may think of a production and sales chain with no retail cut, or a video publishing network with a subscription model without intermediaries. This thesis aims to be a step into an evolving research direction, \textit{infrastructure for the common good}: infrastructureless software that works in favor of its user community instead of companies or profit.
+The framework presented in this thesis can be applied to many other domains beyond music. Most functions of corporation-run centralized platforms are already automated, and handled by AI or robots. It can transform Internet platforms, or even complete value chains that currently have unfair or opaque money flows. One may think of a production and sales chain with no retail cut, or a video publishing network with a subscription model without intermediaries. This thesis aims to be a step into an evolving research direction, \textit{infrastructure for the common good}: autonomous software that works in favor of its user community instead of companies or profit.
 
 \section{Future research directions}
 In the MusicDAO proof-of-concept, there is no use of intelligent robots. Decision making based on AI is the next key step to the robot economy in software. We envision a symbiotic interaction between humans and robots: humans vote for the baselines and rules within which robots play, while robots use AI such as machine learning or evolutionary algorithms to perform tasks and make decisions. 
@@ -30,3 +32,5 @@ Ongoing research into Self-Sovereign Identity (SSI) can fix part of this problem
 Streaming income is only a part of revenue from music. MusicDAO can be extended to include other revenue flows to artists, to make also those incomes higher and more transparent for artists. Possibilities are e.g. live concert tickets, merchanidise or physical audio sales.
 
 A robot economy is highly susceptible for the problem of \textit{determining responsibility} when things go wrong. For example, a software bug may occur or a robot can make an unexpected monetary transaction. This challenge requires research into new theories and ideas in the context of law and philosophy for the robot economy.
+
+% In the current software implementation, when a user makes a donation, this transaction is atomic and can only go to one wallet. An automatic splitting system between different artists of one group or band has not been implemented yet.
