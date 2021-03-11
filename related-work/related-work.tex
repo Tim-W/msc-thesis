@@ -1,4 +1,5 @@
 \chapter{\label{chap:state-of-the-art}State of the Art}
+% Gnutella, Scuttlebutt, libp2p -> possible additions, but not really necessary
 In this chapter we describe existing algorithms, protocols and applications in computer science, which try to solve, or give an alternative for, the centralized power in Big Tech, and more specifically in digital audio streaming. We inspect full solutions in the form of distributed applications, and techniques which solve subproblems, such as decentralized file sharing protocols.
 
 For an application to evolve in a fully distributed network, without a company or a single point of responsibility, decisions need to be made on protocol or feature additions and changes. We inspect the state-of-the-art technologies and organizational theories which enable autonomous communities to solve these problems by organizing themselves.
@@ -38,9 +39,11 @@ In our context, we envision human tasks to be e.g. (1) creating music and giving
 \end{figure}
 
 \section{Decentralized music distribution technologies}
+\label{sec:related-work}
 Multiple decentralized audio distribution and streaming applications exist. Examples are Audius~\citep{audius2018}, Musicoin~\footnote{\url{http://musicoin.org/}} and Opus Audio~\citep{jia2016opus}.
 
 Audius~\citep{audius2018} presents a decentralized protocol for audio content, which aims to improve payouts to artists and its transparency. It contains a token economy with a transparent payout system for the artists, and a user-operated, distributed network for metadata and content. Its monetary infrastructure is displayed in fig. \ref{fig:monetary-flow-audius}. In addition, it has a governance system like a DAO, in which users can decide on changes to the protocol by democratic voting. Its protocol is established around the ideology of disintermediation: ``Intermediaries  should be removed  when possible; when necessary, they should be algorithmic, transparent, and verifiably accurate''~\citep{audius2018}. It uses IPFS~\citep{benet2014ipfs} for storage of audio content, meaning it relies on voluntarily-hosted high-performant servers.
+% The last sentence is most likely not true
 
 Opus Audio~\citep{jia2016opus} is a decentralized music-sharing platform and proposes a solution for music ownership registration on a blockchain structure. It has a running distributed audio file sharing system using the Inter-Planetary FileSystem designed by \cite{benet2014ipfs} (see \ref{sec:decentralized-content-delivery}). It contains a decentralized and fully automated system for purchasing access to music, which works as follows. Opus stores encrypted audio files on a swarm of connected nodes. The decryption keys and files hashes are stored in a smart contract (see \ref{sec:smart-contracts}). Using cryptocurrency, users spend their funds on these smart contracts, to unlock access to audio files, and to cooperate in its permissionless DAO (see fig. \ref{fig:opus-dao}).
 
@@ -57,9 +60,9 @@ Opus Audio~\citep{jia2016opus} is a decentralized music-sharing platform and pro
     \endminipage
 \end{figure}
 
-Musicoin is a blockchain platform without intermediaries that focuses on income for independent artists. It uses smart contracts and cryptocurrency to show transparency in payments (see \ref{sec:smart-contracts}). This payment structure ensures that each contributor in the network is rewarded, and that artists receive a stable income based on the Universal Basic Income ideology. Not all of their architecture is decentralized; they use centralized registration system for artists and listeners. They pay artists using their \$MUSIC currency, of which the value may be higlhy volatile.
+Musicoin is a blockchain platform without intermediaries that focuses on income for independent artists. It uses smart contracts and cryptocurrency to show transparency in payments (see \ref{sec:smart-contracts}). This payment structure ensures that each contributor in the network is rewarded, and that artists receive a stable income based on the Universal Basic Income ideology. Not all of their architecture is decentralized; they use centralized registration system for artists and listeners. They pay artists using their \$MUSIC currency, of which the value may be highly volatile.
 
-None of the state-of-the-art decentralized audio streaming technologies show a running, fully decentralized infrastructure with stable income for artists. All of these systems have in common that they save metadata and identifiers of audio files on a blockchain, and save the audio files in an off-chain database using IPFS~\citep{benet2014ipfs}. This makes these solutions reliant on people voluntarily running IPFS content nodes (servers hosting the audio files). In a fully decentralized network, every participant should have the same role, meaning that every node both uploads and downloads content, and it should not be reliant on external servers. Most decentralized systems use their homebrew cryptocurrency to pay artists, instead of a stable currency.
+None of the state-of-the-art decentralized audio streaming technologies show a running, fully decentralized infrastructure with stable income for artists. All of these systems have in common that they save metadata and identifiers of audio files on a blockchain, and save the audio files in an off-chain database using IPFS~\citep{benet2014ipfs}. This makes these solutions reliant on people voluntarily running IPFS content nodes (servers hosting the audio files). In a fully decentralized network, every participant should have the same role, meaning that every node both uploads and downloads content, and it should not be reliant on external servers. Additionally, all of these technologies use their homebrew cryptocurrency to pay artists, instead of a stable currency.
 
 \section{Financial transparency in the music industry}
 \label{sec:smart-contracts}
@@ -73,8 +76,9 @@ Payments of royalties to artists can be described in transparent, public and imm
 
 \section{Decentralized application frameworks}
 % Add at least one or more decentralized application frameworks
+% Add a good intro: why do we need a Decentralized App Framework?
 \label{sec:sote-trustchain}
-The TrustChain Superapp~\citep{mattskala2020} is a framework for implementing mobile Android decentralized applications. It allows for storing append-only immutable data on TrustChain~\citep{otte2017trustchain} and spreading this data in a phone-to-phone network without servers. It follows the concept of super apps~\citep{kpmg2019superapps}, meaning that it contains many mini-apps which use the same networking interface. The Superapp is an Android app as seen in fig. \ref{fig:trustchain-superapp}. Its mini-apps implement decentralized democratic voting and has bitcoin payment integration, among other features.
+There exist decentralized application frameworks which assist in creating peer-to-peer technologies. A suitable software framework to use for building an alternative for Big Tech is the TrustChain Superapp. The TrustChain Superapp~\citep{mattskala2020} is a framework for implementing mobile Android decentralized applications. It allows for storing append-only immutable data on TrustChain~\citep{otte2017trustchain} and spreading this data in a phone-to-phone network without servers. It follows the concept of super apps~\citep{kpmg2019superapps}, meaning that it contains many mini-apps which use the same networking interface. The Superapp is an Android app as seen in fig. \ref{fig:trustchain-superapp}. Its mini-apps implement decentralized democratic voting and has bitcoin payment integration, among other features.
 
 \begin{figure}
     \minipage{0.3\textwidth}
@@ -120,11 +124,12 @@ The Inter-Planetary FileSystem (IFPS), introduced by \cite{benet2014ipfs}, is a 
 % It uses a Distributed Hash Table to address content using a combination of SHA-256 hashes and hyperlinks. 
 
 At its core, IPFS maintains a global key-value store for all files (and file parts). This is in contrast to BitTorrent, which works with torrent swarms and trackers. IPFS uses an efficient content addressing mechanism. Another feature is built-in file de-duplication. Additionally it supports public file history bookkeeping.
-//
-//
+
 End-users of content stored on IPFS can access content without supporting the network, so there is the possibility of free-riding. In addition, there are no direct (financial) incentives to run an IPFS node, other than to help the network and to host content. 
 % For example, users of the aforementioned Audius music streaming system are not required to run an IPFS node to improve the health of the network. 
 % \subsection{Comparison: IPFS and BitTorrent}
+\\
+\\
 When comparing IPFS and BitTorrent, a notable difference between IPFS and BitTorrent is that IPFS makes a distinction between file-hosting nodes and end-users (which only download files). BitTorrent does not make a distinction between these actors. In BitTorrent, every participant of the network has the capabilities to both upload and download content. Therefore a BitTorrent network using DHT is typically more decentralized than IPFS. 
 
 IPFS uses a global file index using a hash tree, which means that every two file that produce the same hash are stored on the same index. This leads to de-duplication, which may result in better use of disk space, in comparison to BitTorrent.
@@ -146,7 +151,7 @@ IPFS uses a global file index using a hash tree, which means that every two file
 
 \section{File hosting incentive algorithms}
 \label{sec:file-spreading-incentives}
-In a DAO, the party responsible for hosting and spreading of files is not well-defined. To tackle the tragedy of the commons, participants should have an incentive to contribute their computational and bandwidth resources for the network to be sustainable and responsive. One example incentive system is bandwidth tokens~\citep{de2018blockchain} as part of the Tribler system. Another is the FileCoin 
+In a DAO, the party responsible for hosting and spreading of files is not well-defined. To tackle the tragedy of the commons, participants should have an incentive to contribute their computational and bandwidth resources for the network to be sustainable and responsive. One example incentive system is bandwidth tokens~\citep{de2018blockchain} as part of the Tribler system. Another is FileCoin: a decentralized storage network that rewards uploaders of content in terms of tokens.
 
 Tribler~\citep{pouwelse2008tribler} is a peer-to-peer system to share, download and stream multimedia. It has implementations for desktop environments and an Android prototype. It makes use of BitTorrent for file transfer and adds anonymization techniques on top of it. In addition, it makes use of its bandwidth tokens: an incentive system to increase cooperation between users, in order to achieve high availability of downloads. In essence, it subtracts tokens for downloading content from peers and rewards tokens for helping peers. An overview of the Tribler desktop interface can be seen in fig. \ref{fig:tribler}.
 

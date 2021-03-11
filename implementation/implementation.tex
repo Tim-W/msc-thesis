@@ -1,5 +1,5 @@
 \chapter{Implementation}
-We implemented our system on a network of phones, with no servers. Every mobile phone cooperates by sharing music and establishing trust. This means that the computational capacity grows with the amount of users, as does the demand on such capacity. The system is built along the ideologies of a DAO: there is no single party, server or database that the system requires to operate. As such, it is a non-profit system, where the artists keep all revenues. In MusicDAO, mobile phones are able to transfer money and music. In this trust-less system, trust in other parties is established through proofs of identity using cryptography, and publicly verified append-only history data. It is resilient against censorship-attacks: it cannot be taken down by any government or institution. MusicDAO runs on Android 5.1.1 and above, meaning there are 13,734 Android devices supported\footnote{According to Google Play Console, 17-02-2021.}.
+We implemented our system on a network of phones, with no servers. Every mobile phone cooperates by sharing music and establishing trust. This means that the computational capacity grows with the amount of users, as does the demand on such capacity. The system is built along the ideologies of a DAO: there is no single party, server or database that the system requires to operate. As such, it is a non-profit system, where the artists keep all revenues. In MusicDAO, mobile phones are able to transfer money and music. In this trustless system, trust in other parties is established through proofs of identity using cryptography, and publicly verified append-only history data. It is resilient against censorship-attacks: it cannot be taken down by any government or institution. The main features of our work in comparison to the state-of-the-art related work (see sec. \ref{sec:related-work}) can be viewed in table \ref{tab:comparison}.
 \\
 \\
 \textbf{Features overview}
@@ -15,28 +15,27 @@ The following was not implemented:
 \begin{itemize}
     \item Artist Income Division Algorithm.
 \end{itemize}
-Apart from the Android SDK and the TrustChain Superapp, the main libraries that are used are shown in \ref{tab:library-usage}. In the following sections we explain the details of implementing the aforementioned features in a top-down overview, starting with the interfaces.
+Apart from the Android SDK and the TrustChain Superapp, the main libraries that are used are JLibtorrent\footnote{\url{https://github.com/frostwire/frostwire-jlibtorrent}} (Libtorrent protocol interface), BitcoinJ\footnote{\url{https://bitcoinj.org/}} (Bitcoin protocol interface) and ExoPlayer\footnote{\url{https://github.com/google/ExoPlayer}} (Android media player). In the following sections we explain the details of implementing the aforementioned features in a top-down overview, starting with the interfaces.
 
-The Artist Income Division Algorithm, presented in the Design chapter, is not implemented in MusicDAO at the time of writing. The implementation does contain the central component of this algorithm: an integration with peer-to-peer direct donations without intermediaries. For this reason, AIDA could be implemented trivially by another reasearcher or developer.
+The Artist Income Division Algorithm, presented in the Design chapter, is not implemented in MusicDAO at the time of writing. However, the implementation does provide the critical component of this algorithm: an integration with peer-to-peer direct donations without intermediaries. As such, AIDA can be trivially implemented by another researcher or developer.
+
+\begin{table}[]
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{}         & Transparent revenue streams & Self-governance & \textgreater{}99.99\% to artists & Fully P2P, self-scaling \\ \hline
+Audius            & \Checkmark & \Checkmark                                 & $\times$                        & $\times$                                 \\ \hline
+Musicoin          & \Checkmark & $\times$                                & $\times$                        & $\times$                                   \\ \hline
+Opus Audio        & \Checkmark & \Checkmark                                & $\times$                        & $\times$                                  \\ \hline
+\textbf{MusicDAO} & \CheckmarkBold &  $\times$                       &  \CheckmarkBold                       &  \CheckmarkBold     \\ \hline
+\end{tabular}
+\caption{Overview of work implemented in this thesis compared to related work (see sec. \ref{sec:related-work})}
+\label{tab:comparison}
+\end{table}
 
 \section{Zero-server infrastructure Android application}
 The system described in chap. \ref{chap:design} is implemented on a network of phones, with no servers. This results in a fully distributed, leaderless organization. Every mobile phone cooperates by sharing music, transacting money and establishing trust. This means that the computational capacity grows with the amount of users, as does the demand on such capacity. The system is built along the ideologies of a DAO: there is no single party, server or database that the system requires to operate. As such, it is a non-profit system, where the destination of money flow is decided by its users, instead of by a single organization. In MusicDAO, mobile phones are able to transfer money and music. In this trust-less system, trust in other parties is established through proofs of identity using cryptography, and publicly verified using append-only history data.
 
 MusicDAO is an Android application which runs on any Android device running version 5.1.1 or above. It is implemented as a `mini-app' of the \textit{TrustChain Superapp}~\citep{mattskala2020}. This follows the concept of super apps~\citep{kpmg2019superapps}. The app is published on the Android Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}} and runs on Android 5.1 and above. Its code is publicly available\footnote{\url{https://github.com/Tim-W/trustchain-superapp}}. As programming language Kotlin is selected, as it is the preferred language for Android development\footnote{\url{https://android-developers.googleblog.com/2019/05/google-io-2019-empowering-developers-to-build-experiences-on-Android-Play.html}}. Moreover the underlying technology stack is also written in Kotlin, so this allows for neat integration. This section describes the implementation choices, usage of external libraries and presents the user interface of MusicDAO. The main interfaces of the app can be seen below (figs. \ref{fig:screenshot-home}, \ref{fig:screenshot-playlist} and \ref{fig:tip-artist}). An overview of the structure of the code can be seen in the package diagram in fig. \ref{fig:package-diagram}.
-
-\begin{table}[]
-\begin{tabular}{|l|l|l|}
-\hline
-Name                  & Version & Usage                          \\ \hline
-JLibtorrent           & 1.2.10  & Peer-to-peer file distribution \\ \hline
-TorrentStream-Android & 2.7.0   & Video streaming library        \\ \hline
-ExoPlayer             & 2.10.5  & Android multimedia player      \\ \hline
-BitcoinJ              & 0.15.7  & Java Bitcoin interface         \\ \hline
-XChange               & 5.0.1   & Crypto/USD price conversion    \\ \hline
-\end{tabular}
-\caption{Notable libraries used}
-\label{tab:library-usage}
-\end{table}
 
 \begin{figure}[]
     \minipage{0.3\textwidth}
@@ -57,19 +56,14 @@ XChange               & 5.0.1   & Crypto/USD price conversion    \\ \hline
 \end{figure}
 
 \section{Peer-to-peer content discovery}
-Peer-to-peer content metadata discovery is implemented by a push-based content spreading mechanism. All devices have an internal clock. Every $i$ seconds, they send a random block of music metadata to a random peer. We analyze the impact of $i$ on content discovery in chap. \ref{chap:evaluation}.
+Peer-to-peer content metadata discovery is implemented using a push-based content spreading. All devices have an internal clock. Every $i$ seconds, a peer sends a random block of music metadata to a random neighbor. 
 
-The entry point of the app is the playlist overview screen (see fig. \ref{fig:screenshot-home}). It is the screen that is first shown upon starting the MusicDAO. Here the user is presented a list of playlists, with title and author, loaded from local disk and from peers. In our current implementation, each Playlist fragment corresponds to exactly one Release block (see fig. \ref{fig:release-model}). The playlists are rendered in real-time based on TrustChain data. This means: during browsing, newly clickable playlists show up near-instantly once they are discovered from peers. The playlists are sorted on their torrent swarm health in ascending order. Caching is used for fast browsing and music playback. All torrent metadata and all track files received from peers are cached on the Android phone.
+The entry point of the app is the playlist overview screen (see fig. \ref{fig:screenshot-home}). It is the screen that is first shown upon starting the MusicDAO. Here the user is presented a list of playlists, with title and author, loaded from local disk and from peers. In our current implementation, each Playlist fragment corresponds to exactly one Release block (see fig. \ref{fig:release-model}). The playlists are rendered in real-time based on TrustChain data. This means: during browsing, newly clickable playlists show up near-instantly once they are discovered from peers. The playlists are sorted on their torrent swarm health in ascending order. Caching is used for fast browsing and music playback. All torrent metadata and all track files received from peers are cached on the Android phone. The cover art shown in fig. \ref{fig:screenshot-home} is rendered using MP3 metadata processing, using its ID3 tags (when available). The system does not contain a pre-fetching mechanism for obtaining cover art (as observed in fig. \ref{fig:search-3}). Instead, it is only shown after at least one of the MP3 metadata has finished transferring using the BitTorrent stream.
 
-The cover art shown in fig. \ref{fig:screenshot-home} is rendered using MP3 metadata processing, using its ID3 tags (when available). The system does not contain a pre-fetching mechanism for obtaining cover art (as observed in fig. \ref{fig:search-3}). Instead, it is only shown after at least one of the MP3 metadata has finished transferring using the BitTorrent stream.
-
-\subsection{Distributed keyword search algorithm}
+% \subsection{Distributed keyword search algorithm}
 \label{sec:searching-musiccommunity-impl}
-The app allows users to search for music content remotely using keyword search. The search function tries to find matches locally, and if there are only a few found, it will try to ask for content from peers. We implemented alg. \ref{alg:algorithm-distributed-search} for this functionality. The current implementation uses only a simple filter, which checks if the keyword is contained in the metadata of the music release.
+MusicDAO allows users to search for music content remotely using keyword search. The search function tries to find matches locally, and if there are only a few found, it will try to ask for content from peers. Alg. \ref{alg:algorithm-distributed-search} is implemented using the parameters $ttl=1$ and $maxPeers=20$ so there is no recursive searching throughout the network. Any $ttl>1$ would result in an exponential message complexity. The current implementation uses only a simple filter, which checks if the keyword is contained in the metadata of the music release.
 
-When the user performs a search, the local database is filtered first to find matches. If there are unsatisfactory results, it sends a search message (see \ref{fig:keyword-search-message-model}) to a few random peers. This asks neighbors to inspect their local database to find matches for the same query. If the peer finds a match, it sends the corresponding results directly back to the original query initiator. To disallow packages from endlessly being forwarded on the network we use a time-to-live property. 
-
-Algorithm \ref{alg:algorithm-distributed-search} is implemented using the parameters $ttl=1$ and $maxPeers=20$ so there is no recursive searching throughout the network. A low value of $ttl$ is chosen because any $ttl>1$ results in an exponential growth of search messages throughout the network.
 \begin{figure}
     \minipage{0.5\textwidth}
         \centering
@@ -85,8 +79,9 @@ Algorithm \ref{alg:algorithm-distributed-search} is implemented using the parame
     \endminipage\hfill
 \end{figure}
 
-\subsection{Gossip-based algorithm for content popularity}
+% \subsection{Gossip-based content popularity algorithm}
 The gossip-based algorithm used for communicating content popularity with peers is implemented as described in alg. \ref{alg:algorithm-content-popularity}. Every peer in the network sends a content health message to a random peer every 3 seconds. The content healthiness is displayed for every release as \textit{Peers: X} (see fig. \ref{fig:screenshot-home}). Gossip messages older than one hour were discarded ($margin=3600$). It is non-trivial to determine a good value for $margin$ as it is a trade-off between amount of information and recentness of information. 
+% Explain the inner workings of this algorithm more thoroughly
 
 \section{Music streaming algorithm}
 To achieve fast buffering of music, we implemented a priority system for tracks and for parts of tracks (chunks) (see \ref{fig:music-streaming-mechanism}). In essence, the player prioritizes chunks that the user is currently interested in, by actively asking peers to send the corresponding $k$ chunks that are necessary to play the selected section of the track. In addition, the selected track is given a higher priority over other tracks in the playlist. This uses the piece priorities system in libtorrent (see libtorrent Manual\footnote{\url{https://www.libtorrent.org/manual-ref.html\#file-format}}). By default, the first couple of chunks of each track are given a high priority, to reduce the chance of buffer underflow, so that the user can start streaming early. 
@@ -97,7 +92,7 @@ To achieve fast buffering of music, we implemented a priority system for tracks 
     \label{fig:music-streaming-mechanism}
 \end{figure}
 
-Playing music is implemented using ExoPlayer (\ref{tab:library-usage}). This music player library is suitable as it allows for playing tracks that are partially loaded, which enables streaming. When the user selects a playlist to browse and play, the fragment in fig. \ref{fig:screenshot-playlist} is displayed. Here, the user can select a track to play. It presents its list of tracks and other metadata, such as the title and artist(s). For each track the file size is displayed, and a loading indicator on the right side. This shows, in real time, how much of the track is downloaded. In the example of \ref{fig:screenshot-playlist}, the first track is fully loaded. The track player, shown on the bottom, interacts directly with the tracklist and the selected track. It shows which track is selected and whether it is currently playing or buffering. 
+Playing music is implemented using ExoPlayer\footnote{\url{https://github.com/google/ExoPlayer}}. This music player library is suitable as it allows for playing tracks that are partially loaded, which enables streaming. When the user selects a playlist to browse and play, the fragment in fig. \ref{fig:screenshot-playlist} is displayed. Here, the user can select a track to play. It presents its list of tracks and other metadata, such as the title and artist(s). For each track the file size is displayed, and a loading indicator on the right side. This shows, in real time, how much of the track is downloaded. In the example of \ref{fig:screenshot-playlist}, the first track is fully loaded. The track player, shown on the bottom, interacts directly with the tracklist and the selected track. It shows which track is selected and whether it is currently playing or buffering. 
 
 \section{Peer-to-peer financial infrastructure}
 \label{sec:regtest-network-impl}
@@ -111,7 +106,7 @@ Upon browsing a playlist, a donation button is displayed as shown in fig. \ref{f
 \begin{figure}
     \minipage{0.3\textwidth}
         \includegraphics[width=1\linewidth]{implementation/wallet-sync.png}
-        \caption{Synchronizing with the Bitcoin RegTest environment blockchain}
+        \caption{Synchronizing the Bitcoin RegTest environment blockchain}
         \label{fig:wallet-sync}
     \endminipage\hfill
     \minipage{0.3\textwidth}
@@ -138,6 +133,7 @@ We run a bittorrent tracker, which maintains a list of seeders for the torrents 
 \label{sec:content-seeding}
 Seeding of content is implemented using a simple continuous mechanism. The ContentSeeder class runs a background thread which seeds all local torrents, with an upper threshold \(T\). This is set to \(T=10\). The ContentSeeder uses a last-in-first-out heuristic: Only the top \(T\) most recently created/received torrent files are seeded.
 
+% This package diagram is ugly and useless
 \begin{figure}
     \minipage{0.3\textwidth}
         \includegraphics[width=\linewidth]{implementation/screenshot-select-tracks.png}
@@ -170,25 +166,31 @@ Code coverage is measured by Android Studio 4\footnote{\url{https://developer.an
 
 MusicDAO runs on Android 5.1.1 and above, and as such supports 13,734 different Android devices\footnote{According to Google Play Console, 17-02-2021.}. During the implementation phase we ensure that it runs well on different screen sizes and Android versions, by running it on 20 different Android devices. To gain a further understanding of device compatibility and bug hunting, we make use of an online crash reporter (fig. \ref{fig:firebase-crashlytics}). Firebase Crashlytics\footnote{\url{https://firebase.google.com/docs/crashlytics}} registers app installs and crashes in real-time, which we use during the experimentation of MusicDAO. It shows details of each application crash for all users (see fig. \ref{fig:firebase-crashlytics}). Using this, a full stack trace can be inspected remotely for each crash. In addition it helps with gaining insight in various performance metrics for certain types of Android devices.
 
+% We used Mocking, Unit tests, Smoke tests (no Android instrumented tests)
+% Discuss per-package the packages that have low coverage
 \begin{table}[]
-\begin{tabular}{|l|l|}
+\centering
+\begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Package/class} & \textbf{Line coverage} \\ \hline
-MusicService.kt        & 15\% (15/95)           \\ \hline
-MusicBaseFragment.kt   & 50\% (1/2)             \\ \hline
-catalog                & 24\% (35/142)          \\ \hline
-dialog                 & 20\% (24/130)          \\ \hline
-ipv8                   & 81\% (57/70)           \\ \hline
-net                    & 90\% (27/30)           \\ \hline
-player                 & 0\% (0/50)             \\ \hline
-playlist               & 9\% (19/203)           \\ \hline
-util                   & 60\% (42/70)           \\ \hline
-wallet                 & 0\% (0/100)            \\ \hline
+\textbf{Package/class} & \textbf{Line coverage} & \textbf{Lines of code} \\ \hline
+MusicService.kt        & 27\%   & 207         \\ \hline
+MusicBaseFragment.kt   & 50\%  & 11            \\ \hline
+MusicGossipingService.kt & 41\% & 75          \\ \hline
+catalog                & 20\% & 249          \\ \hline
+dialog                 & 9\% & 142          \\ \hline
+ipv8                   & 92\% & 229          \\ \hline
+net                    & 71\% & 109          \\ \hline
+player                 & 0\% & 80             \\ \hline
+playlist               & 3\% & 346           \\ \hline
+util                   & 69\% & 224              \\ \hline
+wallet                 & 36\% & 199           \\ \hline
+\textbf{Total} & \textbf{37\%} & \textbf{1871} \\ \hline
 \end{tabular}
 \caption{Code coverage overview}
 \label{tab:code-cov}
 \end{table}
 
+% Replace with newer version of this image showing 94% crash-free users
 \begin{figure}
     \includegraphics[width=0.7\linewidth]{implementation/firebase-crashlytics.png}
     \caption{Firebase Crashlytics crash reporter; this figure shows the crashes over time}

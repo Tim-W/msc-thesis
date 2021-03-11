@@ -15,7 +15,7 @@ The main contributions of this thesis are:
     \item A partial implementation of this framework: a fully decentralized Android music streaming application \textit{MusicDAO} which attempts to liberate artists and consumers from powerful intermediaries.
 \end{enumerate}
 \\
-MusicDAO implements a few key components of our framework: P2P leaderless infrastructure, resilient communication, trustless content sharing/exploration and a trustless monetary system (see \ref{tab:robot-economy-building-blocks}). We design, implement and evaluate the MusicDAO system. We perform supervised experiments with 10 Android devices to test the responsiveness and latency of its main features. Aditionally, we release the application publicly to 50+ users and measure the monetary flows from users to artists over time. 
+MusicDAO implements a few key components of our framework: P2P leaderless infrastructure, resilient communication, trustless content sharing/exploration and a trustless monetary system (see \ref{tab:robot-economy-building-blocks}). The table shows that the other components of our robot economy framework, that are out of scope for this thesis, are under active experimentation and research by other scientists. We design, implement and evaluate the MusicDAO system. We perform controlled experiments with 10 Android devices to test the responsiveness and latency of its main features. Additionally, we release the application publicly to 50+ users and measure the monetary flows from users to artists over time. 
 % is 50+ correct?
 It is available on Google Play\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}} and its code is open source\footnote{\url{github.com/Tribler/trustchain-superapp/}}.
 
@@ -72,7 +72,7 @@ This thesis proposes an alternative technology from Big Tech streaming services.
 % Add a number: how much % is already automated?
 We design and implement a decentralized system which attempts to replace the full value chain in music streaming industry, from the subscription money to the artist, by removing all intermediaries and giving power back to the artists and listeners. Listeners can stream music without being dependent on a single provider and can give money directly to artists. Artists receive 100\% of this donation and subscription money.
 
-In essence, the solution is a decentralized autonomous organization (DAO) which is formed by listeners and artists. A DAO is defined by \cite{buterin2014dao} as an ``entity that lives on the internet and exists autonomously, but also heavily relies on hiring individuals to perform certain tasks that the automation itself cannot do'' (see \ref{fig:dao-quadrants}). In this thesis we present the design and implementation of our mobile android app MusicDAO: a music streaming service for the common good. Users of this app form a phone-to-phone zero-server network over which they publish music, download music and transfer money. This proof-of-principle of a DAO shows a fair and transparent music streaming service in which no external servers, third parties or intermediaries are necessary. Any person can join the network, publish music and get paid for it. 100\% of music revenue goes to artists.
+In essence, the solution is a decentralized autonomous organization (DAO) which is formed by listeners and artists. A DAO is defined by \cite{buterin2014dao} as an ``entity that lives on the internet and exists autonomously, but also heavily relies on hiring individuals to perform certain tasks that the automation itself cannot do'' (see \ref{fig:dao-quadrants}). In this thesis we present the design and implementation of our mobile android app MusicDAO: a music streaming service for the common good. Users of this app form a phone-to-phone zero-server network over which they publish music, download music and transfer money. This proof-of-principle of a DAO shows a fair and transparent music streaming service in which no external servers, third parties or intermediaries are necessary. Its operational network is leaderless and permissionless: any person can join, publish music and receive funds from peers. 100\% of music revenue goes to artists.
 
 MusicDAO contains the following key functionalities:
 \begin{itemize}
@@ -84,19 +84,21 @@ MusicDAO contains the following key functionalities:
     \item Peer-to-peer donations to artists using Bitcoin.
 \end{itemize}
 
-In a real-world experiment with Android phones, we tested the feasibility of such a phone-to-phone infrastructure-less system. In a public release experiment, MusicDAO is published to the crowd via the Google Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}}, and is installed on more than 50 devices. We evaluated all the money flow from its users towards the artists using a public blockchain. We evaluated the responsiveness of our decentralized infrastructure using supervised experiments, in which we measured the effect of network size on the latency of the key functionalities of our system.
+In a real-world experiment with Android phones, we tested the feasibility of such a autonomous phone-to-phone system without centralized infrastructure. In a public release experiment, MusicDAO is published to the crowd via the Google Play Store\footnote{\url{https://play.google.com/store/apps/details?id=nl.tudelft.trustchain}}, and is installed on more than 50 devices. We evaluated all the money flow from its users towards the artists using a public blockchain. We evaluated the responsiveness of our decentralized infrastructure using supervised experiments, in which we measured the effect of network size on the latency of the key functionalities of our system.
 
 \begin{table}[]
-\begin{tabular}{|l|l|}
+\centering
+\begin{tabular}{|l|l|l|}
 \hline
-\textbf{Component}                         & \textbf{Focus in MusicDAO} \\ \hline
-Peer-to-peer leaderless infrastructure     & \checkmark                                      \\ \hline
-Resilient communication                    & \checkmark                                      \\ \hline
-Trustless content sharing and exploration  & \checkmark                                      \\ \hline
-Trustless monetary system                  & \checkmark                                      \\ \hline
-Democratic user engagement                      & $\times$                                      \\ \hline
-AI for decision making (robot tasks)       & $\times$                                      \\ \hline
-Continuous code evolution and distribution & $\times$                                       \\ \hline
+\textbf{Robot Economy component}                         & \textbf{Focus in MusicDAO} & \textbf{Related work} \\ \hline
+Peer-to-peer leaderless and self-scaling infrastructure     & \checkmark  &                                    \\ \hline
+Resilient communication                    & \checkmark  &                                    \\ \hline
+Democratic user engagement                      &    & \cite{osgood2016future}, \cite{meter2017design}                                   \\ \hline
+Trustless content sharing and exploration  & \checkmark &                                     \\ \hline
+AI for decision making (robot tasks)       &   & \cite{dey2016machine}                                    \\ \hline
+Trustless monetary system                  & \checkmark  &                                    \\ \hline
+
+Continuous code evolution and distribution &   & \cite{jentzsch2016decentralized}, \cite{dupont2017experiments}                                     \\ \hline
 \end{tabular}
 \caption{The main components to achieve a robot economy in software}
 \label{tab:robot-economy-building-blocks}
