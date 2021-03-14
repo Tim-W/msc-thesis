@@ -4,7 +4,6 @@
 \begin{algorithmic}
 \State artistInteraction$\gets$Map(key: walletID, value: amount)
 \Function{Subscribe}{artistInteraction, fee, k}\Comment{User registers for subscription}
-    \Comment{Artist interaction map: }
     \Repeat{} Every time interval $t$
     \State artistInteraction$\gets$orderDesc(artistInteraction)\Comment{Order artist interaction descending}
     \State topArtists$\gets$pickFirst(k, artistInteraction)\Comment{Pick the top k artists}

@@ -1,24 +1,30 @@
 \chapter{Conclusion and Future Work}
-This thesis presents a novel framework for building a robot economy in software. This framework allows for designing and implementing software for the common good: software that (1) handles financial transactions in a fair way, as (2) decided by democratic engagement, (3) runs transparently and autonomously, (4) is open to any participant (permissionless), (5) is decentralized and leaderless, (6) supports a self-evolving codebase, and finally (7) can make intelligent decisions on its own using AI.
+This thesis presented a novel framework for building a robot economy in software. This framework allows for designing and implementing software for the common good: software that (1) handles financial transactions in a fair way, as (2) decided by democratic engagement, (3) runs transparently and autonomously, (4) is open to any participant (permissionless), (5) is decentralized and leaderless, (6) supports a self-evolving codebase, and finally (7) can make intelligent decisions on its own using AI.
 
-This thesis presents a music streaming alternative for the Big Tech industry: we implemented our framework in order to build a fully working decentralized music streaming, publishing and discovery mobile app with peer-to-peer donations. In this proof-of-concept called MusicDAO, we applied the theory of the robot economy in software to an industry of which the core contributors (artists) suffer majorly from centralization on the Internet: the music industry. Most music streaming platforms take a 20-40\% cut of music revenue; MusicDAO takes 0\%. MusicDAO implements 1, 3, 4 and 5 of the key features of a robot economy in software (see above).
+We implemented this framework for the robot economy in order to build a fully working decentralized music streaming, publishing and discovery mobile app with peer-to-peer donations. In this proof-of-concept called MusicDAO, we applied the theory of the robot economy in software to an industry of which the core contributors (artists) suffer majorly from centralization on the Internet: the music industry. Most music streaming platforms take a 20-40\% cut of music revenue; MusicDAO takes 0.1‰. MusicDAO implements 1, 3, 4 and 5 of the key features of a robot economy in software (see above).
+\\
+\\
+We now turn to the research question from sec. \ref{research-question}: 
+\textit{How can we design and implement a music streaming service that prevents monopolies and transfers all power to its listeners and artists?}
 
-MusicDAO is completely free of label and platform intermediaries taking large revenue cuts. It forwards $>99.99\%$ of all music revenue to artists. All money flow is public and transparent. Artists using our DAO can be independent and self-publishing. Apart from the \textit{music platform oligarchy}, it also surpasses the \textit{label oligarchy} as it requires no music label to publish music.
-
-MusicDAO implements a peer-to-peer audio streaming algorithm, which is able to stream any BitTorrent audio swarm. Its buffer loading time does not reach industry standards yet but this can be improved by more optimized pre-fetching and piece ordering algorithms. 
-
-Our system is not yet resilient against free-riding, spam attacks or sybil attacks. Preventing such attacks is an active developing area in distributed systems research.
+This thesis presented the design and implementation of MusicDAO. This mobile app distributes the power from one authority to all its listeners and users, using a peer-to-peer network. This network is permissionless and leaderless by design, which reduces the risk of monopolization. Anyone can join the network, and all participants have access to the same functionalities. There is no single entity that maintains the system, but rather it is formed by a community of users.
+\\
+\\
+Our main findings after implementing and evaluating MusicDAO are:
+\begin{itemize}
+    \item MusicDAO is completely free of label and platform intermediaries taking large revenue cuts. It forwards $>99.99\%$ of all music revenue to artists. All money flow is public and transparent. Artists using our DAO can be independent and self-publishing. Apart from the \textit{music platform oligarchy}, it also surpasses the \textit{label oligarchy} as it requires no music label to publish music.
+    \item The system is not yet resilient against free-riding, spam attacks or sybil attacks. Preventing such attacks is an active developing area in distributed systems research.
+    \item Peer-to-peer streaming of music in the network with only phones is operational, but its latency is not comparable to present-day streaming services. Its latency suffers from a lengthy NAT puncturing process, which takes more than a minute. This key challenge should be overcome to build a robust peer-to-peer music streaming system.
+\end{itemize}
 
 \section{Generality: beyond music}
-The framework presented in this thesis can be applied to many other domains beyond music. Most functions of corporation-run centralized platforms are already automated, and handled by AI or robots. It can transform Internet platforms, or even complete value chains that currently have unfair or opaque money flows. One may think of a production and sales chain with no retail cut, or a video publishing network with a subscription model without intermediaries. This thesis aims to be a step into an evolving research direction, \textit{infrastructure for the common good}: autonomous and server-less software that works in favor of its user community instead of companies or profit.
+The framework presented in this thesis can be applied to many other domains beyond music. Most functions of corporation-run centralized platforms are already automated, and handled by AI or robots. It can transform Internet platforms, or even complete value chains that currently have unfair or opaque money flows. One may think of a production and sales chain with no retail cut, or a video publishing network with a subscription model without intermediaries. This thesis aims to be a step into an evolving research direction, \textit{infrastructure for the common good}: autonomous software, running on a self-scaling infrastructure, that works in favor of its user community instead of companies or profit. This brings us back to the Utopian idea of the original intentions of the Internet: to be a network in which users can connect and share, without requiring an intermediate party.
 
 \section{Future research directions}
 % Fore future research directions can be added
 In the MusicDAO proof-of-concept, there is no use of intelligent robots. Decision making based on AI is the next key step to the robot economy in software. We envision a symbiotic interaction between humans and robots: humans vote for the baselines and rules within which robots play, while robots use AI such as machine learning or evolutionary algorithms to perform tasks and make decisions. 
 
-Content moderation is a key ingredient of any Internet platform. In MusicDAO, any music that is published is automatically admitted to the network. Therefore the network does not automatically remove any duplicates (copies), illegal remixes or other illegal audio. Using DAO and intelligent robots, a system can be created in which robots moderate content using AI, while humans democratically vote on the rules for content.
-
-Ongoing research into Self-Sovereign Identity (SSI) can fix part of this problem: SSI can create a certain passport for content creators, with which creators can prove their identity and thus ownership of certain content.
+Content moderation is a key ingredient of any Internet platform. In MusicDAO, any music that is published is automatically admitted to the network. Therefore the network does not automatically remove any duplicates (copies), illegal remixes or other illegal audio. Using DAO and intelligent robots, a system can be created in which robots moderate content using AI, while humans democratically vote on the rules for content. Ongoing research into Self-Sovereign Identity (SSI) can fix part of this problem: SSI can serve as a \textit{creator passport}, with which creators can prove their identity and thus ownership of certain content.
 
 %\section{Future research directions}
 %\begin{itemize}
