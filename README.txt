@@ -1,57 +1,8 @@
-Using the template
-------------------
+During the last decades of explosive growth in economic value on the Internet, we observe the trend of platformization: a shift of economic activity from happening on a wide range of companies to a few major platforms run by Big Tech corporations. This trend is highly susceptible to the rise of monopolies and oligarchs, as seen in the music industry today. In this industry, the top 5 streaming services and top 3 labels form oligarchs. Artist income is diminishing because these powerful intermediaries take large revenue cuts. Streaming services also have curatorial power: they decide the inner workings of their black box recommendation systems. 
 
-This is the TU Delft LaTeX template for reports and theses. It is designed to
-work with all versions of LaTeX, but if you want to adhere to the TU Delft house
-style, you need to use XeLaTeX, as it supports TrueType and OpenType fonts. The
-document can be compiled with
+As an alternative for centralized Internet platforms, this thesis presents a theoretical framework for building a robot economy in software: autonomous software in which robots perform monetary transactions on their own. It allows for building infrastructure for the common good: software systems that (1) handle financial transactions in a fair way, as (2) decided by democratic engagement, (3) run transparently and autonomously, (4) are open to any participant (permissionless), (5) are decentralized and leaderless, (6) support a self-evolving codebase, and finally (7) can make intelligent decisions on their own using AI.
 
-  xelatex report
-  bibtex report
-  xelatex report
-  xelatex report
+We show a proof-of-concept of this framework, by implementing features 1,3,4 and 5. We present a fully operational decentralized music streaming, publishing and discovery mobile app (called MusicDAO) with peer-to-peer donations to artists. It is built on a fully distributed, self-scaling network of Android phones. The app was released to the public, and was installed on 50+ devices. During this public trial, the decentral financial infrastructure was successful: most music streaming platforms take a 20-40\% cut of music revenue; MusicDAO takes <0.001\%. Discovery and metadata search is operational with low latency. Peer-to-peer music streaming is operational, but its latency is not yet competitive.
 
-This is equivalent to selecting 'XeLaTeX+BibTeX' or similar in your favorite TeX
-editing program.
-
-A sample document, as well as documentation for template options, can be found
-in example.pdf. An example with the native LaTeX fonts, compiled using the
-'nativefonts' option (or with pdflatex), can be found in
-example-nativefonts.pdf.
-
-A separate example document is available which generates a cover image (front,
-back and spine). This document can be generated with
-
-  xelatex cover
-  xelatex cover
-
-or simply with the 'XeLaTeX' option in TeXworks or an equivalent program.
-
-
-
-Installation on Windows
------------------------
-
-The TU Delft LaTeX template has been tested to work with the most recent version
-of MiKTeX at the time of this writing (2.9). The following packages are required
-on top of a basic MiKTeX installation to make full use of the template:
-
-  caption, fancyhdr, filehook, footmisc, fourier, l3kernel, l3packages,
-  metalogo, mptopdf, ms, natbib, pgf, realscripts, tipa, titlesec, tocbibind,
-  unicode-math, url, xcolor, xetex-def
-
-Note that MiKTeX will generally automatically install these packages if they are
-missing from your installation.
-
-
-
-Installation on Linux (Debian/Ubuntu)
--------------------------------------
-
-Recent versions of Debian, and derived distributions such as Ubuntu, use the TeX
-Live system. Install the following packages to make full use of the this
-template:
-
-  texlive, texlive-fonts-extra, texlive-math-extra, texlive-lang-dutch,
-  texlive-lang-english, texlive-latex-extra, texlive-xetex
+Our framework and proof-of-concept are fruitful steps towards research into infrastructure for the common good: software systems that are governed by its users instead of by profit-driven corporations.
 
